@@ -1,0 +1,81 @@
+---
+interface Props { id?: string; }
+const { id = 'system-architecture' } = Astro.props;
+---
+<svg class="system-architecture" viewBox="0 0 560 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby={`${id}-title ${id}-description`}>
+  <title id={`${id}-title`}>量超融合系统：CPU 与 QPU 协作，独立评估执行性能</title>
+  <desc id={`${id}-description`}>Python 描述科学计算任务。融合编程框架根据资源声明与任务依赖组织执行，并列连接 CPU 与 QPU。CPU 承担经典计算与模型推理，QPU 承担量子电路计算。性能模拟器以任务图与硬件配置为输入，独立估算耗时和比较配置。</desc>
+  <defs>
+    <pattern id={`${id}-grid`} width="24" height="24" patternUnits="userSpaceOnUse"><path d="M24 0H0V24" fill="none" stroke="#dfe9f6" stroke-width=".6" /></pattern>
+    <marker id={`${id}-arrow`} viewBox="0 0 8 8" refX="6" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="m2 1 3 3-3 3" fill="none" stroke="#7f99b7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></marker>
+  </defs>
+  <rect x="1" y="1" width="558" height="438" rx="22" fill="#f5f8fd" stroke="#dce6f3" />
+  <rect x="1" y="1" width="558" height="438" rx="22" fill={`url(#${id}-grid)`} />
+
+  <path d="M280 98v21" class="connector" marker-end={`url(#${id}-arrow)`} />
+  <path d="M410 60h122v316H424" class="assessment-route" />
+
+  <g>
+    <rect x="150" y="22" width="260" height="76" rx="12" fill="#fff" stroke="#cbdbee" />
+    <rect x="167" y="40" width="40" height="40" rx="9" fill="#edf3fc" />
+    <path d="m182 52-7 8 7 8m11-16 7 8-7 8" fill="none" stroke="#42698e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="222" y="54" class="task-title">科学计算任务</text>
+    <text x="222" y="80" class="detail">Python 程序</text>
+  </g>
+
+  <g>
+    <rect x="104" y="124" width="352" height="76" rx="13" fill="#122d48" />
+    <g fill="none" stroke="#a5c9ee" stroke-width="1.8">
+      <rect x="124" y="145" width="14" height="14" rx="3" /><rect x="151" y="161" width="14" height="14" rx="3" /><rect x="124" y="177" width="14" height="14" rx="3" />
+      <path d="M138 152h6v16h7m-13 16h6v-16" />
+    </g>
+    <text x="183" y="156" class="framework-title">融合编程框架</text>
+    <text x="183" y="182" class="framework-detail">资源声明 · 任务依赖</text>
+  </g>
+
+  <path d="M280 200v18" class="connector" />
+  <path d="M280 218H160v18" class="resource-route cpu-stroke" />
+  <path d="M280 218H400v18" class="resource-route qpu-stroke" />
+  <circle cx="280" cy="218" r="4" fill="#fff" stroke="#7f99b7" stroke-width="1.5" />
+
+  <g transform="translate(55 0)">
+    <rect x="15" y="236" width="180" height="76" rx="10" fill="#fff" stroke="#b5d1f5" />
+    <path d="M16 250q0-13 13-13h152q13 0 13 13" fill="none" stroke="#145bdb" stroke-width="2" />
+    <rect x="47" y="248" width="25" height="25" rx="4" fill="#eff5ff" stroke="#145bdb" stroke-width="1.3" />
+    <path d="M54 255h11v11H54ZM52 244v4m8-4v4m7-4v4m-15 25v4m8-4v4m7-4v4" class="cpu-stroke" fill="none" stroke-width="1.2" />
+    <text x="85" y="268" class="resource-title cpu">CPU</text>
+    <text x="105" y="294" class="resource-detail" text-anchor="middle">经典计算 · 模型推理</text>
+    <circle cx="105" cy="236" r="3" fill="#145bdb" />
+  </g>
+  <g transform="translate(-55 0)">
+    <rect x="365" y="236" width="180" height="76" rx="10" fill="#fff" stroke="#cfc3e5" />
+    <path d="M366 250q0-13 13-13h152q13 0 13 13" fill="none" stroke="#7152ad" stroke-width="2" />
+    <rect x="397" y="248" width="25" height="25" rx="4" fill="#f5f1fb" stroke="#7152ad" stroke-width="1.3" />
+    <g class="qpu-stroke" fill="none" stroke-width="1.3"><path d="M401 257h17m-17 8h17m-8-8v8" /><circle cx="410" cy="265" r="3" /></g>
+    <circle cx="410" cy="257" r="2.3" fill="#7152ad" />
+    <text x="435" y="268" class="resource-title qpu">QPU</text>
+    <text x="455" y="294" class="resource-detail" text-anchor="middle">量子电路</text>
+    <circle cx="455" cy="236" r="3" fill="#7152ad" />
+  </g>
+
+  <g>
+    <rect x="136" y="338" width="288" height="76" rx="9" fill="#fff" stroke="#bdcede" stroke-dasharray="4 3" />
+    <path d="M154 390v-9m8 9v-17m8 17v-25" stroke="#5a7c9d" stroke-width="3" />
+    <text x="188" y="370" class="simulator-title">性能模拟器</text>
+    <text x="188" y="396" class="simulator-detail">耗时估算与配置比较</text>
+    <text x="478" y="367" class="assessment-label" text-anchor="middle">独立评估</text>
+  </g>
+</svg>
+<style>
+  .system-architecture{display:block;width:100%;height:auto;--diagram-title-size:22px;--diagram-detail-size:14px}
+  text{font-family:"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;fill:#122d48}
+  .connector{fill:none;stroke:#7f99b7;stroke-width:1.6}
+  .assessment-route{fill:none;stroke:#9bb0c8;stroke-width:1.4;stroke-dasharray:4 5}
+  .resource-route{fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .task-title,.framework-title,.resource-title,.simulator-title{font-size:var(--diagram-title-size);font-weight:600}
+  .detail,.framework-detail,.resource-detail,.simulator-detail,.assessment-label{font-size:var(--diagram-detail-size);font-weight:400;fill:#42617e}
+  .framework-title{fill:#fff}.framework-detail{fill:#d5e5f5}
+  .cpu{fill:#145bdb}.qpu{fill:#7152ad}
+  .cpu-stroke{stroke:#145bdb}.qpu-stroke{stroke:#7152ad}
+  @media(max-width:760px){.system-architecture{--diagram-title-size:24px;--diagram-detail-size:15px}}
+</style>

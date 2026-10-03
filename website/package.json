@@ -1,0 +1,30 @@
+{
+  "name": "qhai-intro-website",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "check": "astro check",
+    "build": "astro build",
+    "build:release": "node scripts/site-settings.mjs --release && npm run check && npm run build && npm run check:release",
+    "check:release": "node scripts/check-release.mjs",
+    "preview": "astro preview --host 127.0.0.1",
+    "test:browser": "node scripts/browser-check.mjs"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "0.42.5",
+    "astro": "7.3.5",
+    "monaco-editor": "^0.57.0",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@playwright/test": "^1.62.1",
+    "@types/three": "^0.186.0",
+    "typescript": "^6.0.3"
+  }
+}

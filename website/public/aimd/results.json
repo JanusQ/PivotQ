@@ -1,0 +1,19 @@
+{
+  "run_id": "portal-fake-aimd-434aa110e245add823ddf2926a72a6a5",
+  "source": "qfp completed example run",
+  "recorded_date": "2026-09-10",
+  "quantum_backend": "ideal exact-statevector simulator via fake-QPU",
+  "classical_backend": "GPU",
+  "real_qpu": false,
+  "initial_temperature_K": 300,
+  "steps": 1000,
+  "recorded_frames": 1001,
+  "time_step_fs": 0.1,
+  "simulated_time_fs": 100.0,
+  "total_energy_initial_eV": 0.4440088303135072,
+  "total_energy_final_eV": 0.44409169373132656,
+  "total_energy_drift_eV": 8.286341781937878E-05,
+  "total_energy_range_eV": 0.00043146757325773777,
+  "all_frames_finite": true,
+  "all_frames_in_training_domain": true
+}

@@ -1,0 +1,10 @@
+---
+import PortalLayout from '../../layouts/PortalLayout.astro';
+import QramDiagram from '../../components/QramDiagram.astro';
+const base = import.meta.env.BASE_URL;
+---
+<PortalLayout title="QRAM" page="qram" description="量子随机访问存储 QRAM 的概念介绍。">
+  <div class="container"><nav class="breadcrumbs" aria-label="面包屑"><a href={base}>首页</a><span aria-hidden="true">/</span><span aria-current="page">QRAM</span></nav></div>
+  <section class="container example-hero"><div><h1>QRAM<br />量子随机访问存储</h1><p>根据量子地址，访问对应的存储数据。</p></div><figure><QramDiagram /><figcaption class="figure-caption">量子寻址示意</figcaption></figure></section>
+  <section class="container qram-intro"><h2>寻址与读取</h2><p>QRAM 通过量子地址选择存储单元，并在读取时保持地址的相干性。上图高亮了其中一条寻址路径。</p><p>应用示例暂未开放。</p><div class="actions"><a class="button primary" href={`${base}examples/aimd/`}>查看 AIMD 示例</a><a class="button secondary" href={`${base}docs/`}>使用指南</a></div></section>
+</PortalLayout>

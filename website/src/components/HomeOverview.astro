@@ -1,0 +1,80 @@
+---
+import SystemArchitecture from './SystemArchitecture.astro';
+import { site } from '../data/site';
+const base = import.meta.env.BASE_URL;
+---
+<section class="overview-band" aria-labelledby="overview-title">
+ <div class="overview container">
+  <div class="overview-copy">
+    <h1 id="overview-title">{site.name}</h1>
+    <p class="overview-description">通用融合编程框架，让经典计算与量子计算在一个流程中协作。</p>
+    <div class="overview-actions"><a class="button primary" href={`${base}docs/`}>阅读使用指南</a><a class="button secondary" href={`${base}examples/aimd/`}>查看示例</a></div>
+  </div>
+  <div class="overview-visual"><SystemArchitecture id="home-system" /></div>
+ </div>
+</section>
+<style>
+  .overview-band{
+    position:relative;
+    isolation:isolate;
+    padding-top:var(--site-header-height);
+    background:radial-gradient(ellipse at 82% 35%,#fff 0%,#f4f9fc 48%,#e4eff6 100%);
+  }
+  /* JanusQ fades a translucent navy overlay over a light hero background. */
+  .overview-band::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    background:linear-gradient(100deg,rgba(3,38,73,.98) 0%,rgba(9,51,88,.96) 28%,rgba(20,75,119,.84) 44%,rgba(44,110,160,.5) 62%,rgba(74,141,188,.12) 80%,rgba(74,141,188,0) 100%);
+  }
+  .overview{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:center;padding-block:68px 62px}
+  .overview-copy{min-width:0}
+  .overview h1{font-size:clamp(36px,4vw,56px);font-weight:600;line-height:1.3;letter-spacing:-.025em;margin-bottom:24px;color:#fff}
+  .overview-description{font-size:15px;font-weight:400;line-height:1.8;color:#e0ebf5;margin:0}
+  .overview-actions{display:flex;flex-wrap:wrap;align-items:center;gap:18px;margin-top:76px}
+  .overview-actions .button{
+    min-width:168px;
+    width:168px;
+    height:42px;
+    min-height:42px;
+    padding:0 20px;
+    border:1px solid transparent;
+    border-radius:13px;
+    background:#003f88;
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    line-height:1;
+    box-shadow:inset 0 1px 0 #ffffff1f,0 2px 0 rgba(2,45,68,.3),0 5px 12px #061d3633;
+    transition:background .2s cubic-bezier(.645,.045,.355,1),box-shadow .2s,transform .2s;
+  }
+  .overview-actions .button:hover{background:#1677ff;color:#fff;box-shadow:inset 0 1px 0 #ffffff26,0 2px 0 rgba(2,45,68,.3),0 8px 18px #061d363b}
+  .overview-actions .button:active{background:#002f66;box-shadow:0 1px 0 rgba(2,45,68,.3),0 2px 5px #061d3626}
+  .overview-actions .secondary{width:188px;background:#fff;color:#003f88;box-shadow:0 2px 0 rgba(2,45,68,.18),0 5px 12px #061d362b}
+  .overview-actions .secondary:hover{background:#edf5ff;color:#003f88;box-shadow:0 2px 0 rgba(2,45,68,.18),0 8px 18px #061d3633}
+  .overview-actions .secondary:active{background:#dcecff;color:#003f88;box-shadow:0 1px 0 rgba(2,45,68,.18),0 2px 5px #061d3626}
+  .overview-actions .button:focus-visible{outline-color:#a5defa}
+  .overview-visual{min-width:0;transform:translate(-12px,-16px) scale(1.08);transform-origin:center}
+  @media(max-width:1000px){
+    .overview{gap:24px;padding-block:54px}
+    .overview-visual{transform:translate(-6px,-12px) scale(1.04)}
+    .overview h1{font-size:clamp(32px,4vw,40px)}
+    .overview-description{font-size:21px}
+    .overview-actions{gap:16px;margin-top:64px}
+    .overview-actions .button{font-size:15px;min-width:156px;width:156px;padding-inline:18px}
+    .overview-actions .secondary{width:170px}
+  }
+  @media(max-width:760px){
+    .overview-band{background:radial-gradient(ellipse at 85% 75%,#d5e7f3 0%,#eaf3f9 52%,#f4f9fc 100%)}
+    .overview-band::before{background:linear-gradient(160deg,rgba(0,20,50,.94) 0%,rgba(0,20,50,.86) 38%,rgba(0,20,50,.65) 65%,rgba(0,20,50,.24) 100%)}
+    .overview{grid-template-columns:1fr;gap:34px;padding-block:38px 40px}
+    .overview h1{font-size:clamp(32px,8.8vw,40px);line-height:1.3;margin-bottom:20px}
+    .overview-description{font-size:20px}
+    .overview-actions{margin-top:48px;gap:14px}
+    .overview-actions .button{font-size:14px;min-width:0;width:130px;padding-inline:16px;height:42px}
+    .overview-actions .secondary{width:151px}
+    .overview-visual{max-width:580px;width:100%;justify-self:center;transform:none}
+  }
+</style>

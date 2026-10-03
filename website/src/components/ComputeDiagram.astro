@@ -1,0 +1,113 @@
+---
+interface Props {
+  id?: string;
+}
+
+const { id = 'compute-diagram' } = Astro.props;
+---
+
+<svg
+  class="compute-diagram"
+  viewBox="0 0 560 440"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-labelledby={`${id}-title ${id}-description`}
+>
+  <title id={`${id}-title`}>用户指定资源，融合编程框架组织执行</title>
+  <desc id={`${id}-description`}>
+    Python 用户程序连接融合编程框架，由框架分别连接 CPU 和 QPU。
+    CPU 承担经典计算与模型推理，QPU 承担量子电路计算，用户指定各任务使用的资源。性能模拟器独立评估任务与硬件的性能，不承担任务调度。
+  </desc>
+  <defs>
+    <pattern id={`${id}-grid`} x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 H 0 V 24" fill="none" stroke="#dce5ef" stroke-width="0.7" />
+    </pattern>
+    <linearGradient id={`${id}-paper`} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7faff" />
+      <stop offset="1" stop-color="#edf3fa" />
+    </linearGradient>
+    <marker id={`${id}-arrow`} viewBox="0 0 8 8" refX="6" refY="4" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="m 1 1 4 3 -4 3" fill="none" stroke="#7690ab" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="558" height="438" rx="22" fill={`url(#${id}-paper)`} stroke="#e0e8f1" />
+  <rect x="1" y="1" width="558" height="438" rx="22" fill={`url(#${id}-grid)`} />
+
+  <g fill="none" stroke="#b8c9da" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+    <path d="M 20 33 V 20 H 33 M 527 20 H 540 V 33 M 20 407 V 420 H 33 M 527 420 H 540 V 407" />
+  </g>
+
+  <path d="M 280 94 V 134" fill="none" stroke="#7690ab" stroke-width="1.6" marker-end={`url(#${id}-arrow)`} />
+  <text x="296" y="119" class="route-label">指定计算资源</text>
+
+  <g>
+    <rect x="159" y="34" width="242" height="60" rx="10" fill="#fff" stroke="#c9d7e6" />
+    <rect x="174" y="49" width="32" height="30" rx="5" fill="#edf3fa" />
+    <path d="m 185 59 -5 5 5 5 m 10 -10 5 5 -5 5" fill="none" stroke="#496b8d" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="222" y="60" class="program-title">用户程序</text>
+    <text x="222" y="79" class="program-language">Python</text>
+    <circle cx="379" cy="64" r="3" fill="#ced9e6" />
+  </g>
+
+  <g>
+    <rect x="115" y="138" width="330" height="70" rx="11" fill="#122d48" />
+    <path d="M 137 160 H 153 V 176 H 137 Z M 153 168 H 163 V 184 H 147 V 176" fill="none" stroke="#a6c6e8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    <text x="180" y="169" class="framework-title">融合编程框架</text>
+    <text x="180" y="190" class="framework-detail">组织依赖 · 调度执行</text>
+  </g>
+
+  <g fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 280 208 V 230" stroke="#7690ab" />
+    <path d="M 280 230 H 160 V 256" stroke="#0864d9" />
+    <path d="M 280 230 H 400 V 256" stroke="#7152ad" />
+  </g>
+  <circle cx="280" cy="230" r="4" fill="#fff" stroke="#7690ab" stroke-width="1.5" />
+
+  <g transform="translate(55 0)">
+    <rect x="15" y="257" width="180" height="78" rx="9" fill="#fff" stroke="#b7d2f4" />
+    <rect x="49" y="275" width="23" height="23" rx="4" fill="#edf4ff" stroke="#0864d9" />
+    <path d="M 56 281 H 65 V 291 H 56 Z M 54 272 V 275 M 61 272 V 275 M 68 272 V 275 M 54 298 V 301 M 61 298 V 301 M 68 298 V 301" fill="none" stroke="#0864d9" stroke-width="1.2" />
+    <text x="87" y="294" class="resource-title cpu">CPU</text>
+    <text x="105" y="319" class="resource-detail" text-anchor="middle">经典计算 · 模型推理</text>
+    <circle cx="105" cy="257" r="3" fill="#0864d9" />
+  </g>
+
+  <g transform="translate(-55 0)">
+    <rect x="365" y="257" width="180" height="78" rx="9" fill="#fff" stroke="#d4c7e7" />
+    <rect x="399" y="275" width="23" height="23" rx="4" fill="#f5f0fb" stroke="#7152ad" />
+    <path d="M 405 287 H 416 M 411 281 V 292" fill="none" stroke="#7152ad" stroke-width="1.2" />
+    <circle cx="405" cy="287" r="2" fill="#7152ad" />
+    <circle cx="411" cy="281" r="2" fill="#7152ad" />
+    <circle cx="411" cy="292" r="2" fill="#7152ad" />
+    <circle cx="416" cy="287" r="2" fill="#7152ad" />
+    <text x="437" y="294" class="resource-title qpu">QPU</text>
+    <text x="455" y="319" class="resource-detail" text-anchor="middle">量子电路</text>
+    <circle cx="455" cy="257" r="3" fill="#7152ad" />
+  </g>
+
+  <path d="M 445 173 H 545 V 391 H 407" fill="none" stroke="#8fa4bc" stroke-width="1.4" stroke-dasharray="4 5" />
+  <text x="470" y="375" class="route-label" text-anchor="middle">性能评估</text>
+  <g>
+    <rect x="153" y="365" width="254" height="53" rx="9" fill="#f8fafc" stroke="#b6c7d9" stroke-dasharray="4 3" />
+    <path d="M 171 400 V 383 M 176 395 H 179 V 400 H 176 Z M 182 389 H 185 V 400 H 182 Z M 188 379 H 191 V 400 H 188 Z" fill="#708ca8" />
+    <text x="207" y="387" class="simulator-title">性能模拟器</text>
+    <text x="207" y="406" class="simulator-detail">任务与硬件的时间预测</text>
+  </g>
+</svg>
+
+<style>
+  .compute-diagram { display: block; width: 100%; height: auto; overflow: visible; }
+  text { font-family: inherit; fill: #122d48; }
+  .program-title { font-size: 17px; font-weight: 650; }
+  .program-language { font-size: 13px; fill: #587089; }
+  .route-label { font-size: 13px; fill: #536c86; }
+  .framework-title { font-size: 21px; font-weight: 650; fill: #fff; }
+  .framework-detail { font-size: 13px; fill: #c9dcee; }
+  .resource-title { font-size: 23px; font-weight: 650; letter-spacing: .5px; }
+  .resource-detail { font-size: 13px; fill: #526c85; }
+  .cpu { fill: #0864d9; }
+  .qpu { fill: #7152ad; }
+  .simulator-title { font-size: 16px; font-weight: 650; }
+  .simulator-detail { font-size: 12px; fill: #536c86; }
+</style>

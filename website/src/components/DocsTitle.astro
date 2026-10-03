@@ -1,0 +1,8 @@
+---
+import { site } from '../data/site';
+const base = import.meta.env.BASE_URL;
+---
+<a class="portal-docs-title" href={base} aria-label={`${site.name}，返回首页`}>
+  <svg width="27" height="27" viewBox="0 0 30 30" aria-hidden="true"><path d="M6 8 15 3l9 5v12l-9 6-9-6Z" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m6 8 9 6 9-6M15 14v12" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="15" cy="14" r="3" fill="currentColor"/></svg>
+  <span>{site.name}</span>
+</a>

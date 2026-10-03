@@ -1,0 +1,36 @@
+---
+const base = import.meta.env.BASE_URL;
+const { lazy = false } = Astro.props;
+const groups = [
+  { name: '能量', unit: 'eV', keys: ['potential_energy_eV', 'kinetic_energy_eV', 'total_energy_eV'], labels: ['势能', '动能', '总能量'] },
+  { name: '温度', unit: 'K', keys: ['temperature_K'], labels: ['温度'] },
+  { name: '键长', unit: 'Å', keys: ['oh1_length_A', 'oh2_length_A'], labels: ['O–H₁', 'O–H₂'] },
+  { name: '键角', unit: '°', keys: ['hoh_angle_deg'], labels: ['H–O–H'] },
+];
+---
+<div class="wb" data-aimd-workbench data-lazy={lazy ? 'true' : undefined} data-log-url={`${base}aimd/imported/md_log.csv`} data-position-url={`${base}aimd/imported/positions.csv`}>
+  <p class="wb-load-status" data-load-status role="status">正在读取轨迹数据…</p>
+  <div class="wb-analysis-grid">
+    <section class="wb-panel wb-molecule-panel" aria-labelledby="molecule-title">
+      <div class="wb-panel-header"><h2 id="molecule-title">水分子三维轨迹</h2><button data-camera-reset aria-label="重置三维视角">↺ 视角</button></div>
+      <div class="wb-molecule-stage"><canvas data-molecule tabindex="0" role="img" aria-label="水分子三维动画；拖动旋转，滚轮缩放，方向键旋转，Home 重置视角"></canvas><div class="wb-stage-legend"><span class="atom-o">O</span><span class="atom-h1">H₁</span><span class="atom-h2">H₂</span></div></div>
+      <div class="wb-stage-tools"><label><input type="checkbox" data-trails checked /> 显示运动轨迹</label></div>
+      <div class="wb-geometry"><div><span>O–H₁</span><strong data-value="oh1_length_A">—</strong><small>Å</small></div><div><span>O–H₂</span><strong data-value="oh2_length_A">—</strong><small>Å</small></div><div><span>H–O–H</span><strong data-value="hoh_angle_deg">—</strong><small>°</small></div></div>
+    </section>
+    <section class="wb-curves" aria-labelledby="curves-title">
+      <div class="wb-curves-header"><h2 id="curves-title">动力学曲线</h2><label>时间范围 <select data-chart-window aria-label="曲线时间范围"><option value="0">全部</option><option value="10">当前帧 ±10 fs</option><option value="2">当前帧 ±2 fs</option></select></label></div>
+      <div class="wb-chart-grid">
+        {groups.map(group => <section class="wb-panel wb-chart" data-chart data-keys={group.keys.join(',')} data-unit={group.unit}>
+          <div class="wb-chart-header"><h3>{group.name}<small>{group.unit}</small></h3><div class="wb-chart-legends">{group.keys.map((key, i) => <button data-series={key} aria-pressed="true" aria-label={`显示${group.labels[i]}曲线`}><i></i>{group.labels[i]}</button>)}</div></div>
+          <svg data-plot viewBox="0 0 480 230" role="img" tabindex="0" aria-label={`${group.name}随时间变化曲线；点击选择时间步，左右方向键逐帧查看`}></svg>
+          <div class="wb-chart-readout" data-chart-readout></div>
+        </section>)}
+      </div>
+    </section>
+  </div>
+  <noscript><p>请启用 JavaScript 查看曲线与动画，也可下载原始 CSV 数据。</p></noscript>
+</div>
+<script>
+  import { mountAimdWorkbench } from '../lib/aimd-workbench';
+  document.querySelectorAll<HTMLElement>('[data-aimd-workbench]:not([data-lazy])').forEach(mountAimdWorkbench);
+</script>

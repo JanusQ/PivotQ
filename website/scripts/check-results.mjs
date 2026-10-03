@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+
+const root = new URL('../public/aimd/', import.meta.url);
+const result = JSON.parse(await readFile(new URL('results.json', root), 'utf8'));
+const csv = (await readFile(new URL('md_log.csv', root), 'utf8')).trim().split(/\r?\n/);
+const headers = csv.shift().split(',');
+const rows = csv.map(line => Object.fromEntries(line.split(',').map((cell, i) => [headers[i], cell])));
+const positions = (await readFile(new URL('positions.csv', root), 'utf8')).trim().split(/\r?\n/);
+const close = (a, b) => assert.ok(Math.abs(a - b) < 1e-10, `${a} != ${b}`);
+assert.equal(rows.length, result.recorded_frames);
+assert.equal(positions.length - 1, result.recorded_frames);
+assert.equal(Number(rows.at(-1).step), result.steps);
+close(Number(rows[0].temperature_K), result.initial_temperature_K);
+close(Number(rows[1].time_fs) - Number(rows[0].time_fs), result.time_step_fs);
+close(Number(rows.at(-1).time_fs), result.simulated_time_fs);
+const energies = rows.map(row => Number(row.total_energy_eV));
+assert.ok(energies.every(Number.isFinite));
+close(energies[0], result.total_energy_initial_eV);
+close(energies.at(-1), result.total_energy_final_eV);
+close(energies.at(-1) - energies[0], result.total_energy_drift_eV);
+close(Math.max(...energies) - Math.min(...energies), result.total_energy_range_eV);
+assert.equal(rows.every(row => row.in_training_domain === 'True'), result.all_frames_in_training_domain);
+assert.equal(result.real_qpu, false);
+console.log(`Static data verified: ${rows.length} frames; time, temperature, energy change, range and training-domain flags match the CSV.`);

@@ -1,0 +1,54 @@
+---
+import { Code } from 'astro:components';
+import PortalLayout from '../../layouts/PortalLayout.astro';
+import AimdWorkbench from '../../components/AimdWorkbench.astro';
+import AimdExecutionFlow from '../../components/AimdExecutionFlow.astro';
+import modelSource from '../../lib/aimd-model-source.py?raw';
+import '../../styles/aimd-workbench.css';
+import '../../styles/aimd-analysis.css';
+const buildSource = modelSource.slice(modelSource.indexOf('def build_circuit()'), modelSource.indexOf('\ndef _save_png'));
+const source = `from qiskit import QuantumCircuit\n\nADAPT_OPERATORS = ("IYZ", "YII", "YZI", "IIX", "YII")\n\n${buildSource.trim()}`;
+const sourceLines = source.split('\n');
+const base = import.meta.env.BASE_URL;
+const lineMap = {
+  1: sourceLines.findIndex(line => line.includes('circuit.ry(angle, qubit)')),
+  4: sourceLines.findIndex(line => line.includes('circuit.ry(theta[qubit], qubit)')),
+  5: sourceLines.findIndex(line => line.includes('circuit.cz(0, 1)')),
+  6: sourceLines.findIndex(line => line.includes('circuit.cz(1, 2)')),
+  8: sourceLines.findIndex(line => line.includes('_native_rx(circuit, theta[3 + qubit], qubit)')),
+  10: sourceLines.findIndex(line => line.includes('_pauli_rotation(circuit, word, theta[6 + index])')),
+};
+---
+<PortalLayout title="水分子 AIMD" page="aimd" description="查看水分子 AIMD 示例代码与电路，播放预先生成的动力学曲线和三维轨迹。">
+  <div class="container aimd-page analysis-page" data-aimd-analysis data-line-map={JSON.stringify(lineMap)}>
+    <section class="analysis-heading"><h1>水分子 AIMD 运行示例</h1></section>
+    <div class="analysis-layout" id="circuit">
+      <section class="analysis-code" aria-labelledby="source-heading">
+        <div class="analysis-card-heading"><h2 id="source-heading">模型代码</h2></div>
+        <div class="analysis-source" data-source data-model-source={source}><div data-code-fallback><Code code={source} lang="python" theme="github-light" /></div><div class="analysis-monaco" data-code-editor hidden></div></div>
+      </section>
+      <div class="analysis-right">
+        {['logical','physical'].map((kind,i)=><section class="analysis-circuit-card" data-circuit-card={kind} aria-labelledby={`${kind}-heading`}>
+          <div class="analysis-card-heading"><h2 id={`${kind}-heading`}>{i===0?'逻辑电路':'物理电路'}</h2><div class="analysis-circuit-tools" hidden data-circuit-tools><button class="analysis-icon" data-clock aria-label={`${i===0?'逻辑':'物理'}电路时序线`} aria-pressed="false" title="显示时序线"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 7v5l3 2"/></svg></button><button class="analysis-icon" data-zoom-out aria-label={`缩小${i===0?'逻辑':'物理'}电路`} title="缩小">−</button><button class="analysis-icon" data-zoom-in aria-label={`放大${i===0?'逻辑':'物理'}电路`} title="放大">＋</button><button class="analysis-icon" data-fit aria-label={`重置${i===0?'逻辑':'物理'}电路视图`} title="重置视图">↺</button></div></div>
+          <div class="analysis-empty" data-empty><svg viewBox="0 0 110 65" aria-hidden="true"><path d="M8 15h94M8 33h94M8 51h94"/><circle cx="34" cy="15" r="7"/><circle cx="64" cy="33" r="7"/><path d="M80 15v36"/><circle cx="80" cy="15" r="3"/><circle cx="80" cy="51" r="3"/></svg><p>{i===0?'正在加载逻辑电路…':'正在加载物理电路…'}</p></div>
+          <div class="analysis-circuit-viewport" data-circuit-viewport hidden tabindex="0" role="region" aria-label={`${i===0?'逻辑':'物理'}电路图，拖动平移，点击量子门查看详情`}><svg data-circuit-svg role="group" aria-label={`${i===0?'逻辑':'物理'}电路`}></svg></div>
+        </section>)}
+      </div>
+    </div>
+    <AimdExecutionFlow />
+    <section class="analysis-results" id="results" aria-labelledby="results-heading">
+      <div class="analysis-result-heading"><h2 id="results-heading">运行结果</h2><button class="analysis-button primary" type="button" data-restart disabled title="从第 0 步重新播放已有轨迹"><span aria-hidden="true">↻</span> 重新播放</button></div>
+      <p class="analysis-result-note">以下曲线与轨迹来自预先生成的结果。“重新播放”仅回放已有数据，不会提交计算任务。</p>
+      <details class="analysis-result-source">
+        <summary>数据来源与运行条件</summary>
+        <p>本页使用已导入的示例轨迹：1000 步、100 fs，共 1001 帧，初始温度为 300 K。导入文件未附原始运行编号与计算后端，因此这些轨迹仅用于展示分子演化，不用于比较硬件性能。</p>
+        <p>这组轨迹与使用指南中的 CPU 操作示例、另行保留的历史运行记录分别存档。<a href={`${base}aimd/README.md`}>查看数据来源说明</a>。</p>
+      </details>
+      <AimdWorkbench lazy />
+    </section>
+  </div>
+  <script>
+    import { mountAimdAnalysis } from '../../lib/aimd-analysis';
+    document.querySelectorAll<HTMLElement>('[data-aimd-analysis]').forEach(mountAimdAnalysis);
+  </script>
+</PortalLayout>

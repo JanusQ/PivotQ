@@ -1,0 +1,64 @@
+---
+import '../styles/quantum-circuit.css';
+---
+<div class="qc" data-quantum-circuit>
+  <div class="qc-topbar">
+    <div><strong data-model-name>F2/A2 演示</strong><span class="qc-count" data-gate-count>3 比特 · 16 个门</span></div>
+    <div class="qc-controls">
+      <button type="button" class="qc-primary" data-action="play">▶ 播放过程</button>
+      <button type="button" data-action="step">单步</button>
+      <button type="button" data-action="start">回到起点</button>
+      <button type="button" data-action="restore">恢复 F2/A2</button>
+      <button type="button" class="qc-primary" data-native-compile>编译原生电路</button>
+    </div>
+  </div>
+  <div class="qc-library" aria-label="量子门库">
+    <span class="qc-library-title">门库</span>
+    <div class="qc-library-gates">
+      {['H', 'X', 'Ry', 'Rx', 'Rz', 'CZ', 'CX'].map(type => <button type="button" draggable="false" data-add={type} aria-pressed="false" aria-label={`添加 ${type} 门`}>{type}</button>)}
+    </div>
+    <label class="qc-target-label">作用比特 <select data-add-qubit aria-label="新增门的作用比特"><option value="0">q0</option><option value="1">q1</option><option value="2">q2</option></select></label>
+    <button type="button" class="qc-append" data-action="append" disabled>追加到末尾</button>
+  </div>
+  <p class="qc-hint" data-hint>点击电路中的门调节参数；从门库拖入新门，或点选门后点击「＋」。</p>
+  <div class="qc-scroll" role="region" aria-label="交互量子电路，可横向滚动" tabindex="0"><div class="qc-canvas" data-canvas></div></div>
+  <div class="qc-timeline">
+    <label for="qc-progress">演化进度 <output data-progress-text>16 / 16</output></label>
+    <input id="qc-progress" data-progress type="range" min="0" max="16" value="16" step="1" aria-label="演化进度" />
+    <span data-stage>全部完成</span>
+  </div>
+  <div class="qc-panels">
+    <section class="qc-inspector" aria-labelledby="qc-selection-title">
+      <div class="qc-panel-heading"><h3 id="qc-selection-title" data-selection-title>Ry(x0)</h3><span data-selection-stage>角度编码 · q0</span></div>
+      <p class="qc-gate-description" data-description></p>
+      <div data-angle-editor>
+        <label class="qc-angle-label" for="qc-angle-number">旋转角度 <span data-angle-pi></span></label>
+        <div class="qc-angle-input"><input id="qc-angle-number" type="number" min="-6.283185307179586" max="6.283185307179586" step="0.01" data-angle-number aria-describedby="qc-angle-unit" /><span id="qc-angle-unit">rad</span></div>
+        <input type="range" data-angle-slider min="-6.283185307179586" max="6.283185307179586" step="0.01" aria-label="旋转角度滑杆" />
+        <div class="qc-presets"><button type="button" data-angle="0">0</button><button type="button" data-angle="1.5707963267948966">π/2</button><button type="button" data-angle="3.141592653589793">π</button><button type="button" data-angle="-1.5707963267948966">−π/2</button></div>
+      </div>
+      <p class="qc-field-error" data-angle-error role="status"></p>
+      <div class="qc-edit-actions"><button type="button" data-action="earlier">前移</button><button type="button" data-action="later">后移</button><button type="button" data-action="delete">删除此门</button><button type="button" data-action="undo" disabled>撤销</button></div>
+    </section>
+    <section class="qc-distribution" aria-labelledby="qc-prob-title">
+      <div class="qc-panel-heading"><h3 id="qc-prob-title">测量概率</h3><div class="qc-basis" role="group" aria-label="测量基"><button type="button" data-basis="Z" aria-pressed="true">Z 基</button><button type="button" data-basis="X" aria-pressed="false">X 基</button></div></div>
+      <div class="qc-chart" data-probabilities aria-label="三比特测量概率"></div>
+      <p class="qc-chart-caption"><span>比特顺序 q0 q1 q2</span><span data-prob-sum>概率合计 100%</span></p>
+    </section>
+  </div>
+  <details class="qc-features"><summary>查看当前状态的 14 维读出</summary><div class="qc-features-scroll"><table><caption>各比特及其关联期望值，范围 −1 至 1</caption><thead><tr><th>测量基</th>{['q0', 'q1', 'q2', 'q0q1', 'q0q2', 'q1q2', 'q0q1q2'].map(label => <th>{label}</th>)}</tr></thead><tbody data-features></tbody></table></div></details>
+  <section class="native-panel" data-native-panel hidden aria-labelledby="native-title">
+    <div class="native-header"><div><h3 id="native-title">原生电路 · Ry / Rz / CZ</h3><p data-native-summary></p></div><div class="qc-controls"><button type="button" data-native-clock aria-pressed="false">◷ 显示时序</button><button type="button" data-native-start>初态</button><button type="button" data-native-next>原生门单步</button></div></div>
+    <p class="native-status" data-native-status role="status"></p>
+    <div class="qc-scroll" tabindex="0" role="region" aria-label="编译后的原生电路，可横向滚动"><div class="native-canvas" data-native-canvas></div></div>
+    <div class="native-timeline"><label>原生门进度 <output data-native-step></output><input data-native-progress type="range" min="0" max="1" value="0" step="1" aria-label="原生电路演化进度" /></label><span data-native-selection></span></div>
+    <div class="native-probabilities" data-native-probabilities aria-label="原生电路当前步测量概率"></div>
+  </section>
+  <p class="qc-note">电路参数可调，原生门分解与概率在浏览器中计算；此处为独立的理想模拟，编辑电路不会重新计算已导入的分子轨迹。</p>
+  <p class="qc-announcement" data-announcement role="status" aria-live="polite"></p>
+  <noscript><p>请启用 JavaScript 使用交互电路。原生电路图与下方固定结果仍可查看。</p></noscript>
+</div>
+<script>
+  import { mountCircuit } from '../lib/quantum-circuit-ui';
+  document.querySelectorAll<HTMLElement>('[data-quantum-circuit]').forEach(mountCircuit);
+</script>

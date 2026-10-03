@@ -1,0 +1,51 @@
+---
+const tasks = [
+  { title: '初始化与轨迹控制', hardware: 'CPU' },
+  { title: '量子特征计算', hardware: 'QPU' },
+  { title: '经典能量预测', hardware: 'CPU' },
+  { title: '求力与轨迹积分', hardware: 'CPU' },
+  { title: '轨迹分析', hardware: 'CPU' },
+];
+---
+<section class="execution-flow" aria-labelledby="execution-flow-heading">
+  <div class="flow-heading"><h2 id="execution-flow-heading">执行流程</h2></div>
+  <div class="flow-scroll" tabindex="0" role="region" aria-label="AIMD 计算任务与目标硬件，窄屏可横向滚动">
+    <ol class="flow-tasks">
+      {tasks.map((task, index) => <li class:list={['flow-task', { 'quantum-task': task.hardware === 'QPU' }]}>
+        <div class="flow-task-card">
+        <span class="step-number" aria-label={`第 ${index + 1} 步`}>{String(index + 1).padStart(2, '0')}</span>
+        <h3>{task.title}</h3>
+        <span class="hardware" aria-label={`目标硬件 ${task.hardware}`}>
+          {task.hardware === 'CPU' ? <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 3v3m6-3v3M9 18v3m6-3v3M3 9h3m-3 6h3m12-6h3m-3 6h3"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg> : <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 17h18M12 7v10"/><circle cx="12" cy="7" r="2"/><circle cx="12" cy="17" r="4"/></svg>}
+          {task.hardware}
+        </span>
+        </div>
+        {index < tasks.length - 1 && <svg class="next-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h17m-5-5 5 5-5 5"/></svg>}
+      </li>)}
+    </ol>
+  </div>
+</section>
+<style>
+  .execution-flow{margin-top:32px;border:1px solid #dde7ef;border-radius:13px;background:#fff;box-shadow:0 5px 24px #1c3d5805;overflow:hidden}
+  .flow-heading{padding:18px 20px;border-bottom:0}
+  .flow-heading h2{font-size:19px;font-weight:650;color:#234361;line-height:1.3}
+  .flow-scroll{padding:16px 20px 28px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#b9cce0 #f4f7fa}
+  .flow-tasks{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:28px;min-width:1100px;list-style:none;margin:0;padding:0}
+  .flow-task{position:relative;min-width:0}
+  .flow-task-card{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:12px;width:100%;min-height:176px;padding:20px;border:1px solid #bfd6ec;border-radius:10px;text-align:left;cursor:default;background:var(--card-background);box-shadow:inset 0 1px 0 #fff,0 2px 5px #183e6710;transition:transform .24s cubic-bezier(.2,.8,.2,1),box-shadow .24s,border-color .24s;transform-origin:center;isolation:isolate}
+  .flow-task:nth-child(1){--card-background:linear-gradient(135deg,#fff 12%,#f0f8ff 55%,#cfE5fa 100%)}
+  .flow-task:nth-child(2){--card-background:radial-gradient(ellipse at 85% 15%,#fff 0%,#e6f2ff 48%,#b9d6f5 100%)}
+  .flow-task:nth-child(3){--card-background:linear-gradient(25deg,#d3e7fa 0%,#f3f9ff 48%,#fff 78%)}
+  .flow-task:nth-child(4){--card-background:radial-gradient(ellipse at 18% 82%,#fff 0%,#edf6ff 45%,#c4def7 100%)}
+  .flow-task:nth-child(5){--card-background:linear-gradient(110deg,#d3e6fa 0%,#fff 52%,#e9f4ff 100%)}
+  .flow-task-card::before{content:'';position:absolute;inset:0;border-radius:inherit;border:1px solid #ffffffb3;pointer-events:none}
+  @media(hover:hover){.flow-task-card:hover{z-index:1;transform:translateY(-7px) scale(1.015);border-color:#579bdc;box-shadow:inset 0 1px 0 #fff,0 3px 0 #a7c8e7,0 12px 22px #174c7f26,0 4px 8px #174c7f18}}
+  .step-number{font:750 22px/1 'Segoe UI',sans-serif;letter-spacing:.025em;color:#3d5873}
+  .flow-task h3{font-size:19px;line-height:1.4;font-weight:650;color:#193a57;white-space:nowrap}
+  .hardware{display:inline-flex;align-items:center;gap:10px;margin-top:auto;min-height:48px;padding:8px 14px;border:1px solid #dce6ef;border-radius:7px;background:#edf3f9;color:#365873;font:700 17px/1.4 'Segoe UI',sans-serif;letter-spacing:.03em}
+  .hardware svg{width:32px;height:32px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .quantum-task .step-number{color:#1c568b}.quantum-task .hardware{background:#073e80;color:#fff;border-color:#073e80;box-shadow:0 2px 5px #073e801a}
+  .next-arrow{position:absolute;right:-27px;top:calc(50% - 12px);width:24px;height:24px;fill:none;stroke:#6e8da8;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  @media(max-width:760px){.execution-flow{margin-top:24px}.flow-heading{padding:16px}.flow-heading h2{font-size:16px}.flow-scroll{padding:16px 16px 28px}}
+  @media(prefers-reduced-motion:reduce){.flow-task-card{transition:none}.flow-task-card:hover{transform:none}}
+</style>

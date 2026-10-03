@@ -1,0 +1,104 @@
+---
+import { site } from '../data/site';
+import GitHubLink from '../components/GitHubLink.astro';
+import '../styles/global.css';
+interface Props { title?: string; description?: string; page?: string; }
+const { title, description = site.description, page = 'home' } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const href = (path = '') => `${base}${path}`;
+const links = [
+  { key: 'home', label: '首页', href: base, active: page === 'home' },
+  { key: 'system', label: '系统介绍', href: `${base}#system`, active: false },
+  { key: 'applications', label: '应用示例', href: `${base}#applications`, active: page === 'aimd' || page === 'qram' },
+  { key: 'docs', label: '使用指南', href: href('docs/'), active: page === 'docs' },
+];
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    {page === '404' && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#52606d" />
+    {Astro.site && page !== '404' && <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />}
+    <link rel="icon" type="image/svg+xml" href={href('favicon.svg')} />
+    <title>{title ? `${title} · ${site.name}` : `${site.name} | 量子与经典计算协作`}</title>
+  </head>
+  <body data-page={page}>
+    <a class="skip-link" href="#main">跳转到正文</a>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href={base} aria-label={`${site.name}首页`}>
+          <svg width="34" height="34" viewBox="0 0 30 30" aria-hidden="true"><path d="M6 8 15 3l9 5v12l-9 6-9-6Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m6 8 9 6 9-6M15 14v12" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="15" cy="14" r="3" fill="currentColor"/></svg>
+          <span>{site.name}</span>
+        </a>
+        <nav class="desktop-nav" aria-label="主导航">
+          {links.map(link => <a href={link.href} data-nav-key={link.key} aria-current={link.active ? 'page' : undefined}>{link.label}</a>)}
+          {site.githubUrl && <GitHubLink href={site.githubUrl} placeholder={site.githubPlaceholder} />}
+        </nav>
+        <details class="mobile-menu">
+          <summary>菜单 <span aria-hidden="true">☰</span></summary>
+          <nav aria-label="移动端导航">
+            {links.map(link => <a href={link.href} data-nav-key={link.key} aria-current={link.active ? 'page' : undefined}>{link.label}</a>)}
+            {site.githubUrl && <GitHubLink href={site.githubUrl} placeholder={site.githubPlaceholder} />}
+          </nav>
+        </details>
+      </div>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <nav class="footer-column" aria-label="用户指南"><h2>用户指南</h2><a href={href('docs/')}>用户指南</a></nav>
+        <nav class="footer-column" aria-label="了解系统"><h2>了解系统</h2><a href={`${base}#system`}>系统介绍</a></nav>
+      </div>
+      <div class="footer-bottom"><span>© {new Date().getFullYear()} {site.name}</span></div>
+    </footer>
+    <script>
+      if (document.body.dataset.page === 'home') {
+        const sections = [
+          { key: 'home', element: document.querySelector('.overview-band') },
+          { key: 'system', element: document.getElementById('system') },
+          { key: 'applications', element: document.getElementById('applications') },
+          { key: 'docs', element: document.querySelector('.guide-callout') },
+        ].filter(section => section.element !== null);
+        const navLinks = document.querySelectorAll<HTMLAnchorElement>('.site-header [data-nav-key]');
+        const header = document.querySelector('.site-header');
+        let scheduled = false;
+        function updateNavigation() {
+          scheduled = false;
+          const headerBottom = header?.getBoundingClientRect().bottom ?? 80;
+          const readingLine = headerBottom + (window.innerHeight - headerBottom) * .25;
+          let active = sections[0]?.key ?? 'home';
+          sections.forEach(section => {
+            if (section.element!.getBoundingClientRect().top <= readingLine) active = section.key;
+          });
+          // The short final section may never reach the reading line.
+          if (window.scrollY > 0 && window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) active = sections.at(-1)?.key ?? active;
+          navLinks.forEach(link => {
+            if (link.dataset.navKey === active) link.setAttribute('aria-current', 'page');
+            else link.removeAttribute('aria-current');
+          });
+        }
+        function scheduleUpdate() {
+          if (!scheduled) { scheduled = true; requestAnimationFrame(updateNavigation); }
+        }
+        window.addEventListener('scroll', scheduleUpdate, { passive: true });
+        window.addEventListener('resize', scheduleUpdate);
+        window.addEventListener('load', scheduleUpdate);
+        window.addEventListener('pageshow', scheduleUpdate);
+        window.addEventListener('hashchange', scheduleUpdate);
+        scheduleUpdate();
+      }
+      document.querySelectorAll<HTMLAnchorElement>('.mobile-menu a').forEach(link => {
+        link.addEventListener('click', () => link.closest('details')?.removeAttribute('open'));
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') document.querySelectorAll<HTMLDetailsElement>('.mobile-menu[open]').forEach(menu => {
+          menu.open = false;
+          menu.querySelector('summary')?.focus();
+        });
+      });
+    </script>
+  </body>
+</html>

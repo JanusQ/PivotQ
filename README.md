@@ -2,6 +2,10 @@
 
 PivotQ is a platform for hybrid quantum–classical scientific computing. It combines heterogeneous task execution, performance prediction, and a browser workspace. The included water-molecule AIMD application combines quantum circuits with a classical machine-learning potential.
 
+## Project website
+
+The public introduction website is maintained in [`website/`](website/README.md), with an overview of the framework, a usage guide, and interactive examples using saved results. Its GitHub Pages address will be [https://janusq.github.io/PivotQ/](https://janusq.github.io/PivotQ/) after the first deployment. See the [deployment guide](website/DEPLOYMENT.md) for setup and local preview instructions.
+
 ## Install
 
 Run PivotQ with Docker, or install from source using uv.

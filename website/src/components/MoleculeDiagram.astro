@@ -1,0 +1,76 @@
+---
+interface Props {
+  compact?: boolean;
+  id?: string;
+}
+
+const { compact = false, id = 'molecule-diagram' } = Astro.props;
+---
+
+<svg
+  class:list={['molecule-diagram', { compact }]}
+  viewBox={compact ? '55 15 450 290' : '0 0 560 340'}
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-labelledby={`${id}-title ${id}-description`}
+>
+  <title id={`${id}-title`}>水分子球棍结构示意</title>
+  <desc id={`${id}-description`}>
+    一个珊瑚红色的氧原子通过两条键连接两个浅蓝色的氢原子，组成弯曲的 H₂O 分子。
+    这是静态结构示意，不是模拟轨迹，图中不包含实验或计算数据。
+  </desc>
+  <defs>
+    <radialGradient id={`${id}-oxygen`} cx="32%" cy="25%" r="78%">
+      <stop offset="0" stop-color="#ffa893" />
+      <stop offset="0.42" stop-color="#e57965" />
+      <stop offset="1" stop-color="#bd4e47" />
+    </radialGradient>
+    <radialGradient id={`${id}-hydrogen`} cx="30%" cy="24%" r="77%">
+      <stop offset="0" stop-color="#fff" />
+      <stop offset="0.52" stop-color="#eaf2fc" />
+      <stop offset="1" stop-color="#a7c2df" />
+    </radialGradient>
+    <linearGradient id={`${id}-bond`} x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#c1d0e0" />
+      <stop offset="0.45" stop-color="#edf3f8" />
+      <stop offset="1" stop-color="#9eb4ca" />
+    </linearGradient>
+    <radialGradient id={`${id}-shadow`}>
+      <stop offset="0" stop-color="#a0b7d0" stop-opacity="0.19" />
+      <stop offset="1" stop-color="#a0b7d0" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <ellipse cx="280" cy="289" rx="205" ry="24" fill={`url(#${id}-shadow)`} />
+  <g fill="none" stroke-linecap="round">
+    <path d="M 280 114 137 226 M 280 114 423 226" stroke="#9bb1c7" stroke-width="22" />
+    <path d="M 280 113 137 225 M 280 113 423 225" stroke={`url(#${id}-bond)`} stroke-width="18" />
+    <path d="M 276 109 133 221 M 284 109 427 221" stroke="#f8fbfd" stroke-opacity="0.7" stroke-width="3" />
+    <path d="M 225 157 A 70 70 0 0 0 335 157" stroke="#b6c7d8" stroke-width="1.2" stroke-dasharray="3 4" />
+  </g>
+
+  <circle cx="280" cy="114" r="66" fill={`url(#${id}-oxygen)`} stroke="#c35b50" stroke-width="0.8" />
+  <path d="M 233 88 A 52 52 0 0 1 276 63" fill="none" stroke="#ffd0be" stroke-width="2.5" stroke-linecap="round" opacity="0.75" />
+  <text x="280" y="125" text-anchor="middle" class="oxygen-label">O</text>
+
+  <circle cx="137" cy="226" r="42" fill={`url(#${id}-hydrogen)`} stroke="#a9bfd6" stroke-width="0.8" />
+  <path d="M 107 208 A 32 32 0 0 1 133 195" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+  <text x="137" y="235" text-anchor="middle" class="hydrogen-label">H</text>
+
+  <circle cx="423" cy="226" r="42" fill={`url(#${id}-hydrogen)`} stroke="#a9bfd6" stroke-width="0.8" />
+  <path d="M 393 208 A 32 32 0 0 1 419 195" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" />
+  <text x="423" y="235" text-anchor="middle" class="hydrogen-label">H</text>
+
+  <text x="280" y="260" text-anchor="middle" class="formula">H₂O</text>
+  <text x="280" y="283" text-anchor="middle" class="illustration-label">结构示意</text>
+</svg>
+
+<style>
+  .molecule-diagram { display: block; width: 100%; height: auto; }
+  .molecule-diagram.compact { max-width: 450px; margin-inline: auto; }
+  text { font-family: inherit; }
+  .oxygen-label { fill: #fff; font-size: 31px; font-weight: 600; }
+  .hydrogen-label { fill: #355371; font-size: 25px; font-weight: 600; }
+  .formula { fill: #122d48; font-size: 21px; font-weight: 550; letter-spacing: 1px; }
+  .illustration-label { fill: #536c86; font-size: 14px; }
+</style>

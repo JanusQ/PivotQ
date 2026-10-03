@@ -1,0 +1,127 @@
+---
+import PortalLayout from '../../layouts/PortalLayout.astro';
+import { Content, getHeadings } from '../../content/docs/docs/index.md';
+const chapters = [
+  { slug: 'system-overview', text: '系统介绍' },
+  ...getHeadings().filter(heading => heading.depth === 2),
+];
+---
+<PortalLayout title="使用指南" page="docs" description="了解通用融合编程框架及各模块的协作方式，并通过水分子 AIMD 应用示例学习硬件分配、性能预测与结果查看。">
+  <section class="guide-page" aria-labelledby="guide-title">
+    <div class="container">
+      <h1 id="guide-title">使用指南</h1>
+      <div class="guide-card">
+        <aside class="guide-menu" aria-label="文档目录">
+          <div class="guide-menu-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h11M4 18h6" /></svg><span>文档目录</span></div>
+          <nav class="guide-chapters" aria-label="指南章节">
+            {chapters.map((chapter, index) => <a href={`#guide-${chapter.slug}`} data-chapter={chapter.slug} aria-current={index === 0 ? 'true' : undefined}>{chapter.text}</a>)}
+          </nav>
+        </aside>
+        <article class="guide-content" tabindex="0" aria-label="指南正文" data-pagefind-body>
+          <h2 id="system-overview">系统介绍</h2>
+          <Content />
+        </article>
+      </div>
+    </div>
+  </section>
+</PortalLayout>
+<script>
+  const content = document.querySelector<HTMLElement>('.guide-content');
+  const navigation = document.querySelector<HTMLElement>('.guide-chapters');
+  if (content && navigation) {
+    content.querySelectorAll<HTMLImageElement>('img').forEach(image => {
+      if (image.closest('a')) return;
+      const link = document.createElement('a');
+      link.href = image.currentSrc || image.src;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.className = 'guide-image-link';
+      link.title = '点击查看大图（新窗口）';
+      link.setAttribute('aria-label', `${image.alt}，在新窗口查看大图`);
+      image.replaceWith(link);
+      link.append(image);
+    });
+    const links = Array.from(navigation.querySelectorAll<HTMLAnchorElement>('a[data-chapter]'));
+    const panels: HTMLElement[] = [];
+    let panel: HTMLElement | undefined;
+    for (const child of Array.from(content.children)) {
+      const heading = child.tagName === 'H2' ? child : child.querySelector('h2');
+      if (heading) {
+        panel = document.createElement('section');
+        panel.id = `guide-${heading.id}`;
+        panel.setAttribute('aria-labelledby', heading.id);
+        panel.className = 'guide-chapter';
+        content.insertBefore(panel, child);
+        panels.push(panel);
+      }
+      panel?.append(child);
+    }
+    const selectChapter = (id: string) => {
+      const decoded = decodeURIComponent(id);
+      const selected = panels.find(item => item.id === decoded || item.id === `guide-${decoded}`) || panels[0];
+      if (!selected) return;
+      panels.forEach(item => { item.hidden = item !== selected; });
+      links.forEach(link => {
+        if (`guide-${link.dataset.chapter}` === selected.id) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+      content.scrollTop = 0;
+    };
+    navigation.addEventListener('click', event => {
+      const link = (event.target as Element).closest<HTMLAnchorElement>('a[data-chapter]');
+      if (!link) return;
+      event.preventDefault();
+      history.pushState(null, '', link.hash);
+      selectChapter(link.hash.slice(1));
+    });
+    window.addEventListener('popstate', () => selectChapter(location.hash.slice(1)));
+    window.addEventListener('hashchange', () => selectChapter(location.hash.slice(1)));
+    selectChapter(location.hash.slice(1));
+  }
+</script>
+<style>
+  .guide-page{background:#f5f5f5;padding:26px 0 48px;min-height:calc(100svh - var(--site-header-height))}
+  .guide-page h1{text-align:center;font-size:38px;line-height:1.6;letter-spacing:0;color:var(--blue);margin-bottom:30px}
+  .guide-card{display:grid;grid-template-columns:200px minmax(0,1fr);height:clamp(480px,calc(100svh - 220px),720px);background:#fff;border-radius:40px 40px 40px 0;box-shadow:0 1px 2px -2px #00000029,0 3px 6px #0000001f,0 5px 12px 4px #00000017;overflow:hidden}
+  .guide-menu{border-right:1px solid #edf0f2;min-width:0;overflow-y:auto}
+  .guide-menu-title{height:90px;display:flex;align-items:center;gap:12px;padding:0 24px 0 30px;color:#7b8793;font-size:14px}
+  .guide-menu-title svg{width:26px;height:26px;fill:none;stroke:#aab4bf;stroke-width:2}
+  .guide-chapters{display:flex;flex-direction:column}
+  .guide-chapters a{display:block;padding:13px 20px;border-right:2px solid transparent;font-size:14px;color:#42566a;line-height:1.5}
+  .guide-chapters a:hover{background:#f4f9fc;color:#1677ff}
+  .guide-chapters a[aria-current]{background:#e6f3f9;color:#1677ff;border-right-color:#1677ff}
+  .guide-content{padding:22px 30px 36px;min-width:0;overflow:auto;scrollbar-gutter:stable;font-size:16px;color:#42566a;line-height:1.9}
+  .guide-content:focus-visible{outline-offset:-4px}
+  .guide-content :global(h2){font-size:26px;color:#334554;margin:0 0 22px;line-height:1.5}
+  .guide-content :global(h3){font-size:21px;margin:28px 0 16px;color:#334554}
+  .guide-content :global(p){margin:0 0 20px}
+  .guide-content :global(a){color:var(--blue);text-decoration:underline;text-underline-offset:4px}
+  .guide-content :global(ul),.guide-content :global(ol){padding-left:24px;margin:16px 0 24px}
+  .guide-content :global(li){margin-bottom:12px}
+  .guide-content :global(table){width:100%;border-collapse:collapse;font-size:15px;margin:20px 0}
+  .guide-content :global(th),.guide-content :global(td){text-align:left;border:1px solid #dde4eb;padding:14px 16px;vertical-align:top}
+  .guide-content :global(th){background:#f6f8fa;font-weight:600;color:#334554}
+  .guide-content :global(hr){border:0;border-top:1px solid #edf0f2;margin:24px 0}
+  .guide-content :global(pre){overflow:auto;padding:18px;background:#f6f8fa;border-radius:8px}
+  .guide-content :global(img){display:block;width:100%;height:auto;border:1px solid #e1e8f0;border-radius:10px;background:#f6f8fc}
+  .guide-content :global(.guide-image-link){display:block;cursor:zoom-in;border-radius:10px}
+  .guide-content :global(.guide-image-link:focus-visible){outline:3px solid #1677ff;outline-offset:4px}
+  .guide-content :global(p>em:only-child){display:block;font-size:13px;line-height:1.6;color:#62778b;font-style:normal;text-align:center}
+  .guide-content :global(.guide-chapter[hidden]){display:none}
+  .guide-content :global(.sl-anchor-link){display:none}
+  @media(max-width:760px){
+    .guide-page{padding:22px 0 34px}
+    .guide-page h1{font-size:29px;margin-bottom:22px}
+    .guide-card{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);height:calc(100svh - 205px);min-height:440px;border-radius:22px 22px 22px 0}
+    .guide-menu{border-right:0;border-bottom:1px solid #edf0f2;overflow:visible}
+    .guide-menu-title{height:52px;padding:0 18px;font-size:13px}
+    .guide-menu-title svg{width:21px;height:21px}
+    .guide-chapters{flex-direction:row;overflow-x:auto}
+    .guide-chapters a{flex:none;white-space:nowrap;padding:12px 15px;border-right:0;border-bottom:2px solid transparent;font-size:14px}
+    .guide-chapters a[aria-current]{border-bottom-color:#1677ff}
+    .guide-content{padding:22px 18px 28px;font-size:15px}
+    .guide-content :global(h2){font-size:22px;margin-bottom:18px}
+    .guide-content :global(table){font-size:13px}
+    .guide-content :global(th),.guide-content :global(td){padding:10px 8px;overflow-wrap:anywhere}
+  }
+</style>

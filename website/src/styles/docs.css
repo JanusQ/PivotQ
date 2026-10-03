@@ -1,0 +1,83 @@
+:root,:root[data-theme='light'],:root[data-theme='dark'] {
+  color-scheme: light;
+  --sl-font: ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  --sl-font-mono: ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
+  --sl-color-accent-low: #eaf2ff;
+  --sl-color-accent: #003f88;
+  --sl-color-accent-high: #003768;
+  --sl-color-white: #153653;
+  --sl-color-gray-1: #263f58;
+  --sl-color-gray-2: #425b73;
+  --sl-color-gray-3: #53667a;
+  --sl-color-gray-4: #91a1b2;
+  --sl-color-gray-5: #dde5ee;
+  --sl-color-gray-6: #f6f7f9;
+  --sl-color-black: #fff;
+  --sl-color-bg: #fff;
+  --sl-color-bg-nav: #fff;
+  --sl-color-bg-sidebar: #fafbfd;
+  --sl-content-width: 49rem;
+  --sl-text-h1: 2.25rem;
+}
+
+.portal-docs-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 650;
+  font-size: 19px;
+  color: #153653;
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: -.02em;
+}
+
+.portal-docs-title svg {
+  color: #003f88;
+  flex-shrink: 0;
+}
+
+.portal-docs-title:hover {
+  color: #003f88;
+}
+
+.sl-markdown-content {
+  line-height: 1.9;
+}
+
+.sl-markdown-content h2 {
+  font-weight: 650;
+  letter-spacing: -.025em;
+}
+
+.sl-markdown-content a {
+  text-underline-offset: 3px;
+}
+
+a:focus-visible,button:focus-visible,summary:focus-visible {
+  outline: 3px solid #003f88;
+  outline-offset: 4px;
+}
+
+@media (max-width:600px) {
+  .portal-docs-title {
+    font-size: 16px;
+    gap: 7px;
+  }
+
+  .portal-docs-title svg {
+    width: 24px;
+  }
+
+  :root {
+    --sl-text-h1: 1.9rem;
+  }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}

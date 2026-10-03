@@ -1,0 +1,7 @@
+---
+import PortalLayout from '../layouts/PortalLayout.astro';
+const base = import.meta.env.BASE_URL;
+---
+<PortalLayout title="页面未找到" page="404">
+  <section class="container not-found"><p class="error-code">404</p><h1>这个页面还没有连接。</h1><p>地址可能有误，或页面已经移动。可以返回首页，也可以从文档继续了解项目。</p><div class="actions"><a class="button primary" href={base}>返回首页</a><a class="button secondary" href={`${base}docs/`}>阅读文档</a></div></section>
+</PortalLayout>

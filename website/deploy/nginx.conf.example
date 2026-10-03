@@ -1,0 +1,30 @@
+# Include this server block from Nginx's http context.
+# TLS may terminate at an existing HTTPS reverse proxy / load balancer.
+# For a standalone HTTPS server, replace listen/server_name and configure certificates.
+server {
+    listen 8080;
+    server_name _;
+    root /srv/qhai-site;
+    index index.html;
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+
+    location / {
+        try_files $uri $uri/ =404;
+        add_header Cache-Control "no-cache";
+    }
+
+    # Astro asset names include hashes. Other content and search indexes must revalidate.
+    location /_astro/ {
+        try_files $uri =404;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+    }
+
+    gzip on;
+    gzip_types text/plain text/css application/javascript application/json application/xml image/svg+xml application/wasm;
+}
