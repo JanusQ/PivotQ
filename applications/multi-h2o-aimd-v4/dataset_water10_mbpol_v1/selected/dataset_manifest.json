@@ -1,0 +1,32 @@
+{
+  "status": "FROZEN",
+  "dataset_id": "water10_mbpol_v1",
+  "label_source": "MB-pol",
+  "is_dft": false,
+  "samples": 5000,
+  "files": {
+    "selected/water10.h5": "091032b72a9cdc3f9f557e189b91119aebcc6fc29af76bcc8eb5bd061e445e1c",
+    "selected/test_id.extxyz": "5d7d8ffdd9d94da0e7b4ac166ab2ffe2b939479d29af728d5a94ca3f4fab71c4",
+    "selected/test_ood.extxyz": "7a16c7f931d6aad5b699b91b06b7355710ef0d64ee8505f22959746041111925",
+    "selected/test_trajectory.extxyz": "25b2fba6bca2b58cfc845465cda35350b1a7c05f2628a07c420336fe19e31136",
+    "selected/train.extxyz": "2aa79e2e9bc889480fc0b33b92dc023cf9adae2081f7f2a5c4faffe03e1f4160",
+    "selected/validation.extxyz": "af1fff0e5984ede3217aa7b6f9b032ae5099e0a2a5bd36f941932bc556f63936",
+    "selected/splits.csv": "19e4274d49995fbbc982c03aedf896f56cee46131b3ccfc00f1d90631e6b72c3",
+    "selected/nested_train_ids.json": "7f63ef8b8ce52416b5bbfa60b7b94442d124785fe78e3b9a740aa1075ebc2053",
+    "selected/normalization.json": "06218c66319279fc8697c66c7b594410fe5cb5bb3f2f01cc0a3b560404b75b53",
+    "config/generation.json": "7c94e26a1a27075de24093be46d1742d6cd503d350374f5c491d1550235880fb",
+    "config/reference.lock.json": "0d9cb9f457718b8b348526538cca37f5eec30e10e19acdd324259cf78292a98f",
+    "code/dataset_loader.py": "9f75317a2b195a23b9d7a4308673822ce69fa9758d2228b0f19f3b6635bad562",
+    "figures/energy_test_id.png": "bd589a63c81670e6054a0537915c9d350ff920955c7bdd94ac62f8c447e6542f",
+    "figures/energy_test_ood.png": "21610829a4728495ad03da8b389f28a10a9b443136b8043ce22b9858648a93f2",
+    "figures/energy_test_trajectory.png": "f6d3b6db79b15ffcd6ba05480fd953b4a331b725a5ef336c8a89093367c6f536",
+    "figures/energy_train.png": "dc4d0212a59b15175361e715da2f4cd5736ac406b675d6ef90756d29316393a9",
+    "figures/energy_validation.png": "fdcf9a0b948aedafbfcbfcf81bfa5c5e790131c87347b813c22d9765feaabc05",
+    "figures/force_magnitude.png": "ef149d1c2b6a01ab47f04b3701b6b6acbe861d7dc891b1b8d24b88230697d346",
+    "reports/final_quality_report.json": "976a9217a4349ae70a76e96af5b0a60bdf37d4313b1724e4da935c95db48f142",
+    "reports/input_audit.json": "f449395a7e8331c593fe024083039430856eb51d7c7dfceaf0a8cab230211a5f",
+    "reports/numerical_audit.json": "d93c0842106e639a8fb56a46cece57926f46307753bfe07477e93a3a5ab115f0",
+    "reports/labeling_metrics.json": "ef6c20a7fdb690e8385e14621f811cf117feefd344e099437afb165329507192",
+    "reports/distribution_metrics.json": "e9aea073e30e1673724218d4c8f097f20dd049200d3c709ed6ff38c37f9b2e2c"
+  }
+}

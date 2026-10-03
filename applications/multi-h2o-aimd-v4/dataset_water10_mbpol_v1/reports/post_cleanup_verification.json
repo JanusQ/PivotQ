@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "dependencies_verified": 12,
+  "training_rows_read": 3500,
+  "default_loader_energy_only": true,
+  "frozen_manifest_verified_by_generator": true
+}

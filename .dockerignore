@@ -42,6 +42,9 @@
 **/*.log
 **/deliverables
 **/reports
+applications/multi-h2o-aimd-v4/runs
+applications/multi-h2o-aimd-v4/.cache
+applications/multi-h2o-aimd-v4/build
 **/tmp
 /test-scenario.yaml
 
@@ -50,3 +53,6 @@ fusion-platform
 
 # Rebuilt in the frontend stage
 dashboard/frontend/dist
+
+# Preserve every immutable dataset member, including nested audit reports.
+!applications/multi-h2o-aimd-v4/dataset_water10_mbpol_v1/**

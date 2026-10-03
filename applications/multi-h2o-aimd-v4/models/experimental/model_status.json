@@ -1,0 +1,10 @@
+{
+  "status": "unconverged",
+  "completed_updates": 11,
+  "completed_epochs": 0,
+  "source_commit": "f9a3de008cd428e098b5d6ff688bc0c57da43145",
+  "source_path": "applications/multi-h2o-aimd-v4/reports/force_preparation_20260923/current_run/current_model.json",
+  "sha256": "664c59820a887e48e8ec63a1a28dfd8235f914553f9264fbc84b74a18cca44ae",
+  "purpose": "software execution validation only",
+  "scientific_status": "not_validated"
+}

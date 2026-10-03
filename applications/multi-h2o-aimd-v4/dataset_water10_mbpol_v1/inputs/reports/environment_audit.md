@@ -1,0 +1,163 @@
+# 实际计算环境审计
+
+```json
+{
+  "host": "user-System-Product-Name",
+  "platform": "Linux-7.0.0-29-generic-x86_64-with-glibc2.39",
+  "python": "3.12.13 | packaged by conda-forge | (main, Mar  5 2026, 16:50:00) [GCC 14.3.0]",
+  "executable": "/data/hzhang/conda/envs/ase-aimd-gpaw/bin/python",
+  "cpu_affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63
+  ],
+  "packages": {
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "pyscf": "2.13.1",
+    "ase": "3.29.0",
+    "h5py": "3.16.0",
+    "yaml": "6.0.3",
+    "networkx": "3.6.1",
+    "psutil": "7.2.2"
+  },
+  "errors": [],
+  "memory": {
+    "total": 269696856064,
+    "available": 255657984000,
+    "percent": 5.2,
+    "used": 14038872064,
+    "free": 188317921280,
+    "active": 12541870080,
+    "inactive": 58317549568,
+    "buffers": 4506767360,
+    "cached": 65352732672,
+    "shared": 244035584,
+    "slab": 4728238080
+  },
+  "disk": {
+    "total": 3935709487104,
+    "used": 1254930096128,
+    "free": 2480779771904,
+    "percent": 33.6
+  },
+  "execution": {
+    "max_scf_attempts_each": 3,
+    "resume": true,
+    "workers": 1,
+    "threads_per_worker": 8,
+    "memory_mb_per_worker": 16000,
+    "scratch": "scratch",
+    "preflight_timeout_seconds": 1800,
+    "production_resource_budget": null
+  },
+  "numpy_build": "Build Dependencies:\n  blas:\n    detection method: pkgconfig\n    found: true\n    include directory: /data/hzhang/conda/envs/ase-aimd-gpaw/include\n    lib directory: /data/hzhang/conda/envs/ase-aimd-gpaw/lib\n    name: blas\n    openblas configuration: unknown\n    pc file directory: /data/hzhang/conda/envs/ase-aimd-gpaw/lib/pkgconfig\n    version: 3.9.0\n  lapack:\n    detection method: pkgconfig\n    found: true\n    include directory: /data/hzhang/conda/envs/ase-aimd-gpaw/include\n    lib directory: /data/hzhang/conda/envs/ase-aimd-gpaw/lib\n    name: lapack\n    openblas configuration: unknown\n    pc file directory: /data/hzhang/conda/envs/ase-aimd-gpaw/lib/pkgconfig\n    version: 3.9.0\nCompilers:\n  c:\n    args: -march=nocona, -mtune=haswell, -ftree-vectorize, -fPIC, -fstack-protector-strong,\n      -fno-plt, -O2, -ffunction-sections, -pipe, -fno-merge-constants, -isystem, /data/hzhang/conda/envs/ase-aimd-gpaw/include,\n      -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/bld/rattler-build_numpy_1783206200/work=/usr/local/src/conda/numpy-2.5.1,\n      -fdebug-prefix-map=/data/hzhang/conda/envs/ase-aimd-gpaw=/usr/local/src/conda-prefix,\n      -DNDEBUG, -D_FORTIFY_SOURCE=2, -O2, -isystem, /data/hzhang/conda/envs/ase-aimd-gpaw/include\n    commands: /home/conda/feedstock_root/build_artifacts/bld/rattler-build_numpy_1783206200/build_env/bin/x86_64-conda-linux-gnu-cc\n    linker: ld.bfd\n    linker args: -Wl,-O2, -Wl,--sort-common, -Wl,--as-needed, -Wl,-z,relro, -Wl,-z,now,\n      -Wl,--disable-new-dtags, -Wl,--gc-sections, -Wl,--allow-shlib-undefined, -Wl,-rpath,/data/hzhang/conda/envs/ase-aimd-gpaw/lib,\n      -Wl,-rpath-link,/data/hzhang/conda/envs/ase-aimd-gpaw/lib, -L/data/hzhang/conda/envs/ase-aimd-gpaw/lib,\n      -march=nocona, -mtune=haswell, -ftree-vectorize, -fPIC, -fstack-protector-strong,\n      -fno-plt, -O2, -ffunction-sections, -pipe, -fno-merge-constants, -isystem, /data/hzhang/conda/envs/ase-aimd-gpaw/include,\n      -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/bld/rattler-build_numpy_1783206200/work=/usr/local/src/conda/numpy-2.5.1,\n      -fdebug-prefix-map=/data/hzhang/conda/envs/ase-aimd-gpaw=/usr/local/src/conda-prefix,\n      -DNDEBUG, -D_FORTIFY_SOURCE=2, -O2, -isystem, /data/hzhang/conda/envs/ase-aimd-gpaw/include\n    name: gcc\n    version: 14.3.0\n  c++:\n    args: -fvisibility-inlines-hidden, -fmessage-length=0, -march=nocona, -mtune=haswell,\n      -ftree-vectorize, -fPIC, -fstack-protector-strong, -fno-plt, -O2, -ffunction-sections,\n      -pipe, -fno-merge-constants, -isystem, /data/hzhang/conda/envs/ase-aimd-gpaw/include,\n      -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/bld/rattler-build_numpy_1783206200/work=/usr/local/src/conda/numpy-2.5.1,\n      -fdebug-prefix-map=/data/hzhang/conda/envs/ase-aimd-gpaw=/usr/local/src/conda-prefix,\n      -DNDEBUG, -D_FORTIFY_SOURCE=2, -O2, -isystem, /data/hzhang/conda/envs/ase-aimd-gpaw/include\n    commands: /home/conda/feedstock_root/build_artifacts/bld/rattler-build_numpy_1783206200/build_env/bin/x86_64-conda-linux-gnu-c++\n    linker: ld.bfd\n    linker args: -Wl,-O2, -Wl,--sort-common, -Wl,--as-needed, -Wl,-z,relro, -Wl,-z,now,\n      -Wl,--disable-new-dtags, -Wl,--gc-sections, -Wl,--allow-shlib-undefined, -Wl,-rpath,/data/hzhang/conda/envs/ase-aimd-gpaw/lib,\n      -Wl,-rpath-link,/data/hzhang/conda/envs/ase-aimd-gpaw/lib, -L/data/hzhang/conda/envs/ase-aimd-gpaw/lib,\n      -fvisibility-inlines-hidden, -fmessage-length=0, -march=nocona, -mtune=haswell,\n      -ftree-vectorize, -fPIC, -fstack-protector-strong, -fno-plt, -O2, -ffunction-sections,\n      -pipe, -fno-merge-constants, -isystem, /data/hzhang/conda/envs/ase-aimd-gpaw/include,\n      -fdebug-prefix-map=/home/conda/feedstock_root/build_artifacts/bld/rattler-build_numpy_1783206200/work=/usr/local/src/conda/numpy-2.5.1,\n      -fdebug-prefix-map=/data/hzhang/conda/envs/ase-aimd-gpaw=/usr/local/src/conda-prefix,\n      -DNDEBUG, -D_FORTIFY_SOURCE=2, -O2, -isystem, /data/hzhang/conda/envs/ase-aimd-gpaw/include\n    name: gcc\n    version: 14.3.0\n  cython:\n    commands: cython\n    linker: cython\n    name: cython\n    version: 3.2.8\nMachine Information:\n  build:\n    cpu: x86_64\n    endian: little\n    family: x86_64\n    system: linux\n  host:\n    cpu: x86_64\n    endian: little\n    family: x86_64\n    system: linux\nPython Information:\n  path: /data/hzhang/conda/envs/ase-aimd-gpaw/bin/python\n  version: '3.12'\nSIMD Extensions:\n  baseline:\n  - X86_V2\n  found:\n  - X86_V3\n  - X86_V4\n  - AVX512_ICL\n  not found:\n  - AVX512_SPR\n\n",
+  "reference": {
+    "libxc_version": "7.0.0",
+    "is_nlc": true,
+    "rsh_coeff": [
+      0.3,
+      1.0,
+      -0.85
+    ],
+    "nlc_coeff": [
+      [
+        [
+          6.0,
+          0.01
+        ],
+        1
+      ]
+    ],
+    "vv10_grid_response_available": true
+  },
+  "units": {
+    "hartree_to_ev": 27.211386024367243,
+    "bohr_to_angstrom": 0.5291772105638411,
+    "kcalmol_to_ev": 0.04336410390059322,
+    "library": "ase.units",
+    "codata": "2014"
+  },
+  "auxiliary_basis_sha256": "93fe099e9ab8d6e20c1acc2ce1c1adf58662b0f2abcd956a6a5d9dd973e098b6",
+  "orbital_basis_sha256": "b7a372df983602e8ee5fc74bf42cd6748b98b8759e233a98cbe5cf0edf516102",
+  "mbx": {
+    "commit": "0e01b75b47611d7d51f27a34b112bdc5e2090a50",
+    "library_sha256": "9a81a7038cfff4c51571806fe085ee3941239905db43ebf7ab74e97b8f9ef4f5",
+    "adapter_library_sha256": "580369a11d8940b05af6b009e3141c05fdca19848b555b1151ed7e604bf0fff1",
+    "adapter_source_sha256": "75b5f0c08bdaf2d23162470e942be6918a604a31c68d0b70574b6c09b5279de6",
+    "official_example": {
+      "energy_difference_ev": -8.570855136724731e-11,
+      "force_max_difference_ev_a": 3.445251306466446e-10,
+      "finite_difference_errors_ev_a": [
+        1.317281816959337e-08,
+        1.5443450962493444e-09,
+        1.93366101464143e-08,
+        3.0806730499932655e-09
+      ],
+      "passed": true
+    }
+  },
+  "passed": true
+}
+```

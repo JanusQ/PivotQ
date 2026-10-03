@@ -1,0 +1,38 @@
+{
+  "fit_split": "train",
+  "full_train_mean_ev": -2.5351707079985957,
+  "full_train_std_ev": 0.46365752597482757,
+  "subset_normalizers": {
+    "250": {
+      "mean_ev": -2.227067310524019,
+      "std_ev": 0.47080685029436803,
+      "sample_ids_sha256": "a1362df329df49aa903d28160e99706d66dce205bdc1ce7923a314da694e0bbf",
+      "count": 250
+    },
+    "500": {
+      "mean_ev": -2.258396568757455,
+      "std_ev": 0.4582152855673593,
+      "sample_ids_sha256": "74b3de2ef6ce8fa83b13b6a06e3050a8bdc8aafc683e58977d6513483305b5b6",
+      "count": 500
+    },
+    "1000": {
+      "mean_ev": -2.315286741897701,
+      "std_ev": 0.43589119464561493,
+      "sample_ids_sha256": "f7088cb4a6bb45570d25e3e27a7eed053e220feeb4cd52cc39d151433c382fa1",
+      "count": 1000
+    },
+    "2000": {
+      "mean_ev": -2.4170414063642798,
+      "std_ev": 0.44141082923887626,
+      "sample_ids_sha256": "80a03b8898c8deddc6e0ebdd95a0f58cf336450d0da4b0bfb58081445c8f1119",
+      "count": 2000
+    },
+    "3500": {
+      "mean_ev": -2.535170707998596,
+      "std_ev": 0.4636575259748275,
+      "sample_ids_sha256": "c8fde9c78bff8b293b21c4e0ae606fb543db160e1639b67902f10479e2463360",
+      "count": 3500
+    }
+  },
+  "refit_for_custom_subset": true
+}

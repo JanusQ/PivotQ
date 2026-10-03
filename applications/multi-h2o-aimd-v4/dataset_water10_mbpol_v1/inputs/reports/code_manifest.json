@@ -1,0 +1,22 @@
+{
+  "code/audit_labels.py": "98851395a5907d9cb118b51c8a9ff8dbd972a1ecf5ddcee2e1d80ff312e2b495",
+  "code/audit_preselection.py": "379ca6f1eca0bfc584e9f0d337bb7ed04781e45abf5c78bd986642996626100b",
+  "code/build_candidate_pool.py": "a3a5355e63fde6829aad82a9fd0165e74c617a515916c1f267336ec8cb0f4625",
+  "code/check_electronic_stability.py": "b8aabe31b4035c410fcb0473f6afff13b2e9f6c026ea783a901aae210806ae05",
+  "code/common.py": "4e77899a2e0ce5af7a320ad66761cadeccd224f35c311f3e559673ba245bf3bd",
+  "code/dataset_loader.py": "9f75317a2b195a23b9d7a4308673822ce69fa9758d2228b0f19f3b6635bad562",
+  "code/descriptors_and_groups.py": "e3c0a4ab5159b4af38552a4ad4fe996f1f4430e8d92365a55d363200e5fbdbcc",
+  "code/export_dataset.py": "7e82a701963f6baa06c8599ef76fbc1303d9df5a41c6246a73db18cb33ae93ea",
+  "code/fetch_or_build_seeds.py": "6557491f22ac29113409d5c551dedb4c1dbc764931e7241cfc01d49d796c8980",
+  "code/inspect_environment.py": "15c4703d56ee2d6b03580d5412d421daebe763fbf3a3acbd1a6076c26c175448",
+  "code/mbx_sampler.py": "c249280b9eb414a671da5c33188d91885230e5cc902b6e0ce505baeac920e980",
+  "code/plot_candidate_diagnostics.py": "f37ad653e19d3fa669b94da03220e4f3ed078e07e9a1595d56619aa628b91c14",
+  "code/reference_pyscf.py": "ad3ec50779c7938516c7fc72d9578d550f9b68a995ed9f864f96ae2cd0e8d06c",
+  "code/report_progress.py": "d73e39ca7e9b16304530da1d24f8e91507d31598185d451e2dba0eec0caba4d3",
+  "code/run_labels.py": "6ef78069792cd996837d6eb494d61a4137656830bf20b8e3a804176fa60fd5f5",
+  "code/run_pilot.py": "65e7325b8cbf1d67d3248634ecbe2ebe0e651829049c9948f43c494e6a141c36",
+  "code/sample_candidates.py": "f79022029449ed3caa5944c11d751073a7d8cd92bc7e09e98471da05a9a4d54b",
+  "code/select_and_split.py": "ac0ce19ffabcd1e1127b45e8f2c04e3f313cf656127c66d2421c74d6ef799ad3",
+  "code/tests/test_contracts.py": "839db5b8f1346d9e5328045620b5b227e039d53e82dbe0bce63941afcea114cd",
+  "code/validate_geometry.py": "8f57f3c12b4732576e4cc71f8d2101e922d35f5912601124425100b333da7f39"
+}

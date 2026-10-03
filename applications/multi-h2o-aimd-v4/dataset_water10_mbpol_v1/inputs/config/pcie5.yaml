@@ -1,0 +1,40 @@
+dataset_id: water10_mbpol_v1
+sampling:
+  backend: mbx_original_mbpol_h2o
+  mbx_home: vendor/mbx
+  adapter_source: vendor/mbx/mbx_adapter.cpp
+  adapter_library: vendor/mbx/pcie5/lib/libqaqua_mbx.so
+  mbx_commit: 0e01b75b47611d7d51f27a34b112bdc5e2090a50
+  temperatures_kelvin: [100, 200, 300]
+  timestep_fs: 0.25
+  thermostat_tau_fs: 100.0
+  equilibration_ps: 0.5
+  production_ps: 2.0
+  candidate_stride_fs: 5.0
+  selected_min_stride_fs: 20.0
+  initial_candidate_target: 30000
+  max_candidate_target: 50000
+  seed_families: {train: 20, validation: 3, test_id: 3, test_trajectory: 2, test_ood: 2}
+geometry:
+  main_oh: [0.85, 1.15]
+  main_angle: [85, 125]
+  hard_oh: [0.80, 1.25]
+  hard_angle: [75, 135]
+  min_oo: 2.2
+  min_nonbonded: 0.65
+  duplicate_rmsd: 0.03
+  duplicate_oo_rms: 0.03
+  hbond_oo: 3.5
+  hbond_angle_deg: 30.0
+splits: {train: 3500, validation: 500, test_id: 500, test_trajectory: 250, test_ood: 250}
+quotas:
+  train: {thermal: 2450, distortion: 700, boundary: 350}
+  validation: {thermal: 350, distortion: 100, boundary: 50}
+  test_id: {thermal: 350, distortion: 100, boundary: 50}
+  test_trajectory: {trajectory: 250}
+  test_ood: {ood: 250}
+labels: {energy: true, forces: true}
+training_contract:
+  default_loss: energy_only
+  nested_train_sizes: [250, 500, 1000, 2000, 3500]
+  refit_normalizer_on_each_subset: true

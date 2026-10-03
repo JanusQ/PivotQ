@@ -1,0 +1,161 @@
+{
+  "host": "pcie5-up.rc4ml.org",
+  "platform": "Linux-5.15.0-102-generic-x86_64-with-glibc2.35",
+  "python": "3.12.14 (main, Sep  2 2026, 23:27:36) [GCC 15.3.0]",
+  "executable": "/mnt/nfs/home/zhanghao/envs/water10-pyscf/bin/python",
+  "cpu_affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63
+  ],
+  "packages": {
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "pyscf": "2.13.1",
+    "ase": "3.29.0",
+    "h5py": "3.16.0",
+    "yaml": "6.0.3",
+    "networkx": "3.6.1",
+    "psutil": "7.2.2"
+  },
+  "errors": [],
+  "memory": {
+    "total": 1081586741248,
+    "available": 1053767057408,
+    "percent": 2.6,
+    "used": 27819683840,
+    "free": 1031046844416,
+    "active": 3652030464,
+    "inactive": 25722384384,
+    "buffers": 509132800,
+    "cached": 27411705856,
+    "shared": 3903488,
+    "slab": 1243021312
+  },
+  "disk": {
+    "total": 76721860640768,
+    "used": 6609137827840,
+    "free": 70112722812928,
+    "percent": 8.6
+  },
+  "execution": {
+    "max_scf_attempts_each": 3,
+    "resume": true,
+    "workers": 1,
+    "threads_per_worker": 8,
+    "memory_mb_per_worker": 16000,
+    "scratch": "scratch",
+    "preflight_timeout_seconds": 1800,
+    "production_resource_budget": null
+  },
+  "numpy_build": "Build Dependencies:\n  blas:\n    detection method: pkgconfig\n    found: true\n    include directory: /opt/_internal/cpython-3.12.13/lib/python3.12/site-packages/scipy_openblas64/include\n    lib directory: /opt/_internal/cpython-3.12.13/lib/python3.12/site-packages/scipy_openblas64/lib\n    name: scipy-openblas\n    openblas configuration: OpenBLAS 0.3.33.112.0  USE64BITINT DYNAMIC_ARCH NO_AFFINITY\n      Haswell MAX_THREADS=64\n    pc file directory: /project/.openblas\n    version: 0.3.33.112.0\n  lapack:\n    detection method: pkgconfig\n    found: true\n    include directory: /opt/_internal/cpython-3.12.13/lib/python3.12/site-packages/scipy_openblas64/include\n    lib directory: /opt/_internal/cpython-3.12.13/lib/python3.12/site-packages/scipy_openblas64/lib\n    name: scipy-openblas\n    openblas configuration: OpenBLAS 0.3.33.112.0  USE64BITINT DYNAMIC_ARCH NO_AFFINITY\n      Haswell MAX_THREADS=64\n    pc file directory: /project/.openblas\n    version: 0.3.33.112.0\nCompilers:\n  c:\n    commands: cc\n    linker: ld.bfd\n    name: gcc\n    version: 14.2.1\n  c++:\n    commands: c++\n    linker: ld.bfd\n    name: gcc\n    version: 14.2.1\n  cython:\n    commands: cython\n    linker: cython\n    name: cython\n    version: 3.2.8\nMachine Information:\n  build:\n    cpu: x86_64\n    endian: little\n    family: x86_64\n    system: linux\n  host:\n    cpu: x86_64\n    endian: little\n    family: x86_64\n    system: linux\nPython Information:\n  path: /tmp/build-env-kd0sw37v/bin/python\n  version: '3.12'\nSIMD Extensions:\n  baseline:\n  - X86_V2\n  found:\n  - X86_V3\n  - X86_V4\n  - AVX512_ICL\n  - AVX512_SPR\n\n",
+  "reference": {
+    "libxc_version": "7.0.0",
+    "is_nlc": true,
+    "rsh_coeff": [
+      0.3,
+      1.0,
+      -0.85
+    ],
+    "nlc_coeff": [
+      [
+        [
+          6.0,
+          0.01
+        ],
+        1
+      ]
+    ],
+    "vv10_grid_response_available": true
+  },
+  "units": {
+    "hartree_to_ev": 27.211386024367243,
+    "bohr_to_angstrom": 0.5291772105638411,
+    "kcalmol_to_ev": 0.04336410390059322,
+    "library": "ase.units",
+    "codata": "2014"
+  },
+  "auxiliary_basis_sha256": "93fe099e9ab8d6e20c1acc2ce1c1adf58662b0f2abcd956a6a5d9dd973e098b6",
+  "orbital_basis_sha256": "b7a372df983602e8ee5fc74bf42cd6748b98b8759e233a98cbe5cf0edf516102",
+  "mbx": {
+    "commit": "0e01b75b47611d7d51f27a34b112bdc5e2090a50",
+    "source_kind": "verified_preserved_archive",
+    "library_path": "/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/pcie5/lib/libmbx.so",
+    "library_sha256": "b3d060b26dccec4106a7ab2baaa163ff14a20ddd718c4ce3a5dab995d9fc5416",
+    "adapter_library_sha256": "efd2ed2f2452101063e9204270eb01f2d9e922b2e2185ea9e63ad9dde56cc22b",
+    "adapter_source_sha256": "75b5f0c08bdaf2d23162470e942be6918a604a31c68d0b70574b6c09b5279de6",
+    "official_example": {
+      "energy_difference_ev": -8.570844034494485e-11,
+      "force_max_difference_ev_a": 3.4452524166894705e-10,
+      "finite_difference_errors_ev_a": [
+        1.3197798187647436e-08,
+        1.5082628479490268e-09,
+        1.933383458885274e-08,
+        3.080673161015568e-09
+      ],
+      "passed": true
+    }
+  },
+  "passed": true
+}

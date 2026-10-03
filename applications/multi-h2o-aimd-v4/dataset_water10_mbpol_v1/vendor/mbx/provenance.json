@@ -1,0 +1,14 @@
+{
+  "upstream_repository": "https://github.com/paesanilab/MBX",
+  "commit": "0e01b75b47611d7d51f27a34b112bdc5e2090a50",
+  "source": "read-only byte-identical copy of existing v2 vendor archive/libraries and adapter; existing v3 official example snapshot",
+  "files": {
+    "mbx_source.tar.gz": "10e245d5a6518ccba5a1ce946491966faa34211df590be065aca22a480917da8",
+    "mbx_adapter.cpp": "75b5f0c08bdaf2d23162470e942be6918a604a31c68d0b70574b6c09b5279de6",
+    "lib/libqaqua_mbx.so": "580369a11d8940b05af6b009e3141c05fdca19848b555b1151ed7e604bf0fff1",
+    "lib/libmbx.so": "9a81a7038cfff4c51571806fe085ee3941239905db43ebf7ab74e97b8f9ef4f5",
+    "examples/PEFs/001_mbpol/python/mbx.json": "745187b0df96b82d793567a6ae6dd080481f46ca27dff861de90fc921cd50d47",
+    "examples/PEFs/001_mbpol/python/expected_output": "f0345d0977ac42950347d0607dc4810ba1a6a476cc43dda1961fc3c897af8598",
+    "examples/PEFs/001_mbpol/python/input.xyz": "9afcb2c30038b8485f1c1f9220ef05edf0d3abae1b6a33465cb834a6036c980c"
+  }
+}

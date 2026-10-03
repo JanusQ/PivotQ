@@ -1,0 +1,83 @@
+{
+  "host": "pcie5-up.rc4ml.org",
+  "compiler": "g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0\nCopyright (C) 2021 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "archive_sha256": "10e245d5a6518ccba5a1ce946491966faa34211df590be065aca22a480917da8",
+  "upstream_commit": "0e01b75b47611d7d51f27a34b112bdc5e2090a50",
+  "adapter_sha256": "75b5f0c08bdaf2d23162470e942be6918a604a31c68d0b70574b6c09b5279de6",
+  "commands": [
+    [
+      "autoreconf",
+      "-fi"
+    ],
+    [
+      "/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/work_pcie5/configure",
+      "--prefix=/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/pcie5",
+      "--enable-shared",
+      "--disable-static",
+      "--disable-i-pi-plugin"
+    ],
+    [
+      "make",
+      "-C",
+      "src",
+      "-j4",
+      "libmbx.la"
+    ],
+    [
+      "make",
+      "-C",
+      "src",
+      "install-libLTLIBRARIES"
+    ],
+    [
+      "/usr/bin/g++",
+      "-O2",
+      "-fopenmp",
+      "-std=c++17",
+      "-shared",
+      "-fPIC",
+      "-I/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/work_pcie5/src",
+      "-I/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/work_pcie5",
+      "-I/mnt/nfs/home/zhanghao/envs/water10-mbx-build/include",
+      "/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/mbx_adapter.cpp",
+      "-L/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/pcie5/lib",
+      "-lmbx",
+      "-Wl,-rpath,$ORIGIN",
+      "-Wl,-rpath,/mnt/nfs/home/zhanghao/envs/water10-mbx-build/lib",
+      "-o",
+      "/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/pcie5/lib/libqaqua_mbx.so"
+    ]
+  ],
+  "executed_commands_this_invocation": [
+    [
+      "/usr/bin/g++",
+      "-O2",
+      "-fopenmp",
+      "-std=c++17",
+      "-shared",
+      "-fPIC",
+      "-I/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/work_pcie5/src",
+      "-I/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/work_pcie5",
+      "-I/mnt/nfs/home/zhanghao/envs/water10-mbx-build/include",
+      "/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/mbx_adapter.cpp",
+      "-L/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/pcie5/lib",
+      "-lmbx",
+      "-Wl,-rpath,$ORIGIN",
+      "-Wl,-rpath,/mnt/nfs/home/zhanghao/envs/water10-mbx-build/lib",
+      "-o",
+      "/mnt/nfs/home/zhanghao/code/multi-h2o-aimd-v3/.deps/mbx/pcie5/lib/libqaqua_mbx.so"
+    ]
+  ],
+  "fftw_prefix": "/mnt/nfs/home/zhanghao/envs/water10-mbx-build",
+  "resumed_adapter_only": true,
+  "wall_seconds_scope": "this invocation only",
+  "earlier_library_build_log": "water10_wb97mv_tzvppd_v1/audit/pcie5_assessment/reports/mbx_build_library.log",
+  "wall_seconds": 1.841043330001412,
+  "files": {
+    ".deps/mbx/pcie5/lib/libmbx.so.0.0.0": "b3d060b26dccec4106a7ab2baaa163ff14a20ddd718c4ce3a5dab995d9fc5416",
+    ".deps/mbx/pcie5/lib/libmbx.la": "d8b2d860dc54b0550c3c8d946b17c2b0192e11991af0864b991aaad987c394fe",
+    ".deps/mbx/pcie5/lib/libqaqua_mbx.so": "efd2ed2f2452101063e9204270eb01f2d9e922b2e2185ea9e63ad9dde56cc22b"
+  },
+  "physical_kernel_changes": false,
+  "old_library_preserved": true
+}

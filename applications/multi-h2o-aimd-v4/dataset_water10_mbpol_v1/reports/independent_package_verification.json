@@ -1,0 +1,63 @@
+{
+  "passed": true,
+  "retired_directory_absent": true,
+  "external_vendor_directory_absent": true,
+  "run_cwd": "/tmp",
+  "samples": 5000,
+  "all_hdf5_datasets_exactly_equal": [
+    "atomic_numbers",
+    "category",
+    "coordinate_sha256",
+    "energy_centered_ev",
+    "energy_ev",
+    "forces_ev_per_angstrom",
+    "geometry_family_id",
+    "lineage_root_id",
+    "metadata_json",
+    "molecule_id",
+    "parent_id",
+    "pbc",
+    "positions_angstrom",
+    "sample_id",
+    "scan_id",
+    "split",
+    "trajectory_id"
+  ],
+  "wall_seconds": 27.106821674002276,
+  "replay_quality": {
+    "passed": true,
+    "dataset_id": "water10_mbpol_v1",
+    "label_source": "MB-pol",
+    "samples": 5000,
+    "splits": {
+      "train": 3500,
+      "validation": 500,
+      "test_id": 500,
+      "test_trajectory": 250,
+      "test_ood": 250
+    },
+    "forces_shape": [
+      5000,
+      30,
+      3
+    ],
+    "all_labels_finite": true,
+    "geometry_and_split_audit_passed": true,
+    "numerical_audit_passed": true,
+    "round_trip_passed": true,
+    "loader_checks_passed": true,
+    "energy_ev_quantiles": [
+      -3.7151586404809485,
+      -3.5106172803328812,
+      -2.535118296172044,
+      -1.6055029767924531,
+      -1.1657896862019088
+    ],
+    "wall_seconds": 23.46462330200302,
+    "host": "pcie5-up.rc4ml.org",
+    "DFT_labels": false,
+    "training_performed": false,
+    "source_license": "Original coordinate licensing caveat retained in inputs/reports/public_data_audit.json"
+  },
+  "original_frozen_files_unchanged": true
+}

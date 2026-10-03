@@ -8,13 +8,14 @@ RUN npm run build
 FROM ghcr.io/astral-sh/uv:0.12.2 AS uv
 FROM ubuntu:24.04
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-venv ca-certificates libgomp1 libstdc++6 \
+RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-venv ca-certificates libgomp1 libstdc++6 g++ \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=uv /uv /uvx /usr/local/bin/
 WORKDIR /app
 COPY pyproject.toml uv.lock .python-version ./
 COPY packages/ ./packages/
 COPY applications/h2o-hybrid-aimd/ ./applications/h2o-hybrid-aimd/
+COPY applications/multi-h2o-aimd-v4/ ./applications/multi-h2o-aimd-v4/
 RUN uv sync --locked --no-dev
 COPY dashboard/ ./dashboard/
 COPY --from=frontend /build/dist/ ./dashboard/frontend/dist/

@@ -1,0 +1,16 @@
+{
+  "samples": 5000,
+  "new_calls_this_invocation": 4968,
+  "loop_wall_seconds": 12.86101950900047,
+  "seconds_per_call_quantiles": [
+    0.0018915430046035908,
+    0.0022923204996914137,
+    0.0037021415042545395,
+    0.0061644660017918795
+  ],
+  "threads": 1,
+  "proposal_comparisons": 3525,
+  "max_proposal_energy_difference_ev": 0.0,
+  "max_total_force_ev_a": 1.6221798348192712e-14,
+  "max_total_torque_ev": 3.5219741722047965e-07
+}

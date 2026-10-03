@@ -1,0 +1,386 @@
+[
+  {
+    "symbol": "theta1",
+    "display": "θ1",
+    "parameter_key": "b1_f0_g0",
+    "checkpoint_value": -0.3415319318089275,
+    "body": 1,
+    "occurrence_count": 10
+  },
+  {
+    "symbol": "theta2",
+    "display": "θ2",
+    "parameter_key": "b1_f0_g1",
+    "checkpoint_value": 0.08781982051009833,
+    "body": 1,
+    "occurrence_count": 10
+  },
+  {
+    "symbol": "theta3",
+    "display": "θ3",
+    "parameter_key": "b1_f1_g0",
+    "checkpoint_value": 0.09050581334179944,
+    "body": 1,
+    "occurrence_count": 10
+  },
+  {
+    "symbol": "theta4",
+    "display": "θ4",
+    "parameter_key": "b1_f1_g1",
+    "checkpoint_value": -0.39392385851635997,
+    "body": 1,
+    "occurrence_count": 10
+  },
+  {
+    "symbol": "theta5",
+    "display": "θ5",
+    "parameter_key": "b1_f2_g0",
+    "checkpoint_value": 0.08173568484768264,
+    "body": 1,
+    "occurrence_count": 10
+  },
+  {
+    "symbol": "theta6",
+    "display": "θ6",
+    "parameter_key": "b1_f2_g1",
+    "checkpoint_value": 0.09050580617332149,
+    "body": 1,
+    "occurrence_count": 10
+  },
+  {
+    "symbol": "theta7",
+    "display": "θ7",
+    "parameter_key": "b2_f0_g0",
+    "checkpoint_value": 0.032816046579687445,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta8",
+    "display": "θ8",
+    "parameter_key": "b2_f0_g1",
+    "checkpoint_value": 0.13975610297841357,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta9",
+    "display": "θ9",
+    "parameter_key": "b2_f0_g2",
+    "checkpoint_value": 0.07022409188513254,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta10",
+    "display": "θ10",
+    "parameter_key": "b2_f1_g0",
+    "checkpoint_value": 0.1397562132098335,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta11",
+    "display": "θ11",
+    "parameter_key": "b2_f2_g0",
+    "checkpoint_value": -0.09914371741159761,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta12",
+    "display": "θ12",
+    "parameter_key": "b2_f3_g0",
+    "checkpoint_value": 0.25465683587132254,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta13",
+    "display": "θ13",
+    "parameter_key": "b2_f3_g1",
+    "checkpoint_value": 0.23689389785968537,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta14",
+    "display": "θ14",
+    "parameter_key": "b2_f3_g2",
+    "checkpoint_value": 0.09738769577170048,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta15",
+    "display": "θ15",
+    "parameter_key": "b2_f4_g0",
+    "checkpoint_value": 0.23689410999056115,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta16",
+    "display": "θ16",
+    "parameter_key": "b2_f5_g0",
+    "checkpoint_value": 0.10918670041902451,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta17",
+    "display": "θ17",
+    "parameter_key": "b2_f6_g0",
+    "checkpoint_value": 0.7616220662389453,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta18",
+    "display": "θ18",
+    "parameter_key": "b2_f6_g1",
+    "checkpoint_value": 0.15314949731287766,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta19",
+    "display": "θ19",
+    "parameter_key": "b2_f6_g2",
+    "checkpoint_value": -0.18078256316979655,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta20",
+    "display": "θ20",
+    "parameter_key": "b2_f7_g0",
+    "checkpoint_value": 0.15314958650518723,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta21",
+    "display": "θ21",
+    "parameter_key": "b2_f8_g0",
+    "checkpoint_value": -0.12374018442538229,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta22",
+    "display": "θ22",
+    "parameter_key": "b2_f9_g0",
+    "checkpoint_value": 0.05992403675961331,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta23",
+    "display": "θ23",
+    "parameter_key": "b2_f9_g1",
+    "checkpoint_value": 0.07590392949283255,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta24",
+    "display": "θ24",
+    "parameter_key": "b2_f9_g2",
+    "checkpoint_value": 0.09440609710698099,
+    "body": 2,
+    "occurrence_count": 6
+  },
+  {
+    "symbol": "theta25",
+    "display": "θ25",
+    "parameter_key": "b3_f0_g0",
+    "checkpoint_value": -0.12879460631302514,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta26",
+    "display": "θ26",
+    "parameter_key": "b3_f0_g1",
+    "checkpoint_value": 0.11375531128261522,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta27",
+    "display": "θ27",
+    "parameter_key": "b3_f0_g2",
+    "checkpoint_value": 0.49275359652802964,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta28",
+    "display": "θ28",
+    "parameter_key": "b3_f1_g0",
+    "checkpoint_value": 0.11375528241090585,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta29",
+    "display": "θ29",
+    "parameter_key": "b3_f2_g0",
+    "checkpoint_value": -0.09348037848811104,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta30",
+    "display": "θ30",
+    "parameter_key": "b3_f3_g0",
+    "checkpoint_value": -0.008301172476934755,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta31",
+    "display": "θ31",
+    "parameter_key": "b3_f3_g1",
+    "checkpoint_value": 0.036913769913553524,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta32",
+    "display": "θ32",
+    "parameter_key": "b3_f4_g0",
+    "checkpoint_value": 0.03691357416851974,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta33",
+    "display": "θ33",
+    "parameter_key": "b3_f4_g1",
+    "checkpoint_value": 0.007490030066358986,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta34",
+    "display": "θ34",
+    "parameter_key": "b3_f5_g0",
+    "checkpoint_value": 0.04132442378510748,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta35",
+    "display": "θ35",
+    "parameter_key": "b3_f6_g0",
+    "checkpoint_value": 0.32119969851432195,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta36",
+    "display": "θ36",
+    "parameter_key": "b3_f6_g1",
+    "checkpoint_value": 0.21253350704762486,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta37",
+    "display": "θ37",
+    "parameter_key": "b3_f7_g0",
+    "checkpoint_value": 0.21253413911493413,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta38",
+    "display": "θ38",
+    "parameter_key": "b3_f8_g0",
+    "checkpoint_value": 0.09979325625442446,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta39",
+    "display": "θ39",
+    "parameter_key": "b3_f8_g1",
+    "checkpoint_value": 0.22521957903530704,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta40",
+    "display": "θ40",
+    "parameter_key": "b3_f9_g0",
+    "checkpoint_value": 0.22290096840381687,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta41",
+    "display": "θ41",
+    "parameter_key": "b3_f9_g1",
+    "checkpoint_value": -0.045683862828873725,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta42",
+    "display": "θ42",
+    "parameter_key": "b3_f10_g0",
+    "checkpoint_value": 0.02034909677019397,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta43",
+    "display": "θ43",
+    "parameter_key": "b3_f11_g0",
+    "checkpoint_value": -0.1575670801502446,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta44",
+    "display": "θ44",
+    "parameter_key": "b3_f12_g0",
+    "checkpoint_value": 0.18737521237423957,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta45",
+    "display": "θ45",
+    "parameter_key": "b3_f12_g1",
+    "checkpoint_value": 0.1314678843891471,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta46",
+    "display": "θ46",
+    "parameter_key": "b3_f12_g2",
+    "checkpoint_value": 0.5043831234176026,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta47",
+    "display": "θ47",
+    "parameter_key": "b3_f13_g0",
+    "checkpoint_value": 0.13146802742361666,
+    "body": 3,
+    "occurrence_count": 4
+  },
+  {
+    "symbol": "theta48",
+    "display": "θ48",
+    "parameter_key": "b3_f14_g0",
+    "checkpoint_value": 0.1368102313666957,
+    "body": 3,
+    "occurrence_count": 4
+  }
+]

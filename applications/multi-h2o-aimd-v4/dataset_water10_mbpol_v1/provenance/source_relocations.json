@@ -1,0 +1,17 @@
+{
+  "note": "Historical frozen source paths resolve relative to this dataset package. Original reference lock and data remain byte-identical.",
+  "paths": {
+    "scripts/generate_mbpol_dataset.py": "provenance/generate_mbpol_dataset.original.py",
+    "water10_wb97mv_tzvppd_v1/code/common.py": "code/common.py",
+    "water10_wb97mv_tzvppd_v1/code/mbx_sampler.py": "code/mbx_sampler.py",
+    "water10_wb97mv_tzvppd_v1/code/validate_geometry.py": "code/validate_geometry.py",
+    "water10_wb97mv_tzvppd_v1/code/descriptors_and_groups.py": "code/descriptors_and_groups.py",
+    "water10_wb97mv_tzvppd_v1/manifests/selection.json": "inputs/manifests/selection.json",
+    "water10_wb97mv_tzvppd_v1/manifests/geometry_groups.json": "inputs/manifests/geometry_groups.json",
+    "water10_wb97mv_tzvppd_v1/candidates/preselected_unlabeled.h5": "inputs/candidates/preselected_unlabeled.h5",
+    "water10_wb97mv_tzvppd_v1/reports/preselection_audit.json": "inputs/reports/preselection_audit.json",
+    ".deps/mbx/mbx_adapter.cpp": "vendor/mbx/mbx_adapter.cpp",
+    ".deps/mbx/pcie5/lib/libmbx.so": "vendor/mbx/pcie5/lib/libmbx.so",
+    ".deps/mbx/pcie5/lib/libqaqua_mbx.so": "vendor/mbx/pcie5/lib/libqaqua_mbx.so"
+  }
+}

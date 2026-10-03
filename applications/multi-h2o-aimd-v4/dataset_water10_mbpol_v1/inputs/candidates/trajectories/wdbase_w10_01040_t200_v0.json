@@ -1,0 +1,23 @@
+{
+  "status": "succeeded",
+  "contract": "8b2837ccd41dd524b3474a65f0aa3253e27f18a13922348f0f938645c38af1e5",
+  "sha256": "bbe93d588d6a4728f06ab4068d6f6a36af613ce72a48d817aeaac8d4fd9f69ed",
+  "job": {
+    "trajectory_id": "wdbase_w10_01040_t200_v0",
+    "seed_id": "wdbase_w10_01040",
+    "lineage_root_id": "wdbase_w10_01040",
+    "split": "train",
+    "temperature_kelvin": 200,
+    "rng_seed": 20261935,
+    "category": "thermal"
+  },
+  "frames": 400,
+  "accepted_frames": 400,
+  "rejected": [],
+  "wall_seconds": 26.464633389026858,
+  "dof": 87,
+  "center_of_mass": "initial momentum removed; FixCom constraint; Langevin fixcm=False",
+  "angular_momentum": "retained; no rotation removal",
+  "velocities_unit": "angstrom/fs",
+  "proposal": "original MB-pol h2o; these are not reference DFT trajectories"
+}

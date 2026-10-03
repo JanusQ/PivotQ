@@ -1,0 +1,14 @@
+HTTP/2 200 
+server: openresty
+date: Sun, 13 Sep 2026 08:20:51 GMT
+content-type: text/html; charset=UTF-8
+vary: Cookie
+no-vary-search: params=("PageSpeed")
+link: <https://sites.uw.edu/wdbase/wp-json/>; rel="https://api.w.org/"
+link: <https://sites.uw.edu/wdbase/wp-json/wp/v2/pages/249>; rel="alternate"; title="JSON"; type="application/json"
+link: <https://sites.uw.edu/wdbase/?p=249>; rel=shortlink
+last-modified: Sun, 13 Sep 2026 08:20:50 GMT
+cache-control: max-age=3600, must-revalidate
+x-cache: MISS
+x-cache-bypass-reason: 0
+

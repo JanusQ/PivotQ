@@ -1,0 +1,23 @@
+{
+  "dataset_root": "dataset_water10_mbpol_v1",
+  "hdf5": "dataset_water10_mbpol_v1/selected/water10.h5",
+  "adapter": "water10_v4.data",
+  "coordinates_key": "positions_angstrom",
+  "energy_key": "energy_ev",
+  "atom_order": "O,H,H repeated 10 times",
+  "molecule_index_key": "molecule_id",
+  "molecule_ids": "0..9; display as W1..W10",
+  "coordinate_unit": "angstrom",
+  "energy_unit": "eV",
+  "pbc": false,
+  "coordinate_policy": "unchanged_hdf5_global_frame",
+  "panels": "data_v4/panels.json",
+  "initial_panel": "pilot_train_32",
+  "next_panel_if_warranted": "train_250",
+  "validation_panel": "validation_64",
+  "test_sealed": true,
+  "pair_radii_angstrom": [4.5, 6.5],
+  "triple_radii_angstrom": [3.0, 4.5],
+  "cutoff_source": "v3 water10_qfe/descriptors.py; v4 uses its own triple weight formula",
+  "force_supervision": false
+}

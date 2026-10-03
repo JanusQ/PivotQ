@@ -1,0 +1,45 @@
+{
+  "sample_id": "w10_269547167027ff4be8a4",
+  "qiskit_version": "2.5.2",
+  "parameters": 48,
+  "compiled": {
+    "count_ops": {
+      "rx": 343,
+      "rz": 250,
+      "cz": 188
+    },
+    "depth": 304,
+    "global_phase_rad": 4.712388980384684
+  },
+  "column_pitch": 154,
+  "angle_note": "Trainable angles: θ1–θ48 (shared symbols retain their coefficients). Encoding angles: fixed numbers. QPY/CSV retain full expressions.",
+  "training_parameters_symbolic": true,
+  "original_bind_matches_frozen_qpy": true,
+  "bound_checkpoint_qpy": "water10_stateprep_symbolic_rx_rz_cz_opt3.bound.qpy",
+  "basis_gates": [
+    "rx",
+    "rz",
+    "cz"
+  ],
+  "optimization_level": 3,
+  "approximation_degree": 1.0,
+  "seed_transpiler": 916,
+  "display_columns": 394,
+  "fold": false,
+  "png_size": [
+    60997,
+    1752
+  ],
+  "rotation_labels_with_symbols": 264,
+  "max_display_label_characters": 18,
+  "visual_qa": {
+    "symbolic_gate_labels": 264,
+    "shared_parameters": 48,
+    "continuous_wires": 30,
+    "checked": [
+      "first trainable region",
+      "middle trainable region",
+      "last trainable region"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "multi-h2o-aimd-v4"
+version = "0.1.0"
+description = "Ten-water quantum-classical potential and experimental AIMD"
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = [
+    "ase>=3.29,<4",
+    "h5py>=3.14,<4",
+    "numpy>=2.5,<3",
+    "psutil>=7,<8",
+    "qiskit>=2.4,<3",
+    "qiskit-aer>=0.17,<1",
+    "torch==2.13.0+cpu",
+]
+
+[tool.setuptools.packages.find]
+include = ["water10_v4*"]
+
+[tool.setuptools.package-data]
+"water10_v4.dense_force" = ["*.cpp"]
+"water10_v4.integration.fusion_framework" = ["*.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-m 'not heavy'"
+markers = ["heavy: real 30-qubit execution; run explicitly on a large-memory host"]

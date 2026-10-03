@@ -1,0 +1,4 @@
+stage,kind,status,detail,log
+resource_preflight,implementation_api_error,resolved,PySCF Bragg radii constant is radii.BRAGG; corrected before successful energy/force probe,reports/reference_preflight_api_error.json
+selection_round1,insufficient_network_ood_candidates,resolved,First candidate pool contained only 7 eligible network-OOD representatives; added controlled variants of pre-reserved seed networks within 50000 ceiling,audit/candidate_pool_round1/selection_run.log
+selection_round2,overrestrictive_component_representative_rule,resolved,Connected geometry families kept for leakage control; diversity selection excludes directly near-equivalent neighbors without collapsing an entire deformation chain to one frame; thresholds unchanged,reports/selection_component_representative_diagnostic.log
