@@ -70,7 +70,7 @@ class VirtualPredictionTests(unittest.TestCase):
         self.assertEqual(request["batch_size"], 32)
         self.assertIn("peak_flops_tflops_per_node: 1", scene)
         self.assertFalse(scope["parameter_sources"]["classical"]["calibrated"])
-        self.assertTrue(any("1 TFLOPS" in note and "100 GB/s" in note and "14→32→32→1" in note and "2 次" in note for note in scope["notes"]))
+        self.assertTrue(any("1 TFLOPS" in note and "100 Gbit/s" in note and "14→32→32→1" in note and "2 次" in note for note in scope["notes"]))
 
     def test_classical_gpu_keeps_a100_source(self):
         graph, _, _, scope = build_virtual_case(h2o_plan("gpu").as_dict(), None, PARAMETERS)

@@ -5,15 +5,15 @@ import json
 
 import pytest
 
-from ray_quantum.errors import UnavailableError, ValidationError
-from ray_quantum.executors import LocalExecutor
-from ray_quantum.framework import (
+from pivotq._internal.errors import UnavailableError, ValidationError
+from pivotq._internal.executors import LocalExecutor
+from pivotq._internal.framework import (
     ComponentRegistry, ComponentSpec, ExecutionMode, FusionFramework,
     InvocationSpec, ResourceRequest,
 )
-from ray_quantum.framework.simulation import has_device_capacity
-from ray_quantum.models import StringMetadata
-from ray_quantum.observability import TraceCollector
+from pivotq._internal.framework.simulation import has_device_capacity
+from pivotq._internal.models import StringMetadata
+from pivotq._internal.observability import TraceCollector
 
 
 class CpuCounter:
@@ -177,7 +177,7 @@ def test_graph_uses_selected_implementations_and_preserves_dependencies(build_fr
     framework = build_framework()
     install(framework)
     first = InvocationSpec("first", "accelerated", "increment", args=(4,))
-    from ray_quantum.framework import ResultRef
+    from pivotq._internal.framework import ResultRef
     second = InvocationSpec("second", "accelerated", "increment", args=(ResultRef("first"),))
     handles = framework.submit_graph((second, first))
     assert [framework.result(handle).value for handle in handles] == [4, 4]
@@ -194,7 +194,7 @@ def test_capacity_respects_total_per_node_and_target_binding():
 
 def test_busy_ray_gpu_keeps_native_selection_without_reading_idle_resources(monkeypatch):
     import ray
-    from ray_quantum.executors.ray import RayExecutor
+    from pivotq._internal.executors.ray import RayExecutor
 
     class InventoryExecutor(LocalExecutor):
         # Exercise the production Ray inventory path without starting Ray.

@@ -1,4 +1,4 @@
-"""按 config_deployment.yaml 把项目组件注册到 ray_quantum FusionFramework。"""
+"""按 config_deployment.yaml 把项目组件注册到 pivotq._internal FusionFramework。"""
 
 from __future__ import annotations
 
@@ -33,17 +33,17 @@ def register_fusion_components(
 ) -> FusionComponentIds:
     """注册 CPU/GPU 量子 TASK、经典 GPU Actor，以及可选真实 QPU TASK。
 
-    ray_quantum 尚未作为本项目依赖发布，因此只在实际调用本函数时导入。
+    pivotq._internal 尚未作为本项目依赖发布，因此只在实际调用本函数时导入。
     QPU 自定义资源的字段在对方 INTERFACE.md 中未定义，由调用方传入框架原生
     ResourceRequest，避免本项目猜测资源名。
     """
 
     try:
-        from ray_quantum.framework import ComponentSpec, ExecutionMode
-        from ray_quantum.framework import ResourceRequest as FrameworkResourceRequest
+        from pivotq._internal.framework import ComponentSpec, ExecutionMode
+        from pivotq._internal.framework import ResourceRequest as FrameworkResourceRequest
     except ImportError as error:
         raise RuntimeError(
-            "ray_quantum is not installed. Install the fusion framework library before registration."
+            "pivotq._internal is not installed. Install the fusion framework library before registration."
         ) from error
 
     ids = component_ids or FusionComponentIds()
@@ -121,7 +121,7 @@ def register_components(framework: Any) -> None:
     register_fusion_components(framework, _load_job_config_from_environment())
     if os.environ.get("AIMD_QUANTUM_TARGET", "gpu") == "qpu":
         try:
-            from ray_quantum.qpu_integration.registration import (
+            from pivotq._internal.qpu_integration.registration import (
                 register_components as register_qpu_components,
             )
         except ImportError as error:

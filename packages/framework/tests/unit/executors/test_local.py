@@ -11,14 +11,14 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from tests.contract.executor_contract import ExecutorContractMixin
-from ray_quantum.errors import (
+from pivotq._internal.errors import (
     ExecutionError,
     TimeoutError as FrameworkTimeoutError,
     UnavailableError,
     ValidationError,
 )
-from ray_quantum.executors import Executor, LocalExecutor
-from ray_quantum.framework import (
+from pivotq._internal.executors import Executor, LocalExecutor
+from pivotq._internal.framework import (
     ComponentRegistry,
     ComponentSpec,
     ExecutionMode,
@@ -27,7 +27,7 @@ from ray_quantum.framework import (
     InvocationStatus,
     ResourceRequest,
 )
-from ray_quantum.observability import TraceCollector, TraceRecord
+from pivotq._internal.observability import TraceCollector, TraceRecord
 from tests.fixtures.fake_components import (
     BlockingFakeComponent,
     FailingFakeComponent,
@@ -651,7 +651,7 @@ class LocalExecutorTest(ExecutorContractMixin, unittest.TestCase):
             if name == "ray" or name.startswith("ray.")
         }
 
-        importlib.import_module("ray_quantum.executors")
+        importlib.import_module("pivotq._internal.executors")
 
         after = {
             name

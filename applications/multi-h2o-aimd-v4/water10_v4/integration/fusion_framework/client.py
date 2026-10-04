@@ -21,7 +21,7 @@ class FusionPotential:
             self.qpu = QPUFeatures(service, shots=config['shots'], physical_qubits=config.get('physical_qubits'))
 
     def invoke(self, component, method, *args):
-        from ray_quantum.models import StringMetadata
+        from pivotq._internal.models import StringMetadata
         handle = self.framework.submit(component, method, *args, invocation_id=f'water10.{uuid4().hex}',
             trace_context=StringMetadata.from_mapping({'run_id': self.context.run_id, 'operation': method}))
         terminal = False

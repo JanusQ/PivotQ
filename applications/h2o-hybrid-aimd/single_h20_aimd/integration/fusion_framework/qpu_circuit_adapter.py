@@ -64,7 +64,7 @@ class FusionQPUCircuitFeatureExtractor(QuantumFeatureAPI):
         return {
             "backend_name": "fusion_qpu_circuit_service_v1",
             "api_version": "1.0",
-            "framework": "qiskit+ray_quantum",
+            "framework": "qiskit+pivotq._internal",
             "real_hardware": True,
             "num_qubits": 3,
             "shots_per_measurement_basis": self._shots,
@@ -112,7 +112,7 @@ class FusionQPUCircuitFeatureExtractor(QuantumFeatureAPI):
                     )
                 except TypeError as error:
                     raise RuntimeError(
-                        "当前 ray_quantum.QuantumCircuitRequest 不支持必填的 "
+                        "当前 pivotq._internal.QuantumCircuitRequest 不支持必填的 "
                         "measurement_basis；请部署与最新版 AIMD QPU 接口文档一致的融合框架。"
                     ) from error
 
@@ -207,10 +207,10 @@ class FusionQPUCircuitFeatureExtractor(QuantumFeatureAPI):
 
 def _load_quantum_circuit_request():
     try:
-        from ray_quantum.qpu_integration import QuantumCircuitRequest
+        from pivotq._internal.qpu_integration import QuantumCircuitRequest
     except ImportError as error:
         raise RuntimeError(
-            "融合 QPU 运行需要 ray_quantum.qpu_integration.QuantumCircuitRequest。"
+            "融合 QPU 运行需要 pivotq._internal.qpu_integration.QuantumCircuitRequest。"
         ) from error
     return QuantumCircuitRequest
 

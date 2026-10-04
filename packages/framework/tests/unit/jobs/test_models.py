@@ -5,7 +5,7 @@ from __future__ import annotations
 import pickle
 import unittest
 
-from ray_quantum.jobs import (
+from pivotq._internal.jobs import (
     RayJobDriverResources,
     RayJobHandle,
     RayJobRuntimeEnvironment,

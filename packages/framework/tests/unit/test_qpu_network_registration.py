@@ -1,7 +1,7 @@
 import json
 import pytest
-from ray_quantum.qpu_integration.component import QPUClientFactory
-from ray_quantum.qpu_integration.device_adapter import DeviceProtocolNotConfiguredError
+from pivotq._internal.qpu_integration.component import QPUClientFactory
+from pivotq._internal.qpu_integration.device_adapter import DeviceProtocolNotConfiguredError
 
 
 def test_device_id_selects_its_own_node_local_credentials(tmp_path, monkeypatch):
@@ -29,6 +29,6 @@ def test_unknown_device_does_not_fall_back_to_global_endpoint(tmp_path, monkeypa
 
 @pytest.mark.parametrize('timeout', [-1, 0, float('nan'), 90000, True])
 def test_invalid_device_timeout_is_rejected(timeout):
-    from ray_quantum.qpu_integration.device_adapter import QPUDeviceAdapter
+    from pivotq._internal.qpu_integration.device_adapter import QPUDeviceAdapter
     with pytest.raises(DeviceProtocolNotConfiguredError):
         QPUDeviceAdapter(timeout_seconds=timeout)

@@ -6,16 +6,16 @@ import json
 import unittest
 import uuid
 
-from ray_quantum.executors import LocalExecutor
-from ray_quantum.framework import (
+from pivotq._internal.executors import LocalExecutor
+from pivotq._internal.framework import (
     ComponentRegistry,
     ComponentSpec,
     ExecutionMode,
     FusionFramework,
     ResourceRequest,
 )
-from ray_quantum.models import StringMetadata
-from ray_quantum.observability import TraceCollector
+from pivotq._internal.models import StringMetadata
+from pivotq._internal.observability import TraceCollector
 from tests.fixtures.fake_components import (
     CancellingFakeComponent,
     FailingFakeComponent,
@@ -251,7 +251,7 @@ class RayFusionTraceTest(
             ray.shutdown()
 
     def setUp(self) -> None:
-        from ray_quantum.executors import RayExecutor
+        from pivotq._internal.executors import RayExecutor
 
         reset_all_fakes()
         self.backend = "ray"

@@ -35,7 +35,7 @@ def cpu_inference_workload(model: dict, batch: int) -> dict:
 
 
 def build_virtual_case(plan: dict, program: dict | None, parameters: dict, *, classical_model: dict | None = None):
-    from _prediction.h2o import TaskGraph, qpu_graph, validate_parameters
+    from pivotq._internal.performance.h2o import TaskGraph, qpu_graph, validate_parameters
 
     stages = {stage["id"]: stage for stage in plan["stages"]}
     quantum = stages.get("quantum_features") or stages.get("circuit_execution")
@@ -107,7 +107,7 @@ def build_virtual_case(plan: dict, program: dict | None, parameters: dict, *, cl
             widths = [classical_model["layers"][0]["input"]] + [layer["output"] for layer in classical_model["layers"]]
             notes.append(
                 f"经典 CPU 假设峰值 {cpu['peak_flops_tflops_per_node']} TFLOPS、访存带宽 "
-                f"{cpu['memory_bandwidth_gbps_per_node']} GB/s；冻结模型层宽 {'→'.join(map(str, widths))}，"
+                f"{cpu['memory_bandwidth_gbps_per_node']} Gbit/s；冻结模型层宽 {'→'.join(map(str, widths))}，"
                 "每次乘加计 2 次操作，偏置计 1 次；按实际几何批量估计前向全连接工作量。"
                 "该推理估计不含激活函数、归一化和 Python 调度开销，未经 CPU 实测标定。")
     elif plan["task_id"] == "quantum-circuit":

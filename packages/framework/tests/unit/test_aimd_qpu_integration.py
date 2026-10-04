@@ -8,15 +8,15 @@ import time
 import pytest
 from qiskit import QuantumCircuit
 
-from ray_quantum.errors import ExecutionError, ValidationError
-from ray_quantum.executors.local import LocalExecutor
-from ray_quantum.framework import ComponentRegistry, FusionFramework
-from ray_quantum.qpu_integration import QuantumCircuitRequest, QPUCircuitService
-from ray_quantum.qpu_integration.component import DEFAULT_QPU_COMPONENT_ID, register_qpu_client
-from ray_quantum.qpu_integration.device_adapter import DeviceExecutionUnknownError
-from ray_quantum.qpu_integration.registration import register_components
-from ray_quantum.qpu_integration import submit_job
-from ray_quantum.qpu_integration.submit_job import build_job_spec
+from pivotq._internal.errors import ExecutionError, ValidationError
+from pivotq._internal.executors.local import LocalExecutor
+from pivotq._internal.framework import ComponentRegistry, FusionFramework
+from pivotq._internal.qpu_integration import QuantumCircuitRequest, QPUCircuitService
+from pivotq._internal.qpu_integration.component import DEFAULT_QPU_COMPONENT_ID, register_qpu_client
+from pivotq._internal.qpu_integration.device_adapter import DeviceExecutionUnknownError
+from pivotq._internal.qpu_integration.registration import register_components
+from pivotq._internal.qpu_integration import submit_job
+from pivotq._internal.qpu_integration.submit_job import build_job_spec
 from tests.fixtures.qpu_device_fake import RecordingDeviceAdapter
 
 
@@ -68,8 +68,8 @@ def test_service_wait_reminder_is_payload_free(setup_service, caplog):
         time.sleep(0.06)
         return original(*args, **kwargs)
     adapter._exchange = slow
-    with patch("ray_quantum.qpu_integration.service.QPU_WAIT_WARNING_SECONDS", 0.01), \
-         patch("ray_quantum.qpu_integration.service.QPU_WAIT_WARNING_INTERVAL_SECONDS", 0.01):
+    with patch("pivotq._internal.qpu_integration.service.QPU_WAIT_WARNING_SECONDS", 0.01), \
+         patch("pivotq._internal.qpu_integration.service.QPU_WAIT_WARNING_INTERVAL_SECONDS", 0.01):
         service.run_quantum_circuits(step=0, circuits=requests())
     assert "当前不会自动取消或重试" in caplog.text
     assert "OPENQASM" not in caplog.text

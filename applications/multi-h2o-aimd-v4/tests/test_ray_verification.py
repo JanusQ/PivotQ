@@ -125,7 +125,7 @@ def test_validate_only_does_not_call_inference(completed_run, monkeypatch):
     smoke.mkdir()
     write_smoke(smoke, dict(status='succeeded', initial_energy_ev=-10.,
         model_sha256=entry['model_sha256'], geometry_sha256=entry['geometry_sha256']))
-    from ray_quantum.jobs import driver
+    from pivotq._internal.jobs import driver
     monkeypatch.setattr(driver, 'run_driver', lambda *args, **kwargs: pytest.fail('must not execute Ray'))
     manifest_hash = verification.sha256(output/'run_manifest.json')
     assert verification.main(['--validate-only', '--output-dir', str(output), '--smoke-output', str(smoke)]) == 0

@@ -11,9 +11,9 @@ from qiskit import QuantumCircuit, qasm3
 from qiskit.circuit import Parameter
 from qiskit.quantum_info import Operator, Statevector
 
-from ray_quantum.errors import ValidationError
-from ray_quantum.qpu_integration import QuantumCircuitRequest
-from ray_quantum.qpu_integration.qasm3_export import (
+from pivotq._internal.errors import ValidationError
+from pivotq._internal.qpu_integration import QuantumCircuitRequest
+from pivotq._internal.qpu_integration.qasm3_export import (
     CircuitExportError, export_batch, export_qasm3, prepare_quantum_circuit_batch,
 )
 
@@ -257,7 +257,7 @@ def test_routing_restores_state_before_terminal_measurements(compiled_exports):
 
 
 def test_topology_guard_rejects_an_illegal_compiler_output():
-    from ray_quantum.qpu_integration.qasm3_export import _enforce_cz_topology
+    from pivotq._internal.qpu_integration.qasm3_export import _enforce_cz_topology
     circuit = QuantumCircuit(3)
     circuit.cz(0, 2)
     with pytest.raises(ValueError, match="outside"):

@@ -7,15 +7,15 @@ from threading import Event, Thread
 import pytest
 from qiskit import QuantumCircuit
 
-from ray_quantum.qpu_integration import QuantumCircuitRequest
-from ray_quantum.qpu_integration.component import (
+from pivotq._internal.qpu_integration import QuantumCircuitRequest
+from pivotq._internal.qpu_integration.component import (
     QPUClientComponent, QPUClientFactory, build_qpu_client_spec,
 )
-from ray_quantum.qpu_integration.device_adapter import (
+from pivotq._internal.qpu_integration.device_adapter import (
     DeviceCircuitResult, DeviceExecutionUnknownError, DeviceProtocolNotConfiguredError,
     DeviceResultError, QPUDeviceAdapter, normalize_results,
 )
-from ray_quantum.qpu_integration.qasm3_export import QASM3Circuit
+from pivotq._internal.qpu_integration.qasm3_export import QASM3Circuit
 from tests.fixtures.qpu_device_fake import RecordingDeviceAdapter
 
 

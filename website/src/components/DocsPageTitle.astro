@@ -1,0 +1,40 @@
+---
+import PageTitle from '@astrojs/starlight/components/PageTitle.astro';
+
+const { entry, sidebar } = Astro.locals.starlightRoute;
+function currentGroups(items: typeof sidebar): string[] | undefined {
+  for (const item of items) {
+    if (item.type === 'link' && item.isCurrent) return [];
+    if (item.type === 'group') {
+      const children = currentGroups(item.entries);
+      if (children) return [item.label, ...children];
+    }
+  }
+}
+const sections = currentGroups(sidebar) ?? [];
+const base = import.meta.env.BASE_URL;
+---
+<nav class="docs-breadcrumbs" aria-label="文档路径">
+  <a href={`${base}docs/`} aria-label="文档首页">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z" /></svg>
+  </a>
+  {sections.map(label => <>
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 4 4 4-4 4" /></svg>
+    <span>{label}</span>
+  </>)}
+  <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m6 4 4 4-4 4" /></svg>
+  <span aria-current="page">{entry.data.title}</span>
+</nav>
+<PageTitle />
+
+<script>
+  // Restore the active path after Starlight restores saved fold states.
+  function revealCurrentSection() {
+    const current = document.querySelector('#starlight__sidebar a[aria-current="page"]');
+    for (let parent = current?.parentElement; parent; parent = parent.parentElement) {
+      if (parent instanceof HTMLDetailsElement) parent.open = true;
+    }
+  }
+  revealCurrentSection();
+  window.addEventListener('pageshow', revealCurrentSection);
+</script>

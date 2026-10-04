@@ -79,14 +79,14 @@ def prepare_environment(job):
         'AIMD_LOGICAL_HARDWARE_JSON': json.dumps(hardware),
         'AIMD_CONFIG_OVERRIDES_JSON': json.dumps(overrides),
     })
-    return 'ray_quantum.integrations.h2o:register_components', 'ray_quantum.integrations.h2o:run'
+    return 'pivotq._internal.integrations.h2o:register_components', 'pivotq._internal.integrations.h2o:run'
 
 
 def execute(job):
     verify_job(job)
     registration, runner = prepare_environment(job)
     import ray
-    from ray_quantum.jobs.driver import RayJobDriverConfig, run_driver
+    from pivotq._internal.jobs.driver import RayJobDriverConfig, run_driver
 
     if ray.is_initialized():
         raise RuntimeError('本地任务必须使用独立进程')

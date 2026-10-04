@@ -8,8 +8,8 @@ import uuid
 
 import ray
 
-from ray_quantum.executors import RayExecutor
-from ray_quantum.framework import (
+from pivotq._internal.executors import RayExecutor
+from pivotq._internal.framework import (
     ComponentRegistry,
     ComponentSpec,
     ExecutionMode,

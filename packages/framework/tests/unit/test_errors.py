@@ -5,7 +5,7 @@ from __future__ import annotations
 import pickle
 import unittest
 
-from ray_quantum.errors import (
+from pivotq._internal.errors import (
     CancellationError,
     ErrorCategory,
     ExecutionError,

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import unittest
 
-from ray_quantum.framework import (
+from pivotq._internal.framework import (
     ResourceRequest,
     resource_request_to_ray_options,
 )

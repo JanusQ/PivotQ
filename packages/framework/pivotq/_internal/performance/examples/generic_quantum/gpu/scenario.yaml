@@ -1,0 +1,41 @@
+schema_version: "v1"
+metadata:
+  name: synthetic_quantum_gpu_example
+  description: "Illustrative inputs; performance parameters are not measured calibration."
+system:
+  hardware:
+    cpu_cluster:
+      node_count: 1
+    gpu_cluster:
+      node_count: 1
+      gpus_per_node: 1
+      hbm_gb_per_gpu: 16
+      compute_tflops_per_gpu: 1
+      hbm_bandwidth_tbps_per_gpu: 1
+      kernel_launch_overhead_us: 50
+  topology:
+    type: custom_graph
+    devices:
+      cpu: 1
+      gpu: 1
+    links:
+      - src: cpu0
+        dst: gpu0
+        bandwidth_gbps: 10
+        latency_us: 2
+      - src: gpu0
+        dst: cpu0
+        bandwidth_gbps: 10
+        latency_us: 2
+workload:
+  type: custom_trace
+  trace_file: task_graph.json
+  job_count: 1
+scheduler:
+  policy: earliest_finish_time
+simulation:
+  network_mode: analytical
+  simulation_time_s: 10
+output:
+  output_format: csv
+  metrics_level: detailed

@@ -39,7 +39,7 @@
 Driver 是融合框架提供的入口：
 
 ```text
-python -m ray_quantum.jobs.driver
+python -m pivotq.jobs.driver
 ```
 
 Ray Jobs 在集群中启动它。Driver 负责连接当前 Ray 集群、创建 Registry/Executor/Framework、导入 AIMD 的注册函数和 runner，并在结束时清理自己拥有的对象。AIMD 团队通常不修改 Driver 源码。
@@ -94,7 +94,7 @@ def run_aimd(
 当前 QPU 组件的注册入口已经由融合框架提供：
 
 ```text
-ray_quantum.qpu_integration.registration:register_components
+pivotq._internal.qpu_integration.registration:register_components
 ```
 
 如果 AIMD 只调用该 QPU 组件，不需要再编写 QPU 注册函数。如果 AIMD 还要注册其他 CPU/GPU 组件，可以提供一个应用级组合注册函数，在其中调用 QPU 注册入口并注册其他组件。AIMD 科学循环本身不负责注册或创建 Actor。
@@ -146,7 +146,7 @@ aimd_integration.runner:run_aimd
 使用当前独立 QPU 接口且没有其他自定义组件时，注册入口直接使用框架提供的目标，AIMD 项目只需要实现 runner：
 
 ```text
-ray_quantum.qpu_integration.registration:register_components
+pivotq._internal.qpu_integration.registration:register_components
 aimd_integration.runner:run_aimd
 ```
 
@@ -226,7 +226,7 @@ def build_external_component() -> ExternalComponentAdapter:
 下面的组件 ID 和方法名都只是结构示例，不代表框架预设任何 AIMD 业务角色：
 
 ```python
-from ray_quantum.framework import (
+from pivotq._internal.framework import (
     ComponentSpec,
     ExecutionMode,
     FusionFramework,
@@ -315,8 +315,8 @@ framework.register(component_spec, component_factory)
 ### 6.1 函数签名与所有权
 
 ```python
-from ray_quantum.framework import FusionFramework
-from ray_quantum.jobs import RayJobDriverContext
+from pivotq._internal.framework import FusionFramework
+from pivotq._internal.jobs import RayJobDriverContext
 
 
 def run_aimd(
@@ -349,8 +349,8 @@ Driver 已经创建并拥有 Framework、Registry、RayExecutor，以及由 Driv
 下面展示一次 Job 内动态提交 Task 和调用 Actor 的控制结构，不包含 AIMD 科学计算：
 
 ```python
-from ray_quantum.framework import FusionFramework
-from ray_quantum.jobs import RayJobDriverContext
+from pivotq._internal.framework import FusionFramework
+from pivotq._internal.jobs import RayJobDriverContext
 
 
 def run_aimd(
@@ -516,7 +516,7 @@ from __future__ import annotations
 import shlex
 import time
 
-from ray_quantum.jobs import (
+from pivotq._internal.jobs import (
     RayJobClient,
     RayJobDriverResources,
     RayJobRuntimeEnvironment,
@@ -532,7 +532,7 @@ def main() -> None:
         (
             "python",
             "-m",
-            "ray_quantum.jobs.driver",
+            "pivotq._internal.jobs.driver",
             "--run-id",
             submission_id,
             "--registration",
@@ -555,7 +555,7 @@ def main() -> None:
         entrypoint=entrypoint,
         runtime_environment=RayJobRuntimeEnvironment(
             # 该路径由执行 submit_job.py 的机器读取并交给 Ray 打包；
-            # 目录中需要包含 AIMD 接入包。ray-quantum 可以位于同一
+            # 目录中需要包含 AIMD 接入包。pivotq 可以位于同一
             # 部署目录，也可以预装在集群环境中。
             working_dir="/path/to/deployment-directory",
             env_vars={
@@ -620,13 +620,13 @@ deleted = client.delete(handle)    # 只允许终态后删除 Jobs 服务元数�
 - AIMD 接入包；
 - AIMD runner 会导入的科学代码；
 - 组件 adapter/factory；
-- `ray-quantum` 包；
+- `pivotq` 包；
 - 所有 Worker/Actor 需要的第三方依赖。
 
 常见部署方式有两种：
 
-1. `ray-quantum` 和稳定依赖预装在集群虚拟环境中，`working_dir` 上传 AIMD 应用代码；
-2. `working_dir` 同时包含 `ray_quantum` 和 AIMD 接入代码，并通过 `PYTHONPATH` 暴露。
+1. `pivotq` 和稳定依赖预装在集群虚拟环境中，`working_dir` 上传 AIMD 应用代码；
+2. `working_dir` 同时包含 `pivotq._internal` 和 AIMD 接入代码，并通过 `PYTHONPATH` 暴露。
 
 不要默认 Head 上存在的本地文件也能被 Worker 直接看到。应用代码依靠 runtime environment 分发；大型数据、模型和输出应通过明确的共享存储或对象存储处理。
 
@@ -684,7 +684,7 @@ manifest 不保存 AIMD 科学结果。runner 如需保存轨迹、最终状态�
 runner 可以在结束前导出 Trace：
 
 ```python
-from ray_quantum.observability import export_trace_jsonl
+from pivotq._internal.observability import export_trace_jsonl
 
 
 collector = context.trace_collector

@@ -4,7 +4,14 @@ import { chromium } from '@playwright/test';
 
 const root = new URL(process.env.PORTAL_TEST_URL || 'http://127.0.0.1:4321/');
 if (!root.pathname.endsWith('/')) root.pathname += '/';
-const pages = ['', 'examples/aimd/', 'examples/qram/', 'docs/'];
+const pages = [
+  '', 'examples/aimd/', 'examples/qram/', 'docs/', 'docs/installation/', 'docs/quickstart/',
+  ...['components-actors', 'workflows', 'observability', 'jobs', 'hardware-profiles',
+      'performance', 'providers'].map(name => `docs/${name}/`),
+  'docs/api/',
+  ...['runtime', 'components', 'workflows', 'quantum', 'providers', 'jobs',
+      'observability', 'performance', 'errors'].map(name => `docs/api/${name}/`),
+];
 const artifactDir = `artifacts/${root.pathname === '/' ? 'root' : 'subpath'}`;
 await mkdir(artifactDir, { recursive: true });
 const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
@@ -50,8 +57,8 @@ try {
           links.add(url.href);
         }
       }
-      if ((width === 390 || width === 1440) && ['', 'examples/aimd/', 'docs/'].includes(route)) {
-        const name = route === '' ? 'home' : route.startsWith('examples') ? 'aimd' : 'docs';
+      if ((width === 390 || width === 1440) && ['', 'examples/aimd/', 'docs/', 'docs/installation/'].includes(route)) {
+        const name = route === '' ? 'home' : route.startsWith('examples') ? 'aimd' : route === 'docs/installation/' ? 'docs-installation' : 'docs';
         await page.screenshot({ path: `${artifactDir}/${name}-${width}.png`, fullPage: true });
         if (route === '') await footer.screenshot({ path: `${artifactDir}/footer-${width}.png` });
       }
@@ -107,7 +114,7 @@ try {
   await page.goto(new URL('examples/aimd/', root).href, { waitUntil: 'networkidle' });
   const menu = page.locator('.mobile-menu');
   await menu.locator('summary').click();
-  assert.ok(await menu.getByRole('link', { name: '使用指南' }).isVisible());
+  assert.ok(await menu.getByRole('link', { name: '参考文档' }).isVisible());
   await page.keyboard.press('Escape');
   assert.equal(await menu.getAttribute('open'), null);
   await page.goto(root.href);
@@ -140,28 +147,127 @@ try {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(new URL('docs/', root).href, { waitUntil: 'networkidle' });
   assert.ok(await page.locator('.site-header').isVisible());
-  const chapters = page.getByRole('navigation', { name: '指南章节' });
-  assert.deepEqual(await chapters.getByRole('link').allTextContents(), ['系统介绍', '使用指南', '应用示例']);
-  assert.equal(await page.locator('.guide-content').getByRole('heading', { name: /^(系统功能|接口概览)$/, includeHidden: true }).count(), 0);
-  assert.match(await page.locator('.guide-chapter:not([hidden])').innerText(), /通用融合编程框架/);
-  await chapters.getByRole('link', { name: '使用指南', exact: true }).click();
-  assert.ok(await page.locator('.guide-content').getByRole('heading', { name: '使用指南', exact: true }).isVisible());
-  assert.equal(await page.locator('.guide-chapter:not([hidden])').count(), 1);
-  await chapters.getByRole('link', { name: '应用示例', exact: true }).click();
-  assert.ok(await page.locator('.guide-content').getByRole('link', { name: '水分子 AIMD', exact: true }).isVisible());
-  assert.equal(await page.locator('.guide-content').getByRole('heading', { name: '使用指南', exact: true }).isVisible(), false);
-  await page.reload();
-  assert.equal(await chapters.locator('[aria-current]').innerText(), '应用示例');
+  const sidebar = page.locator('#starlight__sidebar');
+  assert.deepEqual(await sidebar.locator('.top-level > li > details > summary .large').allTextContents(), ['系统介绍', '使用文档', '应用示例']);
+  assert.deepEqual(await sidebar.locator('.top-level > li > details > ul > li > details > summary .large').allTextContents(), [
+    '入门', '混合编程', '运行与管理', '性能建模与预测', '后端扩展', 'API 参考',
+  ]);
+  async function expandDocsGroup(label) {
+    const summary = sidebar.locator('summary').filter({ hasText: new RegExp(`^${label}$`) });
+    if (!await summary.evaluate(node => node.parentElement.open)) await summary.click();
+  }
+  assert.ok(await sidebar.getByRole('link', { name: '安装', exact: true }).isVisible());
+  assert.ok(await page.locator('.right-sidebar').isVisible());
+  await sidebar.getByRole('link', { name: '安装', exact: true }).click();
+  await page.waitForURL(new URL('docs/installation/', root).href);
+  assert.ok(await page.getByRole('heading', { level: 1, name: '安装 PivotQ' }).isVisible());
+  assert.ok(await page.locator('.pagination-links').isVisible());
+  await sidebar.getByRole('link', { name: '快速上手', exact: true }).click();
+  await page.waitForURL(new URL('docs/quickstart/', root).href);
+  assert.match(await page.locator('.sl-markdown-content').innerText(), /def update_parameter/);
+  async function assertDocsLocation(route, title, sidebarLabel = title) {
+    await page.waitForURL(new URL(`docs/${route}`, root).href);
+    assert.equal(page.url(), new URL(`docs/${route}`, root).href);
+    assert.ok(await page.getByRole('heading', { level: 1, name: title, exact: true }).isVisible());
+    assert.ok((await page.title()).includes(title));
+    const activeLink = sidebar.locator('a[aria-current="page"]');
+    assert.equal(await activeLink.count(), 1);
+    assert.equal((await activeLink.innerText()).trim(), sidebarLabel);
+  }
   await page.goBack();
-  assert.equal(await chapters.locator('[aria-current]').innerText(), '使用指南');
+  await assertDocsLocation('installation/', '安装 PivotQ', '安装');
+  await page.goForward();
+  await assertDocsLocation('quickstart/', '快速上手');
+  await page.getByRole('link', { name: '通过 Provider 接入 QPU', exact: true }).click();
+  await assertDocsLocation('quantum-backends/#接入-qpu-后端', '量子后端');
+  assert.ok(await page.locator('[id="接入-qpu-后端"]').isVisible());
+  await page.goBack();
+  await assertDocsLocation('quickstart/', '快速上手');
+  await page.goForward();
+  await assertDocsLocation('quantum-backends/#接入-qpu-后端', '量子后端');
+  assert.ok(await page.locator('[id="接入-qpu-后端"]').isVisible());
+  await page.goBack();
+  await assertDocsLocation('quickstart/', '快速上手');
+  checks.push('SDK document and deep-link back/forward: URL, page title, h1 and active sidebar stay in sync');
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  const copy = page.locator('.expressive-code .copy button').first();
+  await copy.click();
+  assert.match(await page.evaluate(() => navigator.clipboard.readText()), /python packages\/framework\/examples\/hybrid_program.py/);
+  await page.locator('[data-open-modal]').click();
+  const searchInput = page.locator('.pagefind-ui__search-input');
+  await searchInput.fill('quantum_backend');
+  await page.locator('.pagefind-ui__result-link').first().waitFor();
+  assert.ok(await page.locator('.pagefind-ui__result-link').count() > 0);
+  const searchHref = await page.locator('.pagefind-ui__result-link').first().getAttribute('href');
+  assert.ok(new URL(searchHref, root).pathname.startsWith(root.pathname + 'docs/'));
+  await page.keyboard.press('Escape');
+  await expandDocsGroup('API 参考');
+  await sidebar.getByRole('link', { name: 'API 索引', exact: true }).click();
+  await assertDocsLocation('api/', 'API 参考', 'API 索引');
+  await sidebar.getByRole('link', { name: '运行时与结果引用', exact: true }).click();
+  await page.waitForURL(new URL('docs/api/runtime/', root).href);
+  assert.deepEqual(await page.locator('.docs-breadcrumbs > span:not([aria-current])').allTextContents(), ['使用文档', 'API 参考']);
+  assert.equal(await sidebar.locator('a[aria-current="page"]').innerText(), '运行时与结果引用');
+  assert.ok(await page.locator('.pagination-links').isVisible());
+  // A direct URL must expand its category even when the reader previously collapsed it.
+  const apiSummary = sidebar.locator('summary').filter({ hasText: /^API 参考$/ });
+  await apiSummary.focus();
+  await page.keyboard.press('Enter');
+  assert.equal(await apiSummary.evaluate(node => node.parentElement.open), false);
+  await page.goto(new URL('docs/api/quantum/#quantumresult', root).href, { waitUntil: 'networkidle' });
+  assert.ok(await sidebar.getByRole('link', { name: '量子后端与结果', exact: true }).isVisible());
+  assert.equal(await sidebar.locator('a[aria-current="page"]').innerText(), '量子后端与结果');
+  assert.equal(await page.locator('#quantumresult').count(), 1);
+  await page.goBack();
+  await page.waitForURL(new URL('docs/api/runtime/', root).href);
+  await page.goForward();
+  await page.waitForURL(new URL('docs/api/quantum/#quantumresult', root).href);
+  await page.goto(new URL('docs/api/', root).href, { waitUntil: 'networkidle' });
+  for (const id of ['runtime', 'submit', 'get', 'release', 'close', 'waitstatus-与-report',
+    'cpu-组件与-actor', 'workflow', 'quantum_backend', 'submit-1', '第三方-provider',
+    'quantumresult', '集群作业', '性能模型与预测', '生命周期与错误']) {
+    assert.equal(await page.locator(`[id="${id}"]`).count(), 1, `Legacy API anchor: ${id}`);
+  }
+  checks.push('Nested tutorial/API groups, keyboard folding, active breadcrumbs, API deep links, back/forward and legacy API anchors');
+  await page.goto(new URL('docs/providers/', root).href, { waitUntil: 'networkidle' });
+  assert.match(await page.locator('.sl-markdown-content').innerText(), /class CustomStatevectorProvider/);
+  assert.match(await page.locator('.sl-markdown-content').innerText(), /register_quantum_backend/);
+  await page.goto(new URL('docs/workflows/', root).href, { waitUntil: 'networkidle' });
+  assert.match(await page.locator('.sl-markdown-content').innerText(), /def make_workflow/);
+  await page.goto(new URL('docs/performance/', root).href, { waitUntil: 'networkidle' });
+  assert.match(await page.locator('.sl-markdown-content').innerText(), /predictor.compare/);
+  checks.push('Public SDK examples render from tested Python sources: workflow, provider, performance');
+  const legacyRoutes = [
+    ['guide-system-overview', 'architecture/'], ['system-overview', 'architecture/'],
+    ['guide-使用指南', 'aimd/'], ['使用指南', 'aimd/'],
+    ['guide-应用示例', 'examples/'], ['应用示例', 'examples/'],
+    ...['1-选择应用并编译电路', '2-分配计算硬件并发起性能预测', '3-查看性能预测结果', '4-提交任务并查看运行状态', '5-查看水分子演化结果'].map(hash => [hash, `aimd/#${hash}`]),
+  ];
+  for (const [hash, route] of legacyRoutes) {
+    await page.goto(new URL('docs/#' + encodeURIComponent(hash), root).href);
+    await page.waitForURL(new URL('docs/' + route, root).href);
+    if (route.includes('#')) assert.equal(await page.locator(`[id="${hash}"]`).count(), 1);
+  }
+  await page.goto(new URL('docs/aimd/', root).href, { waitUntil: 'networkidle' });
+  assert.equal(await page.locator('.sl-markdown-content img').count(), 6);
+  assert.equal(await page.locator('.docs-image-link').count(), 6);
+  assert.match(await page.locator('.sl-markdown-content').innerText(), /不能作为.*Python SDK/);
   await page.setViewportSize({ width: 390, height: 844 });
-  await chapters.getByRole('link', { name: '系统介绍', exact: true }).click();
-  assert.match(await page.locator('.guide-chapter:not([hidden])').innerText(), /通用融合编程框架/);
+  await page.goto(new URL('docs/installation/', root).href, { waitUntil: 'networkidle' });
+  await page.locator('.sl-menu-button').click();
+  await expandDocsGroup('混合编程');
+  assert.ok(await sidebar.getByRole('link', { name: '量子后端', exact: true }).isVisible());
+  await sidebar.getByRole('link', { name: '量子后端', exact: true }).click();
+  await page.waitForURL(new URL('docs/quantum-backends/', root).href);
+  assert.ok(await page.getByRole('heading', { level: 1, name: '量子后端' }).isVisible());
   assert.ok(await page.locator('html').evaluate(node => node.scrollWidth <= innerWidth));
-  await chapters.getByRole('link', { name: '应用示例', exact: true }).click();
-  assert.ok(await page.locator('.guide-content').getByRole('link', { name: '水分子 AIMD' }).isVisible());
+  await page.screenshot({ path: `${artifactDir}/docs-quantum-390.png`, fullPage: true });
+  await page.locator('.sl-menu-button').click();
+  await expandDocsGroup('API 参考');
+  await sidebar.getByRole('link', { name: '运行时与结果引用', exact: true }).click();
+  await page.waitForURL(new URL('docs/api/runtime/', root).href);
   assert.ok(await page.locator('html').evaluate(node => node.scrollWidth <= innerWidth));
-  checks.push('Portal guide: three chapters, general-purpose framework introduction, removed sections absent, deep links, browser back and mobile layout');
+  checks.push('SDK docs: nested sidebar groups, API pages, right TOC, code copy, Pagefind search, legacy hashes, AIMD screenshots and mobile navigation');
 
   const missing = await page.goto(new URL('this-page-does-not-exist/', root).href);
   assert.equal(missing?.status(), 404);

@@ -1,0 +1,243 @@
+{
+  "verified_on": "2026-10-04",
+  "scope": "PivotQ system SDK extension: execution, independent prediction, providers, jobs, reports and same-site documentation",
+  "environment": {
+    "python": "3.12.13",
+    "platform": "Linux-5.4.0-100-generic-x86_64-with-glibc2.35",
+    "host_os": "Ubuntu 22.04",
+    "ray": "2.31.0",
+    "qiskit": "2.5.1",
+    "node": "24"
+  },
+  "implementation": {
+    "public_modules": [
+      "pivotq.components",
+      "pivotq.workflow",
+      "pivotq.jobs",
+      "pivotq.observability",
+      "pivotq.providers",
+      "pivotq.performance"
+    ],
+    "public_hardware": [
+      "CPU",
+      "QPU"
+    ],
+    "prediction_model_independent_of_execution": true,
+    "dashboard_prediction_shared_runner": true,
+    "dashboard_preview_no_native_probe": true,
+    "dashboard_prediction_no_live_ray_required": true
+  },
+  "package": {
+    "wheel": "/tmp/pivotq-extension-dist/pivotq-0.1.0.dev0-py3-none-linux_x86_64.whl",
+    "wheel_sha256": "de34c2db86a8f81ffbdc9d68bd5ecc4bb2bcabc5e8210f3305f8ab109b23bf92",
+    "sdist": "/tmp/pivotq-extension-dist/pivotq-0.1.0.dev0.tar.gz",
+    "sdist_sha256": "d848f73b7186e9c6241e52b777c9ec6ee925790228769bcfab60562389a9d387",
+    "tag": "py3-none-linux_x86_64",
+    "root_is_purelib": false,
+    "top_level_packages": [
+      "pivotq"
+    ],
+    "package_files": 72,
+    "old_namespace_absent": true,
+    "native_sha256": "151dca174a7a4596d03d4728cefbf23e74b55a8a4c3f0add5ad36706672264a9",
+    "original_native_bytes_unchanged": true,
+    "standalone_sdist_rebuild_matches_package_bytes": true,
+    "cold_import_and_preview_no_ray_qiskit_native": "passed",
+    "driver_help": "passed",
+    "pip_check": "passed",
+    "wheel_environment": "/tmp/pivotq-extension-wheel-env",
+    "editable_environment": "/tmp/pivotq-extension-editable-env",
+    "editable_cold_preview_and_native_prediction": "passed"
+  },
+  "checks": [
+    {
+      "name": "Framework units, clean package and real native prediction",
+      "cwd": "packages/framework",
+      "command": "PIVOTQ_RUN_NATIVE_PREDICTIONS=1 FUSION_QPERFSIM_RUNTIME=<existing-compatible-runtime> PYTHONPATH=. ../../.venv/bin/python -m pytest tests/unit tests/integration/test_clean_core_package.py tests/integration/test_performance_native.py -q -p no:cacheprovider",
+      "passed": 476,
+      "failed": 29,
+      "skipped": 3,
+      "passed_subtests": 140,
+      "log": "/tmp/pivotq-extension-unit-native-final.log"
+    },
+    {
+      "name": "Executor DAG/trace/Ray and AIMD simulation parity",
+      "passed": 30,
+      "passed_subtests": 12,
+      "log": "/tmp/pivotq-extension-integrations.log"
+    },
+    {
+      "name": "Real Ray script with five-qubit chain, repeated Workflow and Actor state",
+      "passed": 1,
+      "test": "packages/framework/tests/integration/test_sdk_ray_script.py"
+    },
+    {
+      "name": "Real Ray user-defined Provider and single-source example",
+      "passed": 2,
+      "test": "packages/framework/tests/integration/test_sdk_provider_ray.py"
+    },
+    {
+      "name": "Isolated real Ray Jobs submit, status, logs, stop, delete and nested Runtime",
+      "passed": 1,
+      "test": "packages/framework/tests/integration/test_sdk_jobs_service.py",
+      "log": "/tmp/pivotq-extension-jobs-real.log"
+    },
+    {
+      "name": "Dashboard backend including offline HTTP preview and real native H2O/virtual prediction",
+      "passed": 86,
+      "skipped": 0,
+      "log": "/tmp/pivotq-extension-dashboard-final.log"
+    },
+    {
+      "name": "Single-water bridge/circuit/execution contract",
+      "passed": 19,
+      "failed": 4,
+      "log": "/tmp/pivotq-extension-h2o.log"
+    },
+    {
+      "name": "Ten-water bridge/verification",
+      "passed": 28,
+      "deselected": 1,
+      "passed_subtests": 10,
+      "log": "/tmp/pivotq-extension-water10.log"
+    }
+  ],
+  "existing_failures": [
+    {
+      "suite": "framework",
+      "count": 29,
+      "file": "packages/framework/tests/unit/test_qasm_client_adapter.py",
+      "failed_selectors_equal_baseline": true,
+      "reason": "Legacy qasm_client tests target the replaced device SDK."
+    },
+    {
+      "suite": "single-water",
+      "count": 4,
+      "file": "applications/h2o-hybrid-aimd/tests/test_fusion_bridge.py",
+      "failed_selectors_equal_baseline": true,
+      "reason": "Existing fake bridge converts StringMetadata using dict()."
+    }
+  ],
+  "wheel_examples": {
+    "copied_outside_repository_to": "/tmp/pivotq-extension-examples",
+    "python_isolated_mode": true,
+    "hybrid_program": {
+      "local_and_ray": "passed",
+      "iterations": 9,
+      "converged": true,
+      "log": "/tmp/pivotq-extension-wheel-quickstart-ray.log",
+      "source": "packages/framework/examples/hybrid_program.py",
+      "source_sha256": "6e65e5b8ac773c894877c897a8422b0d71162e41d239e2a5b950e4c5f8db3a42"
+    },
+    "system_workflow": {
+      "local_and_ray": "passed",
+      "runs": 2,
+      "actor_steps": 2,
+      "retained_traces": 6,
+      "report_after_close": true,
+      "log": "/tmp/pivotq-extension-wheel-ray.log",
+      "source": "packages/framework/examples/system_workflow.py",
+      "source_sha256": "f020db9e0c7796291ced0d64734376474e95f7963bf4879134601efe729b4aaa"
+    },
+    "custom_backend": {
+      "real_ray": "passed",
+      "shots": 1024,
+      "measured_counts": {
+        "10": 517,
+        "11": 507
+      },
+      "log": "/tmp/pivotq-extension-wheel-provider.log",
+      "source": "packages/framework/examples/custom_backend.py",
+      "source_sha256": "3f50d3887ea9afce7c8bd6b747dec7ba86ccbc8a9fb5d1d39b885b5a4303693a"
+    },
+    "performance_prediction": {
+      "cpu_reference": {
+        "latency_seconds": 0.25,
+        "mean_job_latency_seconds": 0.25,
+        "engine_version": "0.1.0",
+        "simulator_sha256": "151dca174a7a4596d03d4728cefbf23e74b55a8a4c3f0add5ad36706672264a9"
+      },
+      "cpu_qpu": {
+        "latency_seconds": 0.104,
+        "mean_job_latency_seconds": 0.104,
+        "engine_version": "0.1.0",
+        "simulator_sha256": "151dca174a7a4596d03d4728cefbf23e74b55a8a4c3f0add5ad36706672264a9"
+      },
+      "faster_qpu": {
+        "latency_seconds": 0.054,
+        "mean_job_latency_seconds": 0.054,
+        "engine_version": "0.1.0",
+        "simulator_sha256": "151dca174a7a4596d03d4728cefbf23e74b55a8a4c3f0add5ad36706672264a9"
+      },
+      "source": "packages/framework/examples/performance_prediction.py",
+      "source_sha256": "7e85cc4c8691c5b57813a907d791b022ead81882d92c252d5cc4570f4788c52b"
+    }
+  },
+  "prediction_verification": {
+    "native_process_isolation": true,
+    "explicit_compatibility_runtime": "passed",
+    "direct_worker_c_abi_with_compatible_loader": "passed",
+    "ubuntu_2404_host_direct_sdk_run": "not tested on this Ubuntu 22.04 host",
+    "host_without_runtime": "Unavailable, GLIBC_2.38 missing; verified diagnostic",
+    "native_test_log": "/tmp/pivotq-extension-performance-final.log",
+    "original_cli_task_and_h2o": "passed",
+    "coverage": [
+      "CPU only",
+      "CPU/QPU",
+      "communication",
+      "branches and parallelism",
+      "multiple jobs",
+      "instance binding",
+      "compare",
+      "shots/rate/latency sensitivity",
+      "timeout",
+      "incomplete simulation",
+      "invalid worker response",
+      "missing-native preview"
+    ],
+    "units": "CPU and link bandwidth use Gbit/s; CPU operation/memory model includes native 20us overhead; positive explicit durations round up to microseconds"
+  },
+  "website": {
+    "type_check": {
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0
+    },
+    "pages": 22,
+    "local_resources": 47,
+    "examples_read_from_actual_python_sources": true,
+    "builds": {
+      "root": {
+        "preview": "http://127.0.0.1:4341/docs/",
+        "browser_scenarios": 48,
+        "internal_links": 23,
+        "errors": [],
+        "report": "website/artifacts/root/report.json"
+      },
+      "subpath": {
+        "preview": "http://127.0.0.1:4342/PivotQ/docs/",
+        "browser_scenarios": 48,
+        "internal_links": 23,
+        "errors": [],
+        "report": "website/artifacts/subpath/report.json"
+      }
+    },
+    "coverage": [
+      "search",
+      "code copy",
+      "desktop/mobile menus",
+      "anchors",
+      "back/forward",
+      "legacy aliases",
+      "CPU/QPU public API"
+    ]
+  },
+  "boundaries": {
+    "physical_qpu_calls": 0,
+    "large_scientific_runs": 0,
+    "historical_assets_weights_data_changed": false,
+    "committed": false,
+    "pushed": false,
+    "deployed": false
+  }
+}

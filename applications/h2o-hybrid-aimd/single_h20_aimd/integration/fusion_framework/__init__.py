@@ -1,4 +1,4 @@
-"""把 ray_quantum 融合框架适配为项目现有异构执行客户端。"""
+"""把 pivotq._internal 融合框架适配为项目现有异构执行客户端。"""
 
 from .components import (
     ClassicalPredictSessionsComponent,

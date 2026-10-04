@@ -1,0 +1,278 @@
+{
+  "verified_on": "2026-10-04",
+  "scope": "PivotQ SDK/package migration and same-site documentation; no physical QPU or full large scientific run",
+  "environment": {
+    "python": "3.12.13",
+    "platform": "Linux x86-64",
+    "ray": "2.31.0",
+    "qiskit": "2.5.1",
+    "node": "24"
+  },
+  "package": {
+    "distribution": "pivotq",
+    "version": "0.1.0.dev0",
+    "top_level_packages": [
+      "pivotq"
+    ],
+    "old_namespace_absent": true,
+    "cold_import_starts_ray": false,
+    "cold_import_loads_qiskit": false,
+    "wheel": "pivotq-0.1.0.dev0-py3-none-any.whl",
+    "wheel_sha256": "55bb87650ec18cd172e7ab9c719d05d9006f9468fc5cab5003e8ca0f54081a2f",
+    "clean_environment": "/tmp/pivotq-sdk-wheel-env",
+    "pip_check": "passed",
+    "qpu_extra_install": "passed",
+    "public_driver_help": "passed",
+    "qpu_backend_creation_offline": "passed"
+  },
+  "checks": [
+    {
+      "name": "framework unit + clean wheel",
+      "cwd": "packages/framework",
+      "command": "PYTHONPATH=. ../../.venv/bin/python -m pytest tests/unit tests/integration/test_clean_core_package.py -q -p no:cacheprovider",
+      "passed": 355,
+      "failed": 29,
+      "skipped": 3,
+      "passed_subtests": 140,
+      "log": "/tmp/pivotq-sdk-unit-final.log"
+    },
+    {
+      "name": "executor dependency graph, traces and Ray contract",
+      "cwd": "packages/framework",
+      "command": "PYTHONPATH=. ../../.venv/bin/python -m pytest tests/integration/test_fusion_graph.py tests/integration/test_fusion_trace.py tests/integration/test_ray_executor.py -q -p no:cacheprovider",
+      "passed": 26,
+      "passed_subtests": 12,
+      "log": "/tmp/pivotq-sdk-executor-integration.log"
+    },
+    {
+      "name": "user script, five-qubit simulator, classical consumer, shared Ray connection",
+      "test": "packages/framework/tests/integration/test_sdk_ray_script.py",
+      "passed": 1
+    },
+    {
+      "name": "single-water bridge/circuit/execution contract",
+      "cwd": "applications/h2o-hybrid-aimd",
+      "command": "../../.venv/bin/python -m pytest tests/test_fusion_bridge.py tests/test_qpu_circuit_adapter.py tests/test_execution_contract.py -q -p no:cacheprovider",
+      "passed": 19,
+      "failed": 4,
+      "log": "/tmp/pivotq-sdk-h2o.log"
+    },
+    {
+      "name": "AIMD internal simulation parity",
+      "test": "packages/framework/tests/integration/test_h2o_simulation.py",
+      "passed": 4,
+      "log": "/tmp/pivotq-sdk-aimd-parity.log"
+    },
+    {
+      "name": "real local Ray AIMD bridge",
+      "command": ".venv/bin/python -m unittest discover -s tests/integration -v",
+      "passed": 1,
+      "log": "/tmp/pivotq-sdk-aimd-ray.log"
+    },
+    {
+      "name": "ten-water bridge and verification without heavy inference",
+      "cwd": "applications/multi-h2o-aimd-v4",
+      "command": "../../.venv/bin/python -m pytest tests/test_fusion_framework.py tests/test_ray_verification.py -q -p no:cacheprovider",
+      "passed": 28,
+      "deselected": 1,
+      "passed_subtests": 10,
+      "log": "/tmp/pivotq-sdk-water10.log"
+    },
+    {
+      "name": "Dashboard backend",
+      "command": "PYTHONPATH=dashboard .venv/bin/python -m unittest discover -s dashboard/tests/backend -v",
+      "passed": 80,
+      "skipped": 3,
+      "log": "/tmp/pivotq-sdk-dashboard.log"
+    },
+    {
+      "name": "Dashboard HTTP compiler to real local Ray, Bell circuit and two AIMD steps",
+      "command": "QHAI_RUN_CPU_TESTS=1 .venv/bin/python -B dashboard/tests/test_cpu_smoke.py CPUHTTPSmokeTests.test_bell_then_short_aimd_over_http -v",
+      "passed": 1,
+      "log": "/tmp/pivotq-sdk-dashboard-http.log",
+      "runs": [
+        {
+          "task_id": "quantum-circuit",
+          "run_id": "run-6a7e1b9588d2",
+          "status": "SUCCEEDED",
+          "actual_device": "cpu",
+          "cleanup_succeeded": true
+        },
+        {
+          "task_id": "h2o-hybrid-aimd",
+          "run_id": "run-0ba1c1a9df89",
+          "status": "SUCCEEDED",
+          "actual_device": "cpu",
+          "cleanup_succeeded": true
+        }
+      ],
+      "history_restored_without_resubmission": true,
+      "scope": "Software integration only; the short run does not replace full scientific acceptance."
+    }
+  ],
+  "existing_failures": [
+    {
+      "suite": "framework",
+      "count": 29,
+      "test_file": "packages/framework/tests/unit/test_qasm_client_adapter.py",
+      "reason": "Tests still expect the replaced qasm_client SDK, while the adapter uses HTTP.",
+      "baseline_log": "/tmp/pivotq-sdk-baseline-3t1dxobt/unit.log",
+      "failed_selectors_equal_baseline": true
+    },
+    {
+      "suite": "single-water bridge",
+      "count": 4,
+      "test_file": "applications/h2o-hybrid-aimd/tests/test_fusion_bridge.py",
+      "reason": "Existing fake framework applies dict() to StringMetadata.",
+      "baseline_log": "/tmp/pivotq-sdk-h2o-baseline.log",
+      "failed_selectors_equal_baseline": true
+    }
+  ],
+  "hybrid_example": {
+    "source": "packages/framework/examples/hybrid_program.py",
+    "source_sha256": "6e65e5b8ac773c894877c897a8422b0d71162e41d239e2a5b950e4c5f8db3a42",
+    "verification": "Copied this same source outside the repository and executed with the clean wheel environment using python -I -B.",
+    "local": {
+      "backend": "simulator",
+      "is_simulated": true,
+      "iterations": 9,
+      "converged": true,
+      "records": [
+        {
+          "step": 0,
+          "theta": 1.13623046875,
+          "error": 0.2724609375
+        },
+        {
+          "step": 1,
+          "theta": 1.24609375,
+          "error": 0.2197265625
+        },
+        {
+          "step": 2,
+          "theta": 1.3291015625,
+          "error": 0.166015625
+        },
+        {
+          "step": 3,
+          "theta": 1.391357421875,
+          "error": 0.12451171875
+        },
+        {
+          "step": 4,
+          "theta": 1.443115234375,
+          "error": 0.103515625
+        },
+        {
+          "step": 5,
+          "theta": 1.473388671875,
+          "error": 0.060546875
+        },
+        {
+          "step": 6,
+          "theta": 1.499267578125,
+          "error": 0.0517578125
+        },
+        {
+          "step": 7,
+          "theta": 1.517333984375,
+          "error": 0.0361328125
+        },
+        {
+          "step": 8,
+          "theta": 1.51904296875,
+          "error": 0.00341796875
+        }
+      ]
+    },
+    "ray": {
+      "backend": "simulator",
+      "is_simulated": true,
+      "iterations": 9,
+      "converged": true,
+      "records": [
+        {
+          "step": 0,
+          "theta": 1.13623046875,
+          "error": 0.2724609375
+        },
+        {
+          "step": 1,
+          "theta": 1.24609375,
+          "error": 0.2197265625
+        },
+        {
+          "step": 2,
+          "theta": 1.3291015625,
+          "error": 0.166015625
+        },
+        {
+          "step": 3,
+          "theta": 1.391357421875,
+          "error": 0.12451171875
+        },
+        {
+          "step": 4,
+          "theta": 1.443115234375,
+          "error": 0.103515625
+        },
+        {
+          "step": 5,
+          "theta": 1.473388671875,
+          "error": 0.060546875
+        },
+        {
+          "step": 6,
+          "theta": 1.499267578125,
+          "error": 0.0517578125
+        },
+        {
+          "step": 7,
+          "theta": 1.517333984375,
+          "error": 0.0361328125
+        },
+        {
+          "step": 8,
+          "theta": 1.51904296875,
+          "error": 0.00341796875
+        }
+      ]
+    }
+  },
+  "website": {
+    "source": "website/",
+    "route": "/docs/",
+    "root_and_subpath_browser_checks": "passed",
+    "astro_check": {
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0
+    },
+    "release_pages": 14,
+    "release_local_resources": 39,
+    "viewports": [
+      390,
+      768,
+      1440
+    ],
+    "browser_scenarios_per_base": 22,
+    "internal_links_per_base": 15,
+    "legacy_anchor_redirects": 11,
+    "preview": "http://127.0.0.1:4324/PivotQ/docs/",
+    "reports": [
+      "website/artifacts/root/report.json",
+      "website/artifacts/subpath/report.json",
+      "website/artifacts/subpath/legacy-aliases.json",
+      "website/artifacts/subpath/history-navigation.json"
+    ],
+    "back_forward_and_deep_links": "passed"
+  },
+  "boundaries": {
+    "physical_qpu_calls": 0,
+    "large_scientific_runs": 0,
+    "history_weights_data_changed": false,
+    "committed": false,
+    "pushed": false,
+    "deployed": false
+  }
+}

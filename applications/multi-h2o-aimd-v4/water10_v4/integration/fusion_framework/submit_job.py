@@ -21,7 +21,7 @@ def job_arguments(*, submission_id, working_dir, config_path, output_dir):
     for value in (config_path, output_dir):
         if not PurePosixPath(value).is_absolute():
             raise ValueError('config_path/output_dir must be absolute paths on the Ray cluster')
-    parts = ['python', '-B', '-m', 'ray_quantum.jobs.driver', '--run-id', submission_id,
+    parts = ['python', '-B', '-m', 'pivotq.jobs.driver', '--run-id', submission_id,
         '--registration', REGISTRATION, '--runner', RUNNER, '--namespace', f'water10-{submission_id}',
         '--output-dir', output_dir, '--trace-max-records', '10000']
     return dict(submission_id=submission_id, entrypoint=shlex.join(parts), working_dir=str(working),
@@ -30,7 +30,7 @@ def job_arguments(*, submission_id, working_dir, config_path, output_dir):
 
 
 def build_job_spec(**kwargs):
-    from ray_quantum.jobs import RayJobSpec, RayJobRuntimeEnvironment, RayJobDriverResources
+    from pivotq._internal.jobs import RayJobSpec, RayJobRuntimeEnvironment, RayJobDriverResources
     values = job_arguments(**kwargs)
     return RayJobSpec(submission_id=values['submission_id'], entrypoint=values['entrypoint'],
         runtime_environment=RayJobRuntimeEnvironment(working_dir=values['working_dir'], env_vars=values['env_vars']),
@@ -55,7 +55,7 @@ def main():
         parser.error('--address is required unless --dry-run')
     if not 0 < args.wait_timeout < float('inf'):
         parser.error('--wait-timeout must be finite and positive')
-    from ray_quantum.jobs import RayJobClient
+    from pivotq._internal.jobs import RayJobClient
     client = RayJobClient(args.address)
     handle = client.submit(build_job_spec(**kwargs))
     print(f'WATER10_SUBMISSION_ID={handle.submission_id}', flush=True)

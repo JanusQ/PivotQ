@@ -161,7 +161,7 @@ class Contracts(unittest.TestCase):
         spec = build_job_spec(submission_id='test1', working_dir=str(ROOT),
             config_path='/shared/with space/config.json', output_dir='/shared/output')
         parts = shlex.split(spec.entrypoint)
-        self.assertIn('ray_quantum.jobs.driver', parts)
+        self.assertIn('pivotq.jobs.driver', parts)
         self.assertEqual(dict(spec.runtime_environment.env_vars)['WATER10_FUSION_CONFIG'], '/shared/with space/config.json')
         self.assertIn('water10_v4.integration.fusion_framework.runner:run_aimd', parts)
 
@@ -169,9 +169,9 @@ class Contracts(unittest.TestCase):
 class FrameworkIntegration(unittest.TestCase):
     @pytest.mark.heavy
     def test_real_local_executor_cpu_inference_and_runner(self):
-        from ray_quantum.framework import ComponentRegistry, FusionFramework
-        from ray_quantum.executors import LocalExecutor
-        from ray_quantum.observability import TraceCollector
+        from pivotq._internal.framework import ComponentRegistry, FusionFramework
+        from pivotq._internal.executors import LocalExecutor
+        from pivotq._internal.observability import TraceCollector
         from water10_v4.parallel_training import FastSimulator
         from water10_v4.data import load_panel
         from water10_v4.revision import build_block_circuit

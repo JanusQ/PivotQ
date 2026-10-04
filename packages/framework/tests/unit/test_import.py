@@ -20,7 +20,7 @@ class PackageImportTest(unittest.TestCase):
     def test_import_does_not_implicitly_import_ray(self) -> None:
         ray_modules_before = _loaded_ray_modules()
 
-        package = importlib.import_module("ray_quantum")
+        package = importlib.import_module("pivotq._internal")
 
         self.assertEqual(_loaded_ray_modules(), ray_modules_before)
         self.assertEqual(package.__version__, "0.1.0.dev0")
@@ -29,7 +29,7 @@ class PackageImportTest(unittest.TestCase):
     def test_jobs_contract_import_does_not_import_ray(self) -> None:
         ray_modules_before = _loaded_ray_modules()
 
-        jobs = importlib.import_module("ray_quantum.jobs")
+        jobs = importlib.import_module("pivotq._internal.jobs")
 
         self.assertEqual(_loaded_ray_modules(), ray_modules_before)
         self.assertIn("RayJobClient", jobs.__all__)
@@ -41,7 +41,7 @@ class PackageImportTest(unittest.TestCase):
     def test_qpu_integration_public_contract_import_does_not_import_ray(self) -> None:
         ray_modules_before = _loaded_ray_modules()
 
-        qpu_integration = importlib.import_module("ray_quantum.qpu_integration")
+        qpu_integration = importlib.import_module("pivotq._internal.qpu_integration")
 
         self.assertEqual(_loaded_ray_modules(), ray_modules_before)
         self.assertEqual(
@@ -50,10 +50,10 @@ class PackageImportTest(unittest.TestCase):
         )
 
     def test_activity_namespace_does_not_expose_archived_ir_or_source(self) -> None:
-        importlib.import_module("ray_quantum")
+        importlib.import_module("pivotq._internal")
 
-        self.assertIsNone(importlib.util.find_spec("ray_quantum.ir"))
-        self.assertIsNone(importlib.util.find_spec("ray_quantum.source"))
+        self.assertIsNone(importlib.util.find_spec("pivotq._internal.ir"))
+        self.assertIsNone(importlib.util.find_spec("pivotq._internal.source"))
         self.assertFalse(
             any(
                 name == "ray_quantum_ir" or name.startswith("ray_quantum_ir.")

@@ -31,7 +31,6 @@ def configure_defaults() -> None:
         "FUSION_RAY_CONFIG_PATH": APPLICATION_ROOT / "configs/h2o_aimd.yaml",
         "FUSION_RAY_CHECKPOINT_PATH": APPLICATION_ROOT / "checkpoints/hybrid_model.pt",
         "FUSION_RAY_PYTHON": sys.executable,
-        "QPERFSIM_ROOT": REPOSITORY_ROOT / "packages/perf-sim",
         "RAY_JOBS_ADDRESS": "http://127.0.0.1:8265",
     }
     for name, value in defaults.items():

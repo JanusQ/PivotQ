@@ -5,7 +5,7 @@ from __future__ import annotations
 from enum import Enum
 import unittest
 
-from ray_quantum.jobs import (
+from pivotq._internal.jobs import (
     RayJobClient,
     RayJobDriverResources,
     RayJobRuntimeEnvironment,
@@ -15,7 +15,7 @@ from ray_quantum.jobs import (
     RayJobStatus,
     RayJobSubmissionError,
 )
-from ray_quantum.errors import RetryAdvice, SubmissionDisposition
+from pivotq._internal.errors import RetryAdvice, SubmissionDisposition
 
 
 class _SdkStatus(str, Enum):

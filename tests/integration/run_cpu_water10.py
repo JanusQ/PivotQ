@@ -50,7 +50,7 @@ def source_manifest():
     files = {Path(__file__).resolve(), REPOSITORY_ROOT / 'pyproject.toml',
              REPOSITORY_ROOT / 'uv.lock', APPLICATION_ROOT / 'pyproject.toml',
              APPLICATION_ROOT / 'configs/fusion_cpu.json'}
-    for directory in (REPOSITORY_ROOT / 'packages/framework/ray_quantum',
+    for directory in (REPOSITORY_ROOT / 'packages/framework/pivotq',
                       APPLICATION_ROOT / 'water10_v4'):
         files.update(directory.rglob('*.py'))
     return {str(path.relative_to(REPOSITORY_ROOT)): sha256(path)
@@ -59,7 +59,7 @@ def source_manifest():
 
 def package_versions():
     values = {}
-    for package in ('ray', 'ray-quantum', 'numpy', 'qiskit', 'qiskit-aer', 'torch', 'ase', 'psutil'):
+    for package in ('ray', 'pivotq', 'numpy', 'qiskit', 'qiskit-aer', 'torch', 'ase', 'psutil'):
         try:
             values[package] = version(package)
         except PackageNotFoundError:
@@ -218,7 +218,7 @@ def main(argv=None):
     os.environ.update(environment)
     os.environ.pop('RAY_ADDRESS', None)
     import ray
-    from ray_quantum.jobs.driver import RayJobDriverConfig, run_driver
+    from pivotq._internal.jobs.driver import RayJobDriverConfig, run_driver
     from water10_v4.runtime import require_memory_budget
     from water10_v4.integration.fusion_framework.config import CONFIG_ENV, resolve_template
     from water10_v4.integration.fusion_framework.runner import read_geometry

@@ -12,7 +12,7 @@ From the PivotQ repository root on Linux x86-64:
 uv sync --locked
 ```
 
-Python 3.12 is selected by the root project. Analytic forces require `g++` with C++17 and OpenMP; the Dockerfile includes it. Native kernels compile into each run's output directory. The application is installed editable, alongside `ray-quantum`, so the complete model and data resources remain in the application directory.
+Python 3.12 is selected by the root project. Analytic forces require `g++` with C++17 and OpenMP; the Dockerfile includes it. Native kernels compile into each run's output directory. The application is installed editable, alongside `pivotq`, so the complete model and data resources remain in the application directory.
 
 ## Models and validation scope
 

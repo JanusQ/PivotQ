@@ -4,7 +4,7 @@ This fixture does not simulate a quantum circuit or establish scientific
 correctness. The fixed response is used only to test transport contracts.
 """
 
-from ray_quantum.qpu_integration.device_adapter import QPUDeviceAdapter, DeviceCircuitResult
+from pivotq._internal.qpu_integration.device_adapter import QPUDeviceAdapter, DeviceCircuitResult
 
 
 class RecordingDeviceAdapter(QPUDeviceAdapter):

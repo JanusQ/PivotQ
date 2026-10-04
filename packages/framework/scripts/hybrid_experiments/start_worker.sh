@@ -24,7 +24,7 @@ PROJECT_ROOT="${RAY_QUANTUM_PROJECT_ROOT:-$(cd "${SCRIPT_DIRECTORY}/../.." && pw
 export PYTHONPATH="${PROJECT_ROOT}:${PYTHONPATH:+:${PYTHONPATH}}"
 
 test -x "${RAY_BIN}"
-test -d "${PROJECT_ROOT}/ray_quantum"
+test -d "${PROJECT_ROOT}/pivotq"
 "${RAY_BIN}" stop --force || true
 "${RAY_BIN}" start \
   --address="${HEAD_PRIVATE_IP}:6379" \

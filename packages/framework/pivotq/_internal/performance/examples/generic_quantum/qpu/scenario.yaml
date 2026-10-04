@@ -1,0 +1,40 @@
+schema_version: "v1"
+metadata:
+  name: synthetic_quantum_qpu_example
+  description: "Illustrative inputs; performance parameters are not measured calibration."
+system:
+  hardware:
+    cpu_cluster:
+      node_count: 1
+    qpu:
+      count: 1
+      qubits_per_qpu: 8
+      shot_rate: 10000
+      submit_latency_us: 1000
+      availability: 1.0
+  topology:
+    type: custom_graph
+    devices:
+      cpu: 1
+      qpu: 1
+    links:
+      - src: cpu0
+        dst: qpu0
+        bandwidth_gbps: 1
+        latency_us: 100
+      - src: qpu0
+        dst: cpu0
+        bandwidth_gbps: 1
+        latency_us: 100
+workload:
+  type: custom_trace
+  trace_file: task_graph.json
+  job_count: 1
+scheduler:
+  policy: earliest_finish_time
+simulation:
+  network_mode: analytical
+  simulation_time_s: 10
+output:
+  output_format: csv
+  metrics_level: detailed

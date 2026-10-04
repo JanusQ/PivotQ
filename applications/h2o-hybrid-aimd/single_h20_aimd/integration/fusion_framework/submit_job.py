@@ -80,7 +80,7 @@ def build_job_spec(
     entrypoint_parts = [
         python_command,
         "-m",
-        "ray_quantum.jobs.driver",
+        "pivotq.jobs.driver",
         "--run-id",
         submission_id,
         "--registration",
@@ -109,13 +109,13 @@ def build_job_spec(
     }
     if quantum_target == "qpu":
         try:
-            from ray_quantum.qpu_integration.registration import (
+            from pivotq._internal.qpu_integration.registration import (
                 QOS_DATA_TREE_TARGET_ENV,
                 QOS_HELPER_MODULE_ENV,
             )
         except ImportError as error:
             raise RuntimeError(
-                "ray_quantum QPU registration is unavailable on the submitting machine."
+                "pivotq._internal QPU registration is unavailable on the submitting machine."
             ) from error
         environment[QOS_HELPER_MODULE_ENV] = qos_helper_module
         environment[QOS_DATA_TREE_TARGET_ENV] = qos_data_tree_target
@@ -207,10 +207,10 @@ def main(argv: Iterable[str] | None = None) -> int:
 
 def _jobs_api() -> Any:
     try:
-        from ray_quantum import jobs
+        from pivotq._internal import jobs
     except ImportError as error:
         raise RuntimeError(
-            "ray_quantum is not installed. Install the fusion framework library "
+            "pivotq._internal is not installed. Install the fusion framework library "
             "on the submitting machine before using this command."
         ) from error
     return jobs
@@ -254,7 +254,7 @@ def _parse_overrides(text: str, parser: argparse.ArgumentParser) -> dict[str, An
 
 def _argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Submit one complete H2O AIMD run through ray_quantum Ray Jobs."
+        description="Submit one complete H2O AIMD run through pivotq._internal Ray Jobs."
     )
     parser.add_argument("--address")
     parser.add_argument("--submission-id", required=True)

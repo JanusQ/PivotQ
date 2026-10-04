@@ -6,9 +6,9 @@ import unittest
 import uuid
 from typing import Any
 
-from ray_quantum.errors import ValidationError
-from ray_quantum.executors import LocalExecutor
-from ray_quantum.framework import (
+from pivotq._internal.errors import ValidationError
+from pivotq._internal.executors import LocalExecutor
+from pivotq._internal.framework import (
     ComponentRegistry,
     ComponentSpec,
     ExecutionMode,
@@ -373,7 +373,7 @@ class RayFusionGraphTest(
             ray.shutdown()
 
     def setUp(self) -> None:
-        from ray_quantum.executors import RayExecutor
+        from pivotq._internal.executors import RayExecutor
 
         reset_all_fakes()
         self.registry = ComponentRegistry()

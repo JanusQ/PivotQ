@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from ray_quantum.framework import (
+from pivotq._internal.framework import (
     ComponentSpec,
     ExecutionMode,
     FusionFramework,
     ResourceRequest,
 )
-from ray_quantum.qpu_integration.component import register_qpu_client
+from pivotq._internal.qpu_integration.component import register_qpu_client
 from tests.fixtures.qpu_device_fake import RecordingDeviceAdapter
 
 from .components import CpuInputComponent, CudaAngleComponent

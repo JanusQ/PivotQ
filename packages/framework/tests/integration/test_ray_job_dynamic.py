@@ -12,9 +12,9 @@ import time
 import unittest
 import uuid
 
-from ray_quantum.executors import LocalExecutor
-from ray_quantum.framework import ComponentRegistry, FusionFramework
-from ray_quantum.jobs import (
+from pivotq._internal.executors import LocalExecutor
+from pivotq._internal.framework import ComponentRegistry, FusionFramework
+from pivotq._internal.jobs import (
     RayJobClient,
     RayJobDriverContext,
     RayJobDriverResources,
@@ -22,7 +22,7 @@ from ray_quantum.jobs import (
     RayJobSpec,
     RayJobStatus,
 )
-from ray_quantum.observability import TraceCollector
+from pivotq._internal.observability import TraceCollector
 try:
     from tests.fixtures.p7_dynamic_app import (
         register_dynamic_components,
@@ -232,7 +232,7 @@ class DynamicCoordinatorRayJobTest(unittest.TestCase):
                 "exec",
                 sys.executable,
                 "-m",
-                "ray_quantum.jobs.driver",
+                "pivotq._internal.jobs.driver",
                 "--run-id",
                 submission_id,
                 "--registration",

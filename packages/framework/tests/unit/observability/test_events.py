@@ -10,15 +10,15 @@ import shutil
 import unittest
 import uuid
 
-from ray_quantum.framework.models import (
+from pivotq._internal.framework.models import (
     ComponentSpec,
     ExecutionMode,
     InvocationSpec,
     InvocationStatus,
     ResourceRequest,
 )
-from ray_quantum.models import StringMetadata
-from ray_quantum.observability.events import (
+from pivotq._internal.models import StringMetadata
+from pivotq._internal.observability.events import (
     TRACE_EVENT_MANIFEST_TYPE,
     TRACE_EVENT_RECORD_TYPE,
     TRACE_EVENT_SCHEMA_VERSION,

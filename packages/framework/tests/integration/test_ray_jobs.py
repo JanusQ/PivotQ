@@ -8,7 +8,7 @@ import time
 import unittest
 import uuid
 
-from ray_quantum.jobs import (
+from pivotq._internal.jobs import (
     RayJobClient,
     RayJobDriverResources,
     RayJobSpec,

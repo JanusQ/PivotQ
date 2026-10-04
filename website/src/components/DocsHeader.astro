@@ -1,0 +1,77 @@
+---
+import Search from '@astrojs/starlight/components/Search.astro';
+import GitHubLink from './GitHubLink.astro';
+import { site } from '../data/site';
+const base = import.meta.env.BASE_URL;
+const links = [
+  { label: '首页', href: base },
+  { label: '系统介绍', href: `${base}#system` },
+  { label: '应用示例', href: `${base}#applications` },
+  { label: '参考文档', href: `${base}docs/`, active: true },
+];
+---
+<div class="site-header docs-header">
+  <a class="brand" href={base} aria-label={`${site.name}首页`}>
+    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M6 8 15 3l9 5v12l-9 6-9-6Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m6 8 9 6 9-6M15 14v12" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="15" cy="14" r="3" fill="currentColor"/></svg>
+    <span>{site.name}</span>
+  </a>
+  <nav class="desktop-nav" aria-label="主导航">
+    {links.map(link => <a href={link.href} aria-current={link.active ? 'page' : undefined}>{link.label}</a>)}
+    {site.githubUrl && <GitHubLink href={site.githubUrl} />}
+  </nav>
+  <div class="docs-controls">
+    <details class="mobile-menu">
+      <summary>门户</summary>
+      <nav aria-label="移动端导航">
+        {links.map(link => <a href={link.href} aria-current={link.active ? 'page' : undefined}>{link.label}</a>)}
+        {site.githubUrl && <GitHubLink href={site.githubUrl} />}
+      </nav>
+    </details>
+    <Search />
+  </div>
+</div>
+<script define:vars={{ base }}>
+  document.documentElement.dataset.theme = 'light';
+  if (location.pathname.replace(/\/$/, '') === `${base}docs`.replace(/\/$/, '')) {
+    let hash = '';
+    try { hash = decodeURIComponent(location.hash.slice(1)); } catch {}
+    const legacy = {
+      'guide-system-overview': 'architecture/',
+      'system-overview': 'architecture/',
+      'guide-使用指南': 'aimd/',
+      '使用指南': 'aimd/',
+      'guide-应用示例': 'examples/',
+      '应用示例': 'examples/',
+      '1-选择应用并编译电路': 'aimd/#1-选择应用并编译电路',
+      '2-分配计算硬件并发起性能预测': 'aimd/#2-分配计算硬件并发起性能预测',
+      '3-查看性能预测结果': 'aimd/#3-查看性能预测结果',
+      '4-提交任务并查看运行状态': 'aimd/#4-提交任务并查看运行状态',
+      '5-查看水分子演化结果': 'aimd/#5-查看水分子演化结果',
+    };
+    if (legacy[hash]) location.replace(`${base}docs/${legacy[hash]}`);
+  }
+</script>
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('.docs-header .mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => link.closest('details')?.removeAttribute('open'));
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') document.querySelectorAll<HTMLDetailsElement>('.docs-header .mobile-menu[open]').forEach(menu => {
+      menu.open = false;
+      menu.querySelector('summary')?.focus();
+    });
+  });
+</script>
+<style>
+  .docs-header{display:flex;align-items:center;gap:2.5rem;height:100%;color:var(--sl-color-gray-1)}
+  .brand{display:flex;align-items:center;gap:.6rem;white-space:nowrap;font-size:1.25rem;font-weight:650;text-decoration:none;color:inherit}
+  .brand svg{color:#003f88;flex-shrink:0}
+  .desktop-nav{display:flex;align-items:center;gap:1.75rem;margin-left:0;font-size:1rem;white-space:nowrap;color:var(--sl-color-gray-1)}
+  .desktop-nav :global(a){display:inline-flex;align-items:center;position:relative;min-height:2.5rem;padding:.5rem 0;text-decoration:none;color:inherit;font-weight:500}
+  .desktop-nav :global(a:hover){color:var(--sl-color-accent)}
+  .desktop-nav a[aria-current]{font-weight:650}
+  .docs-controls{display:flex;align-items:center;gap:.75rem;margin-left:auto}
+  .mobile-menu{display:none}
+  @media(max-width:72rem){.desktop-nav{display:none}.mobile-menu{display:block}.docs-header{gap:1rem}.docs-controls{margin-left:auto}.mobile-menu summary{cursor:pointer;font-size:.875rem;list-style:none}.mobile-menu nav{position:absolute;top:var(--sl-nav-height);inset-inline:0;display:flex;flex-direction:column;gap:1rem;background:white;border-bottom:1px solid #dde5ee;padding:1.25rem 1.5rem;box-shadow:0 8px 20px #15365312}.mobile-menu :global(a){text-decoration:none;color:inherit}}
+  @media(max-width:30rem){.brand{font-size:1rem;gap:.4rem}.brand svg{width:25px}.docs-controls{gap:.65rem}}
+</style>

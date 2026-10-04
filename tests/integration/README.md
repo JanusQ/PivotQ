@@ -1,6 +1,31 @@
 # Integration tests
 
-`test_framework_aimd.py` verifies the real boundary between `ray_quantum` and `single_h20_aimd`. It starts isolated local Ray, registers the AIMD F2 CPU quantum component in the real framework, submits the existing H2O request through `FusionExecutionClient`, and verifies the returned 14-feature shape.
+## System SDK extension (2026-10-04)
+
+[System SDK evidence](evidence/pivotq_system_sdk_20261004.json) records the public
+component/Actor, Workflow, Provider, Jobs, report and independent prediction
+acceptance. It includes wheel/sdist/editable resource checks, real local Ray,
+Dashboard offline prediction, and both website deployment paths. The older
+SDK migration and scientific experiment records remain separate.
+
+From `packages/framework`, run the relevant SDK integrations:
+
+```bash
+../../.venv/bin/python -m pytest tests/integration/test_sdk_ray_script.py tests/integration/test_sdk_provider_ray.py tests/integration/test_clean_core_package.py -q
+PIVOTQ_TEST_JOBS=1 ../../.venv/bin/python -m pytest tests/integration/test_sdk_jobs_service.py -q
+PIVOTQ_RUN_NATIVE_PREDICTIONS=1 ../../.venv/bin/python -m pytest tests/integration/test_performance_native.py -q
+```
+
+The last command requires a compatible native runtime. On older Linux systems,
+set `FUSION_QPERFSIM_RUNTIME` to an existing compatible directory first. This
+acceptance used Ubuntu 22.04 with that explicit configuration, not an Ubuntu
+24.04 host. No physical QPU or full scientific experiment is part of these tests.
+The recorded 29 legacy QASM test failures and four single-water fake-bridge
+failures match the earlier baseline.
+
+## Application bridge
+
+`test_framework_aimd.py` verifies the real boundary between `pivotq._internal` and `single_h20_aimd`. It starts isolated local Ray, registers the AIMD F2 CPU quantum component in the real framework, submits the existing H2O request through `FusionExecutionClient`, and verifies the returned 14-feature shape.
 
 Run it from the repository root in the unified environment:
 
@@ -28,7 +53,7 @@ uv run --locked python -B tests/integration/run_cpu_aimd.py --quantum-target gpu
 Both routes use real Ray scheduling, a persistent classical Actor, the framework
 Driver, Cartesian central finite differences, ASE NVE integration, diagnostics,
 figures, and artifact packaging. The framework-owned bridge is
-`ray_quantum.integrations.h2o`; the launcher does not add a CPU target to the
+`pivotq._internal.integrations.h2o`; the launcher does not add a CPU target to the
 application configuration or modify its GPU/QPU scheduling declarations.
 
 The default is the frozen 300 K, 0.1 fs, 1000-step experiment. A smaller

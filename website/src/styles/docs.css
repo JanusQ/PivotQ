@@ -1,23 +1,101 @@
+/* Inter v4.1, https://github.com/rsms/inter — license: public/licenses/Inter-OFL.txt. */
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/fonts/InterVariable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
 :root,:root[data-theme='light'],:root[data-theme='dark'] {
   color-scheme: light;
-  --sl-font: ui-sans-serif,system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  --sl-font: 'Inter',"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",system-ui,sans-serif;
   --sl-font-mono: ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
-  --sl-color-accent-low: #eaf2ff;
-  --sl-color-accent: #003f88;
-  --sl-color-accent-high: #003768;
-  --sl-color-white: #153653;
-  --sl-color-gray-1: #263f58;
-  --sl-color-gray-2: #425b73;
-  --sl-color-gray-3: #53667a;
-  --sl-color-gray-4: #91a1b2;
-  --sl-color-gray-5: #dde5ee;
-  --sl-color-gray-6: #f6f7f9;
+  --sl-color-accent-low: #e7f5fa;
+  --sl-color-accent: #007fa3;
+  --sl-color-accent-high: #006b89;
+  --sl-color-white: #161a1d;
+  --sl-color-gray-1: #22272b;
+  --sl-color-gray-2: #454f59;
+  --sl-color-gray-3: #596773;
+  --sl-color-gray-4: #85919b;
+  --sl-color-gray-5: #dfe3e8;
+  --sl-color-gray-6: #f5f7f9;
   --sl-color-black: #fff;
+  --sl-color-text: #22272b;
+  --sl-color-text-accent: #007fa3;
+  --sl-color-hairline: #e6e9ed;
+  --sl-color-hairline-shade: #e6e9ed;
   --sl-color-bg: #fff;
   --sl-color-bg-nav: #fff;
-  --sl-color-bg-sidebar: #fafbfd;
-  --sl-content-width: 49rem;
-  --sl-text-h1: 2.25rem;
+  --sl-color-bg-sidebar: #fff;
+  --sl-content-width: 52rem;
+  --sl-text-h1: 2.625rem;
+  --sl-text-h2: 2.125rem;
+  --sl-text-h3: 1.625rem;
+  --sl-nav-height: 4rem;
+  --sl-sidebar-width: 17.5rem;
+  --sl-line-height: 1.75;
+  --sl-line-height-headings: 1.25;
+  --docs-toc-width: 16rem;
+}
+
+.header {
+  box-shadow: 0 2px 8px #161a1d08;
+}
+
+.main-pane {
+  min-width: 0;
+}
+
+.main-pane .content-panel {
+  padding-block: 1.75rem 1rem;
+}
+
+.main-pane .content-panel + .content-panel {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.main-pane .content-panel > .sl-container {
+  width: 100%;
+  margin-inline: auto;
+}
+
+.main-pane h1 {
+  margin-top: 1.75rem;
+  margin-bottom: .75rem;
+  font-weight: 650;
+  letter-spacing: -.035em;
+}
+
+.docs-breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .625rem;
+  color: var(--sl-color-gray-2);
+  font-size: .8125rem;
+  line-height: 1.6;
+}
+
+.docs-breadcrumbs a {
+  display: inline-flex;
+  color: inherit;
+  text-decoration: none;
+}
+
+.docs-breadcrumbs a:hover {
+  color: var(--sl-color-accent);
+}
+
+.docs-breadcrumbs svg {
+  flex-shrink: 0;
+}
+
+.docs-breadcrumbs [aria-current] {
+  color: var(--sl-color-gray-1);
+  font-weight: 600;
 }
 
 .portal-docs-title {
@@ -26,7 +104,7 @@
   gap: 10px;
   font-weight: 650;
   font-size: 19px;
-  color: #153653;
+  color: var(--sl-color-gray-1);
   text-decoration: none;
   white-space: nowrap;
   letter-spacing: -.02em;
@@ -42,12 +120,178 @@
 }
 
 .sl-markdown-content {
-  line-height: 1.9;
+  font-size: 1rem;
+  line-height: 1.75;
 }
 
-.sl-markdown-content h2 {
+.sl-markdown-content img{border:1px solid var(--sl-color-gray-5);border-radius:6px}
+.sl-markdown-content table{font-size:.9375rem}
+.sl-markdown-content p>em:only-child{display:block;color:var(--sl-color-gray-3);font-size:.875rem;text-align:center;font-style:normal}
+.docs-image-link{display:block;cursor:zoom-in}
+
+/* A white sidebar, neutral text and a single cyan current item, as in Ray's docs. */
+.sidebar-content {
+  padding: 2rem 1.75rem 2rem 2rem;
+}
+
+.sidebar-content .top-level > li + li {
+  margin-top: 1.125rem;
+}
+
+.sidebar-content summary {
+  padding: .375rem 0;
+}
+
+.sidebar-content .group-label .large {
+  color: var(--sl-color-gray-1);
+  font-size: .9375rem;
+  font-weight: 600;
+}
+
+.sidebar-content summary .caret {
+  width: 1rem;
+  color: var(--sl-color-gray-1);
+}
+
+.sidebar-content ul ul li {
+  margin-inline-start: .75rem;
+  padding-inline-start: 0;
+  border-inline-start: 0;
+}
+
+.sidebar-content .top-level > li > details > ul > li > details {
+  margin-block: .125rem;
+}
+
+.sidebar-content details details > summary .large {
+  color: var(--sl-color-gray-2);
+  font-size: .875rem;
+  font-weight: 550;
+}
+
+.sidebar-content details details:has(a[aria-current='page']) > summary .large {
+  color: var(--sl-color-accent);
+  font-weight: 600;
+}
+
+.sidebar-content details details > ul {
+  margin-inline-start: .125rem;
+  border-inline-start: 1px solid var(--sl-color-hairline);
+}
+
+.sidebar-content .top-level a {
+  padding: .375rem 0;
+  border-radius: 0;
+  color: var(--sl-color-gray-1);
+  font-size: .9375rem;
+  line-height: 1.6;
+  text-decoration: none;
+}
+
+.sidebar-content details details a {
+  font-size: .875rem;
+}
+
+.sidebar-content .top-level a:hover {
+  color: var(--sl-color-accent);
+  background: transparent;
+}
+
+.sidebar-content .top-level a[aria-current='page'] {
+  color: var(--sl-color-accent);
+  background: transparent;
+  font-weight: 600;
+}
+
+.sidebar-content .social-icons a {
+  color: var(--sl-color-gray-2);
+}
+
+.sidebar-content .social-icons a:hover {
+  color: var(--sl-color-accent);
+}
+
+.right-sidebar-panel {
+  padding: 0 1.5rem 2rem 0;
+}
+
+.right-sidebar-panel .sl-container {
+  width: auto;
+  max-width: none;
+}
+
+.right-sidebar-panel starlight-toc nav {
+  padding-inline-start: 1rem;
+  border-inline-start: 1px solid var(--sl-color-gray-5);
+}
+
+.right-sidebar-panel h2 {
+  margin-bottom: .5rem;
+  color: var(--sl-color-gray-1);
+  font-size: .9375rem;
+  font-weight: 500;
+}
+
+.right-sidebar-panel starlight-toc a {
+  --pad-inline: 0rem;
+  padding-block: .3125rem;
+  color: var(--sl-color-gray-2);
+  font-size: .9rem;
+  line-height: 1.65;
+  border-radius: 0;
+  text-decoration: none;
+}
+
+.right-sidebar-panel starlight-toc a:hover,
+.right-sidebar-panel starlight-toc a[aria-current='true'] {
+  color: var(--sl-color-accent);
+  background: transparent;
+}
+
+.right-sidebar-panel starlight-toc a[aria-current='true'] {
+  font-weight: 600;
+}
+
+.docs-header .github-link {
+  gap: .45rem;
+}
+
+.docs-header .github-symbol {
+  width: 20px;
+  height: 20px;
+}
+
+.docs-header .github-external {
+  width: 12px;
+  height: 12px;
+  opacity: .6;
+}
+
+@media (min-width: 50rem) {
+  .docs-controls site-search button[data-open-modal] {
+    height: 2.5rem;
+    min-width: 11.5rem;
+    border-color: #dfe3e8;
+    border-radius: 4px;
+    background: #fff;
+    color: var(--sl-color-gray-2);
+    font-size: .9375rem;
+  }
+
+  .docs-controls site-search button[data-open-modal]:hover {
+    border-color: #85919b;
+    background: #fff;
+  }
+
+  .docs-controls site-search button > kbd {
+    background: #f5f7f9;
+    box-shadow: 0 0 0 1px #e6e9ed;
+  }
+}
+
+.sl-markdown-content :is(h2,h3) {
   font-weight: 650;
-  letter-spacing: -.025em;
+  letter-spacing: -.03em;
 }
 
 .sl-markdown-content a {
@@ -55,11 +299,36 @@
 }
 
 a:focus-visible,button:focus-visible,summary:focus-visible {
-  outline: 3px solid #003f88;
+  outline: 2px solid var(--sl-color-accent);
   outline-offset: 4px;
 }
 
-@media (max-width:600px) {
+@media (min-width: 72rem) {
+  .main-pane .content-panel {
+    padding-inline: 3rem 2rem;
+  }
+
+  [data-has-sidebar][data-has-toc] .main-pane {
+    flex: 1;
+    width: calc(100% - var(--docs-toc-width));
+  }
+
+  .right-sidebar-container {
+    flex: 0 0 var(--docs-toc-width);
+    width: var(--docs-toc-width);
+  }
+
+  .right-sidebar {
+    position: sticky;
+    top: var(--sl-nav-height);
+    width: 100%;
+    height: calc(100vh - var(--sl-nav-height));
+    padding-top: 2rem;
+    border-inline-start: 0;
+  }
+}
+
+@media (max-width: 49.99rem) {
   .portal-docs-title {
     font-size: 16px;
     gap: 7px;
@@ -69,8 +338,19 @@ a:focus-visible,button:focus-visible,summary:focus-visible {
     width: 24px;
   }
 
-  :root {
-    --sl-text-h1: 1.9rem;
+  :root,:root[data-theme] {
+    --sl-text-h1: 2rem;
+    --sl-text-h2: 1.625rem;
+    --sl-text-h3: 1.375rem;
+  }
+
+  .main-pane .content-panel {
+    padding-inline: 1.25rem;
+  }
+
+  .docs-breadcrumbs {
+    font-size: .75rem;
+    gap: .5rem;
   }
 }
 

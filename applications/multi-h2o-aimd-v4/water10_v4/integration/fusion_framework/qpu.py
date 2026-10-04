@@ -83,7 +83,7 @@ class QPUFeatures:
             raise ValueError('Shift batch length mismatch')
         factory = self.request_factory
         if factory is None:
-            from ray_quantum.qpu_integration import QuantumCircuitRequest
+            from pivotq._internal.qpu_integration import QuantumCircuitRequest
             factory = QuantumCircuitRequest
         requests, expected = [], []
         prefix = uuid4().hex

@@ -8,8 +8,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from ray_quantum.executors.cleanup import ActorCleanupRecord, ExecutorCleanupError, ExecutorCleanupReport
-from ray_quantum.jobs.driver import RayJobDriverConfig, RayJobDriverStatus, run_driver, _manifest, _write_initial_manifest, _replace_manifest
+from pivotq._internal.executors.cleanup import ActorCleanupRecord, ExecutorCleanupError, ExecutorCleanupReport
+from pivotq._internal.jobs.driver import RayJobDriverConfig, RayJobDriverStatus, run_driver, _manifest, _write_initial_manifest, _replace_manifest
 
 
 def record(name="component", state="timed_out"):
@@ -33,7 +33,7 @@ def test_initial_v2_manifest_and_cli_config_version_are_independent(tmp_path):
     executor.close = close
     fake_ray = Mock()
     fake_ray.is_initialized.return_value = False
-    with patch("ray_quantum.jobs.driver._load_callable", side_effect=[registration, lambda framework, context: None]), patch("ray_quantum.jobs.driver._load_ray_module", return_value=fake_ray), patch("ray_quantum.jobs.driver._load_ray_executor", return_value=lambda *args, **kwargs: executor), patch("ray_quantum.jobs.driver.FusionFramework", side_effect=lambda e: e):
+    with patch("pivotq._internal.jobs.driver._load_callable", side_effect=[registration, lambda framework, context: None]), patch("pivotq._internal.jobs.driver._load_ray_module", return_value=fake_ray), patch("pivotq._internal.jobs.driver._load_ray_executor", return_value=lambda *args, **kwargs: executor), patch("pivotq._internal.jobs.driver.FusionFramework", side_effect=lambda e: e):
         manifest = run_driver(config)
     initial = observed[0]
     assert initial["schema_version"] == 2
@@ -65,7 +65,7 @@ def test_stop_timeout_report_retains_legacy_false_and_owned_connection(tmp_path,
     fake_ray.get_runtime_context.return_value = SimpleNamespace(namespace=config.namespace)
     if failure == "shutdown":
         fake_ray.shutdown.side_effect = RuntimeError("secret shutdown failure")
-    with patch("ray_quantum.jobs.driver._load_callable", side_effect=[lambda framework: None, stop]), patch("ray_quantum.jobs.driver._load_ray_module", return_value=fake_ray), patch("ray_quantum.jobs.driver._load_ray_executor", return_value=lambda *args, **kwargs: executor), patch("ray_quantum.jobs.driver.FusionFramework", side_effect=lambda e: e), patch("ray_quantum.jobs.driver.ComponentRegistry") as registry:
+    with patch("pivotq._internal.jobs.driver._load_callable", side_effect=[lambda framework: None, stop]), patch("pivotq._internal.jobs.driver._load_ray_module", return_value=fake_ray), patch("pivotq._internal.jobs.driver._load_ray_executor", return_value=lambda *args, **kwargs: executor), patch("pivotq._internal.jobs.driver.FusionFramework", side_effect=lambda e: e), patch("pivotq._internal.jobs.driver.ComponentRegistry") as registry:
         registry.return_value.closed = True
         if failure == "registry":
             registry.return_value.close.side_effect = RuntimeError("secret")

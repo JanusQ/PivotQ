@@ -1,0 +1,15 @@
+---
+import { Code } from '@astrojs/starlight/components';
+import workflow from '../../../packages/framework/examples/system_workflow.py?raw';
+import performance from '../../../packages/framework/examples/performance_prediction.py?raw';
+import provider from '../../../packages/framework/examples/custom_backend.py?raw';
+
+interface Props { example: 'workflow' | 'performance' | 'provider' }
+const examples = {
+  workflow: { source: workflow, filename: 'system_workflow.py' },
+  performance: { source: performance, filename: 'performance_prediction.py' },
+  provider: { source: provider, filename: 'custom_backend.py' },
+};
+const { source, filename } = examples[Astro.props.example];
+---
+<Code code={source} lang="python" title={filename} />

@@ -26,16 +26,16 @@ from single_h20_aimd.execution import TaskRequest, execute_quantum_feature_task
 from single_h20_aimd.execution.classical_actor import ClassicalPredictActor
 from single_h20_aimd.quantum import ZX14_OBSERVABLES
 
-from ray_quantum.executors import LocalExecutor
-from ray_quantum.framework import (
+from pivotq._internal.executors import LocalExecutor
+from pivotq._internal.framework import (
     ComponentRegistry, ComponentSpec, ExecutionMode, FusionFramework, ResourceRequest,
 )
-from ray_quantum.integrations.h2o import (
+from pivotq._internal.integrations.h2o import (
     CPUClassicalSessionsComponent, CPUQuantumFeaturesComponent,
     SimulatedQPUCircuitFeatureExtractor,
 )
-from ray_quantum.qpu_integration import QPUCircuitService
-from ray_quantum.qpu_integration.simulation import StatevectorQPUComponent
+from pivotq._internal.qpu_integration import QPUCircuitService
+from pivotq._internal.qpu_integration.simulation import StatevectorQPUComponent
 
 
 APPLICATION_ROOT = Path(__file__).resolve().parents[4] / "applications/h2o-hybrid-aimd"

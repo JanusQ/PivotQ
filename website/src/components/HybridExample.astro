@@ -1,0 +1,6 @@
+---
+import { Code } from '@astrojs/starlight/components';
+import source from '../../../packages/framework/examples/hybrid_program.py?raw';
+// This same file is executed by the Python SDK tests and example command.
+---
+<Code code={source} lang="python" title="hybrid_program.py" />

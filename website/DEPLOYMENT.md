@@ -16,7 +16,7 @@ SITE_BASE=/PivotQ/
 ```
 
 - PR 只执行验证，不部署。
-- `website/` 或本工作流的改动推送到 `main` 后会触发验证，通过后上传 `website/dist/` 并部署至 GitHub Pages；也可以在 `main` 手动运行。
+- `website/`、`packages/framework/examples/` 或本工作流的改动推送到 `main` 后会触发验证，通过后上传 `website/dist/` 并部署至 GitHub Pages；也可以在 `main` 手动运行。文档构建会读取仓库中的实际 Python 示例源码，因此示例更新也会触发网站重建。
 - 功能分支上的手动运行只验证，不部署。
 
 维护者自行提交、推送并合并变更。首次发布后，以 Actions 的部署结果和实际 HTTPS 访问为准；配置文件存在不代表已经上线。

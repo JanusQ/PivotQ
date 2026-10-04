@@ -11,15 +11,15 @@ from typing import Any
 
 from qiskit import QuantumCircuit
 
-from ray_quantum.framework import FusionFramework
-from ray_quantum.jobs import RayJobDriverContext
-from ray_quantum.models import StringMetadata
-from ray_quantum.observability import export_trace_jsonl
-from ray_quantum.qpu_integration import (
+from pivotq._internal.framework import FusionFramework
+from pivotq._internal.jobs import RayJobDriverContext
+from pivotq._internal.models import StringMetadata
+from pivotq._internal.observability import export_trace_jsonl
+from pivotq._internal.qpu_integration import (
     QPUCircuitService,
     QuantumCircuitRequest,
 )
-from ray_quantum.qpu_integration.component import DEFAULT_QPU_COMPONENT_ID
+from pivotq._internal.qpu_integration.component import DEFAULT_QPU_COMPONENT_ID
 
 from .registration import CPU_COMPONENT_ID, CPU_HEAD_RESOURCE, GPU_COMPONENT_ID
 

@@ -6,14 +6,14 @@ from types import SimpleNamespace
 
 import pytest
 
-from ray_quantum.qpu_integration.device_adapter import (
+from pivotq._internal.qpu_integration.device_adapter import (
     DeviceClientError,
     DeviceExecutionUnknownError,
     DeviceJobResponse,
     DeviceProtocolNotConfiguredError,
     QPUDeviceAdapter,
 )
-from ray_quantum.qpu_integration.qasm3_export import QASM3Circuit
+from pivotq._internal.qpu_integration.qasm3_export import QASM3Circuit
 
 
 @pytest.fixture

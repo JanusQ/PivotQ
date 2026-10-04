@@ -130,6 +130,21 @@ class DashboardHTTPTests(unittest.TestCase):
         self.assertEqual(status, 422)
         self.assertEqual(data['error'], 'unsupported_configuration')
 
+    def test_prediction_preview_works_when_ray_discovery_is_offline(self):
+        request = {'source': H2O_SOURCE, 'task_id': 'h2o-hybrid-aimd',
+                   'inputs': {'steps': 1},
+                   'hardware': {'quantum_features': 'fake-sc-36', 'classical_predict': 'cpu-0'}}
+        with patch.dict(os.environ, {'FUSION_EXECUTOR': 'ray'}), \
+             patch.object(server, 'active_hardware', side_effect=AssertionError('live discovery forbidden')), \
+             patch.object(server.QPerfSimClient, 'availability', side_effect=AssertionError('native probe forbidden')):
+            status, result = self.request('/api/v1/performance/preview', request)
+        self.assertEqual(status, 200, result)
+        self.assertNotIn('result', result)
+        self.assertEqual(result['plan']['stages'][2]['device'], 'cpu')
+        self.assertIsNone(result['qperfsim']['available'])
+        self.assertFalse(result['qperfsim']['checked'])
+        self.assertTrue(Path(result['task_graph_path']).is_file())
+
     def test_fake_profile_is_server_owned_and_sealed(self):
         _, targets = self.request('/api/v1/hardware-targets')
         target = next(t for t in targets['items'] if t['id'] == 'fake-sc-36')

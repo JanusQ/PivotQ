@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import unittest
 
-from ray_quantum.errors import UnavailableError, ValidationError
-from ray_quantum.framework import (
+from pivotq._internal.errors import UnavailableError, ValidationError
+from pivotq._internal.framework import (
     ComponentRegistry,
     ComponentSpec,
     ExecutionMode,

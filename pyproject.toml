@@ -6,7 +6,7 @@ requires-python = "==3.12.*"
 dependencies = [
     "h2o-hybrid-aimd",
     "multi-h2o-aimd-v4",
-    "ray-quantum",
+    "pivotq[qpu]",
     "torch==2.13.0+cpu",
     "qiskit-aer>=0.17,<1",
     "pyscf==2.14.0",
@@ -29,7 +29,7 @@ required-environments = [
 [tool.uv.sources]
 h2o-hybrid-aimd = { path = "applications/h2o-hybrid-aimd", editable = true }
 multi-h2o-aimd-v4 = { path = "applications/multi-h2o-aimd-v4", editable = true }
-ray-quantum = { path = "packages/framework", editable = true }
+pivotq = { path = "packages/framework", editable = true }
 torch = { index = "pytorch-cpu" }
 
 [[tool.uv.index]]

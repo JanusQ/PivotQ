@@ -1,3 +1,1 @@
-"""Runnable examples that exercise public ray-quantum interfaces."""
-
-__all__: list[str] = []
+"""Runnable PivotQ examples and retained internal integration fixtures."""

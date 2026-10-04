@@ -1,0 +1,501 @@
+{
+  "schema_version": "h2o-prediction-v1",
+  "template": "h2o_f2_aimd_3qubit",
+  "defaults": {
+    "shots": 3000,
+    "batch_size": 32,
+    "preflight": true
+  },
+  "scope": {
+    "gpu_hardware": {
+      "gpu": "NVIDIA A100-PCIE-40GB",
+      "gpu_count": 1,
+      "gpu_memory_gb": 40,
+      "cpu": "2 x Intel Xeon Silver 4214",
+      "physical_cores": 24,
+      "logical_threads": 48
+    },
+    "gpu_environment": {
+      "backend": "qasm3_torch_statevector",
+      "precision": "complex128",
+      "torch_version": "2.7.1+cu128",
+      "sampling": false
+    },
+    "gpu_measured_steps": [
+      10,
+      100,
+      1000
+    ],
+    "gpu_logical_depth_max": 41,
+    "qpu_transpiled_depths": [
+      17,
+      18
+    ],
+    "qpu_measured_steps": 1,
+    "qpu_measured_shots": 3000,
+    "qpu_measured_batch_size": 32,
+    "qpu_independent_full_task_validated": false,
+    "qpu_observed_scientific_status": "failed_validation",
+    "qpu_controller_hardware": "unspecified in delivery; separate measured host-stage profile",
+    "task_scope": "H2O F2 AIMD with three logical qubits; task or device changes require new matching parameters."
+  },
+  "gpu": {
+    "invocations": {
+      "preflight_coarse": {
+        "seconds": {
+          "circuit_build": 0.09265029,
+          "qasm_prepare": 9.795255898032337,
+          "statevector": 0.12240628814697266,
+          "feature_readout": 0.042795656,
+          "host_service_overhead": 5.041354572683511,
+          "classical_actor": 0.22056514098302357,
+          "force_host": 0.0
+        },
+        "circuits": 324,
+        "quantum_bytes": {
+          "h2d": 25214976,
+          "d2h": 20736
+        },
+        "classical_bytes": {
+          "h2d": 18144,
+          "d2h": 1296
+        }
+      },
+      "preflight_fine": {
+        "seconds": {
+          "circuit_build": 0.104081728,
+          "qasm_prepare": 9.56984311202541,
+          "statevector": 0.001545616030693054,
+          "feature_readout": 0.041886529500000005,
+          "host_service_overhead": 1.7540554738549448,
+          "classical_actor": 0.0034003334830235597,
+          "force_host": 0.0
+        },
+        "circuits": 324,
+        "quantum_bytes": {
+          "h2d": 25214976,
+          "d2h": 20736
+        },
+        "classical_bytes": {
+          "h2d": 18144,
+          "d2h": 1296
+        }
+      },
+      "initial": {
+        "seconds": {
+          "circuit_build": 0.0084249495,
+          "qasm_prepare": 1.1981479963287711,
+          "statevector": 0.0013943519592285157,
+          "feature_readout": 0.0024244765,
+          "host_service_overhead": 0.10907805571025997,
+          "classical_actor": 0.0036758145504780715,
+          "force_host": 0.00715112700000009
+        },
+        "circuits": 38,
+        "quantum_bytes": {
+          "h2d": 2957312,
+          "d2h": 2432
+        },
+        "classical_bytes": {
+          "h2d": 2128,
+          "d2h": 152
+        }
+      },
+      "step": {
+        "seconds": {
+          "circuit_build": 0.021271770672727272,
+          "qasm_prepare": 1.1186378597578204,
+          "statevector": 0.001321203775839372,
+          "feature_readout": 0.003273470690909091,
+          "host_service_overhead": 0.21117810613924493,
+          "classical_actor": 0.002373330977750799,
+          "force_host": 0.008002532454545474
+        },
+        "circuits": 38,
+        "quantum_bytes": {
+          "h2d": 2957312,
+          "d2h": 2432
+        },
+        "classical_bytes": {
+          "h2d": 2128,
+          "d2h": 152
+        }
+      }
+    },
+    "link_bytes_per_second": {
+      "h2d": 5162214626.248717,
+      "d2h": 83163570.908065
+    },
+    "fixed_seconds": {
+      "framework_outer": 13.148486357415095,
+      "worker_setup_teardown": 6.534720854950763,
+      "initial_bookkeeping": 0.0029853149999999884
+    },
+    "step_bookkeeping_seconds": 0.005346354294999911,
+    "timing_scope": "Host wall envelopes; GPU stages include host launch/method work. Link rates use production CUDA-event copies.",
+    "fixed_scope": "Framework outside worker; worker work outside measured preflight calls and MD. Includes lifecycle, preflight coordination and output work."
+  },
+  "qpu": {
+    "shot_rate": 1768,
+    "control_latency_us": 683849,
+    "http_submit_seconds": 0.06634079042307692,
+    "invocations": {
+      "preflight_coarse": {
+        "circuits": 324,
+        "stages": [
+          {
+            "name": "prepare",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.000644,
+            "input_bytes": 648,
+            "output_bytes": 12312
+          },
+          {
+            "name": "circuits",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.462099,
+            "input_bytes": 11664,
+            "output_bytes": 1583959
+          },
+          {
+            "name": "qasm_export",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 1.663456,
+            "input_bytes": 1583959,
+            "output_bytes": 231913
+          },
+          {
+            "name": "normalize_all",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.006195,
+            "input_bytes": 20736,
+            "output_bytes": 20736
+          },
+          {
+            "name": "host_features",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.012259,
+            "input_bytes": 20736,
+            "output_bytes": 18144
+          },
+          {
+            "name": "classical",
+            "node_type": "AI_INFERENCE_STEP",
+            "device_type": "GPU",
+            "seconds": 0.456702,
+            "input_bytes": 18144,
+            "output_bytes": 1296
+          },
+          {
+            "name": "host_energies",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.000202,
+            "input_bytes": 1296,
+            "output_bytes": 1296
+          },
+          {
+            "name": "force",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.057466,
+            "input_bytes": 1944,
+            "output_bytes": 648
+          }
+        ],
+        "decode_seconds_per_circuit": 2.017283950617284e-05,
+        "input_bytes_per_circuit": 715.7808641975308,
+        "output_bytes_per_circuit": 64.0
+      },
+      "preflight_fine": {
+        "circuits": 324,
+        "stages": [
+          {
+            "name": "prepare",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.000107,
+            "input_bytes": 648,
+            "output_bytes": 12312
+          },
+          {
+            "name": "circuits",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.031341,
+            "input_bytes": 11664,
+            "output_bytes": 1583959
+          },
+          {
+            "name": "qasm_export",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 1.720455,
+            "input_bytes": 1583959,
+            "output_bytes": 231707
+          },
+          {
+            "name": "normalize_all",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.005108,
+            "input_bytes": 20736,
+            "output_bytes": 20736
+          },
+          {
+            "name": "host_features",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.012543,
+            "input_bytes": 20736,
+            "output_bytes": 18144
+          },
+          {
+            "name": "classical",
+            "node_type": "AI_INFERENCE_STEP",
+            "device_type": "GPU",
+            "seconds": 0.001887,
+            "input_bytes": 18144,
+            "output_bytes": 1296
+          },
+          {
+            "name": "host_energies",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.000188,
+            "input_bytes": 1296,
+            "output_bytes": 1296
+          },
+          {
+            "name": "force",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.002066,
+            "input_bytes": 1944,
+            "output_bytes": 648
+          }
+        ],
+        "decode_seconds_per_circuit": 1.9725308641975308e-05,
+        "input_bytes_per_circuit": 715.145061728395,
+        "output_bytes_per_circuit": 64.0
+      },
+      "initial": {
+        "circuits": 38,
+        "stages": [
+          {
+            "name": "prepare",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.000384,
+            "input_bytes": 72,
+            "output_bytes": 1440
+          },
+          {
+            "name": "circuits",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.003894,
+            "input_bytes": 1368,
+            "output_bytes": 186651
+          },
+          {
+            "name": "qasm_export",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.250593,
+            "input_bytes": 186651,
+            "output_bytes": 27137
+          },
+          {
+            "name": "normalize_all",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.000594,
+            "input_bytes": 2432,
+            "output_bytes": 2432
+          },
+          {
+            "name": "host_features",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.00159,
+            "input_bytes": 2432,
+            "output_bytes": 2128
+          },
+          {
+            "name": "classical",
+            "node_type": "AI_INFERENCE_STEP",
+            "device_type": "GPU",
+            "seconds": 0.020385,
+            "input_bytes": 2128,
+            "output_bytes": 152
+          },
+          {
+            "name": "host_energies",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.000179,
+            "input_bytes": 152,
+            "output_bytes": 152
+          },
+          {
+            "name": "force",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.000824,
+            "input_bytes": 224,
+            "output_bytes": 72
+          }
+        ],
+        "decode_seconds_per_circuit": 2.010526315789474e-05,
+        "input_bytes_per_circuit": 714.1315789473684,
+        "output_bytes_per_circuit": 64.0
+      },
+      "step": {
+        "circuits": 38,
+        "stages": [
+          {
+            "name": "prepare",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.000203,
+            "input_bytes": 72,
+            "output_bytes": 1440
+          },
+          {
+            "name": "circuits",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.003394,
+            "input_bytes": 1368,
+            "output_bytes": 186651
+          },
+          {
+            "name": "qasm_export",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.197507,
+            "input_bytes": 186651,
+            "output_bytes": 27209
+          },
+          {
+            "name": "normalize_all",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.000648,
+            "input_bytes": 2432,
+            "output_bytes": 2432
+          },
+          {
+            "name": "host_features",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.001899,
+            "input_bytes": 2432,
+            "output_bytes": 2128
+          },
+          {
+            "name": "classical",
+            "node_type": "AI_INFERENCE_STEP",
+            "device_type": "GPU",
+            "seconds": 0.001651,
+            "input_bytes": 2128,
+            "output_bytes": 152
+          },
+          {
+            "name": "host_energies",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.000126,
+            "input_bytes": 152,
+            "output_bytes": 152
+          },
+          {
+            "name": "force",
+            "node_type": "CPU_COMPUTE",
+            "device_type": "CPU",
+            "seconds": 0.000576,
+            "input_bytes": 224,
+            "output_bytes": 72
+          }
+        ],
+        "decode_seconds_per_circuit": 2.0710526315789474e-05,
+        "input_bytes_per_circuit": 716.0263157894736,
+        "output_bytes_per_circuit": 64.0
+      }
+    },
+    "fixed_stages": [
+      {
+        "name": "actor_setup",
+        "node_type": "GPU_COMPUTE",
+        "device_type": "GPU",
+        "seconds": 0.362124,
+        "input_bytes": 662,
+        "output_bytes": 218
+      },
+      {
+        "name": "dataset_and_ood_setup",
+        "node_type": "CPU_COMPUTE",
+        "device_type": "CPU",
+        "seconds": 0.001891,
+        "input_bytes": 34400,
+        "output_bytes": 0
+      },
+      {
+        "name": "diagnostic_input",
+        "node_type": "CPU_COMPUTE",
+        "device_type": "CPU",
+        "seconds": 0.00125,
+        "input_bytes": 34400,
+        "output_bytes": 648
+      },
+      {
+        "name": "preflight_absolute_difference",
+        "node_type": "CPU_COMPUTE",
+        "device_type": "CPU",
+        "seconds": 0.002367,
+        "input_bytes": 1296,
+        "output_bytes": 648
+      },
+      {
+        "name": "initial_state",
+        "node_type": "CPU_COMPUTE",
+        "device_type": "CPU",
+        "seconds": 0.008635,
+        "input_bytes": 0,
+        "output_bytes": 72
+      },
+      {
+        "name": "plot_artifacts",
+        "node_type": "CPU_COMPUTE",
+        "device_type": "CPU",
+        "seconds": 0.869084,
+        "input_bytes": 1399,
+        "output_bytes": 560141
+      },
+      {
+        "name": "actor_teardown",
+        "node_type": "GPU_COMPUTE",
+        "device_type": "GPU",
+        "seconds": 0.000191,
+        "input_bytes": 223,
+        "output_bytes": 4
+      }
+    ],
+    "launcher_outer_seconds": 8.52354500399997,
+    "worker_exclusive_seconds": 2.73382515,
+    "step_bookkeeping_seconds": 0.000322042,
+    "record_seconds_per_frame": 0.002312174,
+    "unresolved": [
+      "QPU pure network bandwidth",
+      "separate unknown lifecycle/quality stages",
+      "HTTP polling overlaps acquisition; no additive poll/sleep charge",
+      "Unmeasured lifecycle stages are covered only by local outer/worker envelopes"
+    ]
+  }
+}

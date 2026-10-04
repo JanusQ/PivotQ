@@ -10,9 +10,9 @@ import uuid
 
 import ray
 
-from ray_quantum.errors import ExecutionError
-from ray_quantum.executors import Executor, RayExecutor
-from ray_quantum.framework import (
+from pivotq._internal.errors import ExecutionError
+from pivotq._internal.executors import Executor, RayExecutor
+from pivotq._internal.framework import (
     ComponentRegistry,
     ComponentSpec,
     ExecutionMode,

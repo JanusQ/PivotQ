@@ -42,7 +42,7 @@ def run_aimd(framework, context):
         classical_device=c['classical_device'], num_qubits=30, feature_order='X0..X29,Z0..Z29',
         force_method='cartesian_central_difference_unvalidated' if c['mode'] != 'energy' else None,
         python=platform.python_version(), versions={})
-    for package in ('numpy', 'qiskit', 'qiskit-aer', 'ray', 'ray-quantum', 'torch', 'ase'):
+    for package in ('numpy', 'qiskit', 'qiskit-aer', 'ray', 'pivotq', 'torch', 'ase'):
         try:
             summary['versions'][package] = version(package)
         except PackageNotFoundError:
@@ -83,7 +83,7 @@ def run_aimd(framework, context):
             summary['runtime_execution'] = framework.execution_report()
         write_json(out/'run_summary.json', summary)
         if getattr(context, 'trace_collector', None) is not None:
-            from ray_quantum.observability import export_trace_jsonl
+            from pivotq._internal.observability import export_trace_jsonl
             export_trace_jsonl(context.trace_collector, out/'framework_trace.jsonl')
         manifest = {p.name: dict(size=p.stat().st_size, sha256=hashlib.sha256(p.read_bytes()).hexdigest())
                     for p in sorted(out.iterdir()) if p.is_file() and p.name != 'artifacts.json'}

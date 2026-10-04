@@ -8,7 +8,7 @@ import shlex
 import time
 from typing import Iterable
 
-from ray_quantum.jobs import (
+from pivotq._internal.jobs import (
     RayJobClient,
     RayJobDriverResources,
     RayJobRuntimeEnvironment,
@@ -38,7 +38,7 @@ def build_job_spec(
             "exec",
             python_command,
             "-m",
-            "ray_quantum.jobs.driver",
+            "pivotq.jobs.driver",
             "--run-id",
             submission_id,
             "--registration",

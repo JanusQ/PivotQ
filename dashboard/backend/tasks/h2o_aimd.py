@@ -84,7 +84,7 @@ def _resources(device: str) -> dict[str, Any]:
     return {"cpu": 1}
 
 
-def build_plan(request: dict[str, Any]) -> WorkflowPlan:
+def build_plan(request: dict[str, Any], *, prediction=False) -> WorkflowPlan:
     inputs = dict(request.get("inputs") or {})
     normalized: dict[str, Any] = {}
     for name, definition in TASK.input_schema["properties"].items():
@@ -96,7 +96,7 @@ def build_plan(request: dict[str, Any]) -> WorkflowPlan:
     hardware_targets = dict(request.get("hardware_targets") or {})
     plans: list[StagePlan] = []
     for stage in H2O_STAGES:
-        device = hardware.get(stage.id, stage_policy(stage)[0])
+        device = hardware.get(stage.id, stage_policy(stage, prediction=prediction)[0])
         plans.append(StagePlan(
             stage.id,
             stage.title,
@@ -109,7 +109,7 @@ def build_plan(request: dict[str, Any]) -> WorkflowPlan:
     return WorkflowPlan(TASK.id, TASK.version, normalized, tuple(plans))
 
 
-def validate(request: dict[str, Any]) -> list[dict[str, str]]:
+def validate(request: dict[str, Any], *, prediction=False) -> list[dict[str, str]]:
     errors: list[dict[str, str]] = []
     inputs = request.get("inputs") or {}
     if set(inputs) - set(TASK.input_schema['properties']):
@@ -138,7 +138,7 @@ def validate(request: dict[str, Any]) -> list[dict[str, str]]:
     if set(hardware) - {stage.id for stage in H2O_STAGES}:
         errors.append({'path': 'hardware', 'message': '存在未知执行阶段'})
     for stage in H2O_STAGES:
-        default, allowed = stage_policy(stage)
+        default, allowed = stage_policy(stage, prediction=prediction)
         device = hardware.get(stage.id, default)
         if device not in allowed:
             errors.append({"path": f"hardware.{stage.id}", "message": f"{device} 不支持；可选值: {', '.join(allowed)}"})

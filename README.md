@@ -29,6 +29,48 @@ Open [http://localhost:8787](http://localhost:8787) in your browser.
 
 Run history and outputs are saved in the `pivotq-data` volume.
 
+### Python library
+
+Use Python 3.12. From the repository root:
+
+```bash
+python3.12 -m venv .venv-sdk
+. .venv-sdk/bin/activate
+python -m pip install ./packages/framework
+python packages/framework/examples/hybrid_program.py
+```
+
+The library is installed and imported as `pivotq`. It provides CPU tasks,
+quantum circuit execution, result references, and ordinary Python control flow:
+
+```python
+import pivotq as pq
+
+def square(value):
+    return value * value
+
+with pq.Runtime() as runtime:
+    answer = runtime.submit(square, 7)
+    print(runtime.get(answer))  # 49
+    runtime.release(answer)
+```
+
+QPU providers implement the common quantum backend interface and declare their
+device capabilities. HTTP-based providers can use `"./packages/framework[qpu]"`
+for HTTP client dependencies. The default quantum backend is a CPU simulator.
+Complete SDK documentation lives inside the
+website's [usage guide](website/src/content/docs/docs/index.md). See also the
+[library README](packages/framework/README.md). This source installation does
+not require the AIMD applications or dashboard.
+
+The SDK also exposes reusable components and actors, explicit workflows,
+execution reports, Ray Jobs, third-party quantum providers, and independent
+CPU/QPU performance models. Run `system_workflow.py` or `custom_backend.py` in
+`packages/framework/examples/` for complete CPU-only examples. Performance
+prediction uses the bundled native engine and requires its compatible Linux
+runtime. See the [API reference](website/src/content/docs/docs/api.md)
+for the public programming interfaces.
+
 ## Features
 
 - **Hybrid execution framework** — Schedule application components on CPU, GPU, and QPU resources, with hardware targets specified by the user.

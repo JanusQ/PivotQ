@@ -12,7 +12,7 @@ import time
 import unittest
 import uuid
 
-from ray_quantum.jobs import (
+from pivotq._internal.jobs import (
     RayJobClient,
     RayJobDriverResources,
     RayJobRuntimeEnvironment,
@@ -35,7 +35,7 @@ def _driver_spec(submission_id: str, runner_name: str) -> RayJobSpec:
             "exec",
             sys.executable,
             "-m",
-            "ray_quantum.jobs.driver",
+            "pivotq._internal.jobs.driver",
             "--run-id",
             submission_id,
             "--registration",

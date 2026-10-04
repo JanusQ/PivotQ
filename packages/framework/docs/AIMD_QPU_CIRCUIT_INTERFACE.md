@@ -5,7 +5,7 @@
 ## 输入
 
 ```python
-from ray_quantum.qpu_integration import QuantumCircuitRequest, QPUCircuitService
+from pivotq._internal.qpu_integration import QuantumCircuitRequest, QPUCircuitService
 
 request = QuantumCircuitRequest(
     circuit_id="sample-001.Y", circuit=y_circuit, measurement_basis="Y",

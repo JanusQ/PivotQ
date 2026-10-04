@@ -14,10 +14,10 @@ AIMD → QPUCircuitService → Ray 管理的 QPUClientComponent（框架服务�
      ← list[CircuitResult] ← 完整结果校验及八状态补齐
 ```
 
-设备侧不安装 ray_quantum，不创建框架 Actor。框架服务器上的客户端 Actor 负责通信，
+设备侧不安装 pivotq._internal，不创建框架 Actor。框架服务器上的客户端 Actor 负责通信，
 保留 Component/Invocation/Trace/清理机制。它不持有物理设备资源令牌。
 
-注册入口仍是 `ray_quantum.qpu_integration.registration:register_components`，
+注册入口仍是 `pivotq._internal.qpu_integration.registration:register_components`，
 组件 ID 仍是 `qpu-circuits`，Actor 只申请 CPU:1，不附加服务器专属资源。
 用户确认 Ray 集群只包含具备运行条件的计算服务器，因此按 CPU/GPU 可用容量调度。
 部署时各计算节点需要相同框架、必要依赖和可见的应用文件；设备只提供局域网服务。
@@ -33,7 +33,7 @@ AIMD 的 CPU/GPU 组件保留原有请求。提交器不再提供服务器标记
 ## 2. AIMD 公共接口
 
 ```python
-from ray_quantum.qpu_integration import QuantumCircuitRequest, QPUCircuitService
+from pivotq._internal.qpu_integration import QuantumCircuitRequest, QPUCircuitService
 
 # y_circuit 由应用构造，已包含应用需要的 Y 基变换。
 request = QuantumCircuitRequest(
@@ -91,7 +91,7 @@ counts 必须是非负整数且总和等于实际 shots，再转换为概率；�
 
 ## 4. 设备客户端和唯一待补文件
 
-实现及未知项都集中在 `ray_quantum/qpu_integration/device_adapter.py`。
+实现及未知项都集中在 `pivotq/_internal/qpu_integration/device_adapter.py`。
 
 `_exchange()` 已按设备示例实现：
 
@@ -133,7 +133,7 @@ Actor close 仅释放自己拥有的客户端资源，不终止共享设备服�
 14 维特征不变。D-104 不修改 AIMD 接口或代码；Y 科学特征与多比特仍待后续决定。
 SDK 与结果解析仍未齐备，不能直接完成真机计算。
 
-主仓库和 real-qpu-test-package/framework 的活动源码、受影响测试及接口说明同步。
+当前活动实现维护在 PivotQ 的 `packages/framework/pivotq/`。`real-qpu-test-package` 为独立历史交付快照，保留其原接口与来源哈希，不随本次 SDK 包迁移改写。
 包内 AIMD 仅适配启动链路和结果契约；checkpoint、数据、科学电路、候选副本与历史源码不改。
 
 ## 7. 离线验收

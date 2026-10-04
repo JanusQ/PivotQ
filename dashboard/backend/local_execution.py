@@ -136,7 +136,7 @@ class LocalCPUExecutor:
             raise ValueError('无效的任务 ID')
         if any(stage.device not in {'cpu', 'gpu', 'qpu'} for stage in run.plan.stages):
             raise ValueError('Simulation 模式仅支持 CPU、参考 GPU 和虚拟 QPU 目标')
-        missing = [name for name in ('ray', 'torch', 'psutil', 'ray_quantum') if importlib.util.find_spec(name) is None]
+        missing = [name for name in ('ray', 'torch', 'psutil', 'pivotq') if importlib.util.find_spec(name) is None]
         if run.task_id == 'h2o-hybrid-aimd':
             missing += [name for name in ('single_h20_aimd', 'ase', 'qiskit') if importlib.util.find_spec(name) is None]
         if missing:

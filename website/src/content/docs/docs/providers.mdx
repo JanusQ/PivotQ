@@ -1,0 +1,65 @@
+---
+title: 扩展量子后端
+description: 注册自己的量子模拟器或设备 Provider，共用任务依赖、结果契约和错误处理。
+---
+
+import SDKExample from '../../../components/SDKExample.astro';
+
+通过 `runtime.register_quantum_backend()`，第三方库或用户代码可以提供量子执行能力。CPU 模拟器与已注册的 Provider 使用相同的电路处理、结果校验和生命周期管理。
+
+## 注册与创建
+
+```python
+from pivotq.providers import BackendCapabilities
+
+runtime.register_quantum_backend(
+    "my-device", MyProvider,
+    capabilities=BackendCapabilities(max_qubits=device_qubit_limit, is_simulated=False),
+)
+backend = runtime.quantum_backend("my-device", endpoint="device-address")
+```
+
+`MyProvider` 是部署方提供或用户实现的类，`device_qubit_limit` 来自实际设备能力。`endpoint` 仅示范该类可接收的配置项；实际配置参数由 Provider 定义。SDK 不会只凭名称或地址自动适配任意 QPU。
+
+执行时通过 `MyProvider(**config)` 构造实例。注册与创建后端均不构造该类，也不连接设备；factory 在执行进程中首次调用时构造实例。配置须可序列化，并在创建后端时生成独立快照。
+
+注册属于当前 Runtime，名称不能重复或覆盖已有后端。`backend.describe()` 返回注册时提供的静态能力，不探测设备。
+
+## Provider 协议
+
+| 接口 | 约定 |
+| --- | --- |
+| `run(request: QuantumRequest)` | 同步返回 `ProviderResult` |
+| `close()` | 幂等释放客户端资源；无资源时可为空方法 |
+| `BackendCapabilities` | max_qubits、min_qubits、is_simulated、supports_seed |
+| `QuantumRequest` | circuit、shots、seed、request_id |
+| `ProviderResult` | shots、source、可选 counts/probabilities、metadata |
+
+输入电路是已绑定参数、去掉末尾测量的独立副本。Provider 负责把它编译到设备门集并读取**所有逻辑量子位**。结果位串必须为 `q[n-1]…q0`，不含寄存器分隔空格；设备路由后的物理布局和厂商位序由 Provider 还原。
+
+SDK 保存用户原始测量映射，统一处理部分测量、位重排和未写入的经典位。Provider 不需要重复实现这些逻辑。首版不支持中途测量、动态控制、reset 或 initialize。
+
+## 结果校验与故障
+
+counts 与 probabilities 至少提供一种，具体类型取决于后端实际提供的数据；计数总和必须等于设备确认的 shots，概率必须有效且总和为 1。两者同时返回时必须一致。只提供概率时，用户得到的 `QuantumResult.counts` 为 `None`。SDK 不补造原始计数，也不静默归一化错误分布。
+
+`source` 明确填写结果来源。metadata 可含 `backend_job_id`、`device_id`，不能覆盖 source、request_id、backend、is_simulated、bit_order，也不能包含不可序列化对象或凭据。
+
+确认未提交的输入问题使用 `pivotq.errors.ValidationError`；已可能执行但响应丢失时使用 `ResultUnknownError` 并保留设备作业标识。真实 Provider 的未分类异常或无效结果也按执行状态未知处理，沿后续 CPU 依赖保留核实信息。SDK 不自动重试或回退模拟器。
+
+## Task 与 Actor
+
+模拟 Provider 默认使用 Task，每次构造和关闭实例，申请 1 CPU；可设置 `execution="actor"` 保留状态，默认串行。`num_cpus` 可调整模拟 Provider 的 CPU 请求。
+
+真实设备 Provider 使用固定的串行 Actor、0 CPU 资源请求。串行约束作用于同一个后端对象；多个客户端对同一设备的全局排队仍由设备服务负责。
+
+## 可运行的离线扩展示例
+
+```bash
+python packages/framework/examples/custom_backend.py
+python packages/framework/examples/custom_backend.py --executor ray
+```
+
+示例注册用户实现的 CPU 量子模拟器，验证部分测量与结果依赖，全程不访问真实设备。源码与测试使用同一文件：
+
+<SDKExample example="provider" />

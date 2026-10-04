@@ -123,7 +123,7 @@ single_h20_aimd.integration.fusion_framework.registration:register_components
 single_h20_aimd.integration.fusion_framework.runner:run_aimd
 ```
 
-提交命令示例和运行边界见 `single_h20_aimd/integration/fusion_framework/BRIDGE.md`。提交机器和集群运行环境需要由融合框架方提供 `ray_quantum`；它不是公开 PyPI 依赖，因此没有伪造到 `requirements.txt` 中。没有真实集群、CUDA 节点、QPU provider 和凭据时，本地合同测试不能代替真实 GPU/QPU 验收。
+提交命令示例和运行边界见 `single_h20_aimd/integration/fusion_framework/BRIDGE.md`。提交机器和集群运行环境需要由融合框架方提供 `pivotq`；它不是公开 PyPI 依赖，因此没有伪造到 `requirements.txt` 中。没有真实集群、CUDA 节点、QPU provider 和凭据时，本地合同测试不能代替真实 GPU/QPU 验收。
 
 根目录 `requirements.txt` 继续锁定已验证的 CPU PyTorch 环境。融合 GPU worker 的集群镜像必须另行预装与驱动匹配的 CUDA PyTorch 2.13.0；GPU worker 和 Classical Actor 会在 CUDA 不可用时明确失败，不会静默回退到 CPU。
 

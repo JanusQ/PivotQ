@@ -1,0 +1,35 @@
+---
+import Pagination from '@astrojs/starlight/components/Pagination.astro';
+import { site } from '../data/site';
+const base = import.meta.env.BASE_URL;
+---
+<div class="docs-pagination"><Pagination /></div>
+<footer class="docs-footer" role="contentinfo">
+  <div class="footer-links">
+    <nav aria-label="用户指南"><h2>用户指南</h2><a href={`${base}docs/`}>用户指南</a></nav>
+    <nav aria-label="了解系统"><h2>了解系统</h2><a href={`${base}#system`}>系统介绍</a></nav>
+  </div>
+  <p>© {new Date().getFullYear()} {site.name}</p>
+</footer>
+<script>
+  document.querySelectorAll<HTMLImageElement>('.sl-markdown-content img').forEach(image => {
+    if (image.closest('a')) return;
+    const link = document.createElement('a');
+    link.href = image.currentSrc || image.src;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.className = 'docs-image-link';
+    link.setAttribute('aria-label', `${image.alt}，在新窗口查看大图`);
+    image.replaceWith(link);
+    link.append(image);
+  });
+</script>
+<style>
+  .docs-pagination{margin-top:3rem}
+  .docs-footer{border-top:1px solid var(--sl-color-gray-5);margin-top:2rem;padding:2rem 0 1rem;color:var(--sl-color-gray-3);font-size:.875rem}
+  .footer-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem}
+  nav{display:flex;flex-direction:column;gap:.6rem}
+  h2{font-size:1rem;font-weight:600;color:var(--sl-color-gray-1);margin:0}
+  a{color:var(--sl-color-gray-2);text-decoration:none}a:hover{color:var(--sl-color-accent);text-decoration:underline}
+  p{font-size:.8rem;margin-top:1.5rem}
+</style>

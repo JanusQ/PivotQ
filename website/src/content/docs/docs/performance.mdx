@@ -1,0 +1,64 @@
+---
+title: 性能预测
+description: 使用独立工作量描述与 CPU/QPU 参数预测耗时、吞吐和阶段瓶颈。
+---
+
+import SDKExample from '../../../components/SDKExample.astro';
+
+`pivotq.performance` 将用户编写的工作量图转换为仓库性能模拟器的输入。预测不会执行用户的 Python 算法或量子设备，也不会自动从任意程序推导运算量。
+
+## 描述工作量
+
+```python
+from pivotq.performance import Workload, CPUProfile, QPUProfile, Hardware, Predictor
+
+workload = Workload("one-iteration")
+prepared = workload.cpu("prepare", duration_seconds=0.002)
+measured = workload.qpu("quantum", qubits=5, shots=1024, depends_on=[prepared])
+workload.cpu("update", duration_seconds=0.001, depends_on=[measured])
+hardware = Hardware(cpu=CPUProfile(cores_per_node=4),
+                    qpu=QPUProfile(qubits=8, shot_rate=10000))
+predictor = Predictor()
+compiled = predictor.preview(workload, hardware)
+```
+
+以上时间与速率是示例假设。`preview()` 校验图、硬件与编译结果，不启动原生模拟器、不写入文件。`cpu()` 可用已知时间或运算量/内存量，`qpu()` 描述电路宽度、shots 与电路数量；`transfer()` 描述显式通信。相关单位见[硬件性能模型](../hardware-profiles/)。
+
+## 运行与对比
+
+```python
+availability = predictor.availability()
+prediction = predictor.predict(workload, hardware, output_dir="prediction-output")
+print(prediction.latency_seconds)
+print(prediction.main_bottleneck)
+```
+
+输出目录必须是新目录或空目录；未提供目录时中间文件使用临时目录。保留目录包含源模型、模拟器输入、原始 CSV 和 `prediction.json`。`compare({"配置名": (workload, hardware), ...})` 对每个配置分别预测。
+
+`PredictionResult` 包括时延、吞吐、阶段耗时、通信信息、参数来源、验证范围、引擎版本和模型与模拟器哈希。`simulator_wall_seconds` 是模拟器运行所花时间；`latency_seconds` 是整个工作负载的最终完成时刻，`mean_job_latency_seconds` 是逐作业时延的平均值，三者用途不同。
+
+## 原生运行环境
+
+wheel 携带性能模拟器原生文件。当前直接运行目标是 Linux x86-64、Ubuntu 24.04 兼容环境。较旧系统（例如 Ubuntu 22.04）需要显式提供已有的兼容运行目录：
+
+```python
+predictor = Predictor(native_runtime="/path/to/existing/runtime")
+```
+
+也可设置 `FUSION_QPERFSIM_RUNTIME`。库文件选择顺序为显式 `library`、`QPERFSIM_LIBRARY`、`QPERFSIM_ROOT` 下的库、随包引擎。SDK 不会下载运行环境；缺少兼容库或加载器时明确抛出 `UnavailableError`，`preview()` 仍可用于检查输入。
+
+## 完整对比示例
+
+```bash
+python packages/framework/examples/performance_prediction.py --out prediction-output
+```
+
+示例比较用户提供的纯 CPU 模型、CPU/QPU 模型和另一种 QPU 吞吐配置。源码与测试使用同一文件：
+
+<SDKExample example="performance" />
+
+## 结果边界
+
+当前模型不覆盖量子噪声、门深度与路由开销、外部设备排队和科学精度。`quality_equivalence_verified=False` 表示未验证对比算法的质量等价。阶段任务可能重叠，阶段耗时总和不一定等于整体时延。
+
+CPU 数值模拟的实测速度、性能模型预测的目标 QPU 速度和真实设备测量必须分别标注。应用所用的工作台预测入口仍受其应用模型限制，SDK 的通用预测接口不代表网页已经支持任意 Python 程序。

@@ -27,7 +27,7 @@
 
 ## 部署和最小命令
 
-Driver、Task、Actor 必须能访问同一共享存储上的 `model_path`、`geometry_path` 和输出目录。框架 `ray_quantum` 应安装在提交端及各 worker 环境；应用依赖 NumPy、h5py、Qiskit、Qiskit Aer、psutil（现有线路模块的导入依赖），MD 另需 ASE，CUDA 另需支持 CUDA 的 PyTorch。以本仓库框架安装说明为准；本次未安装或升级集群 Ray。
+Driver、Task、Actor 必须能访问同一共享存储上的 `model_path`、`geometry_path` 和输出目录。框架 `pivotq._internal` 应安装在提交端及各 worker 环境；应用依赖 NumPy、h5py、Qiskit、Qiskit Aer、psutil（现有线路模块的导入依赖），MD 另需 ASE，CUDA 另需支持 CUDA 的 PyTorch。以本仓库框架安装说明为准；本次未安装或升级集群 Ray。
 
 已提供 `configs/fusion_geometry.json`，使用训练样本 `w10_269547167027ff4be8a4`，可直接配合示例配置运行。更换输入时，在 v4 项目目录导出训练集的一条几何，另存新文件并更新配置的 `geometry_path`；`--sample-id` 可重复。脚本不读取测试标签、不覆盖已有输出文件：
 
@@ -67,7 +67,7 @@ python -B -m water10_v4.integration.fusion_framework.submit_job \
 
 ## 30 比特 QPU 契约与现有限制
 
-**仓库 `ray_quantum.qpu_integration.QPUCircuitService` 仍固定三比特，不可直接用于本应用。** 共享框架本次未修改。QPU 模式必须配置：
+**仓库 `pivotq._internal.qpu_integration.QPUCircuitService` 仍固定三比特，不可直接用于本应用。** 共享框架本次未修改。QPU 模式必须配置：
 
 ```json
 {
@@ -105,7 +105,7 @@ python -B -m water10_v4.integration.fusion_framework.submit_job \
 
 `status=succeeded` 仅表示程序完成；`scientific_status=not_validated` 明确不声明力/MD验收通过。真实 Ray 多节点、GPU 和 30 比特真机均需独立验收。
 
-测试命令（环境中需可导入 `ray_quantum`）：
+测试命令（环境中需可导入 `pivotq._internal`）：
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \

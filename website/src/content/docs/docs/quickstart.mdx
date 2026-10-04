@@ -1,0 +1,66 @@
+---
+title: 快速上手
+description: 通过 Ray 调度运行量子–经典混合程序，默认用 CPU 模拟量子电路。
+---
+
+import HybridExample from '../../../components/HybridExample.astro';
+
+完成[安装](../installation/)后，通过 PivotQ 运行一个由 **Ray 调度的量子–经典混合程序**：经典任务构造电路，量子后端执行电路，再由经典任务读取结果并更新参数。
+
+本页使用 Ray 执行器组织任务依赖与跨进程执行。为了在未连接 QPU 时也能跑通程序，量子后端默认选择 `simulator`，在 CPU 上模拟量子电路并采样。接入 QPU 后，可通过同一套后端接口提交量子任务。
+
+## 运行完整示例
+
+在仓库根目录执行：
+
+```bash
+python packages/framework/examples/hybrid_program.py --executor ray --address local
+```
+
+这条命令会启动本机 Ray 实例，无需预先部署多节点集群。程序依次提交以下任务，由 Ray Worker 执行：
+
+1. **经典预处理**：调用 `build_circuit`，根据当前参数构造电路。
+2. **量子执行**：调用量子后端；本例默认在 CPU 上模拟电路，返回采样结果。
+3. **经典更新**：调用 `update_parameter`，使用量子结果更新参数。
+
+主程序取回更新后的参数，判断是否继续迭代；各步骤之间通过结果引用传递依赖。默认不连接 QPU，任务提交与依赖调度仍完整经过 Ray。
+
+## 切换执行方式
+
+`--executor` 选择任务执行器，`--backend` 选择量子计算后端，两项可以独立设置。上面的 `--address local` 表示在本机启动 Ray，仍然使用 Ray Worker。已有 Ray 集群时，将它替换为部署方提供的集群地址；在已配置集群的节点上也可以使用：
+
+```bash
+python packages/framework/examples/hybrid_program.py --executor ray --address auto
+```
+
+连接 QPU 时，先由部署方或用户实现并注册 Provider，再在程序中取得对应的后端对象。参见[通过 Provider 接入 QPU](../quantum-backends/#接入-qpu-后端)与[扩展量子后端](../providers/)。经典任务和量子任务之间仍通过相同的结果引用传递数据。
+
+仅调试函数逻辑时，也可以显式使用本地线程池执行器。这种模式不启动 Ray：
+
+```bash
+python packages/framework/examples/hybrid_program.py --executor local
+```
+
+示例脚本不带参数时同样使用本地执行器；本页主流程通过 `--executor ray` 显式启用 Ray。`--seed` 控制模拟器采样；可通过 `--steps 30`、`--shots 2048` 调整迭代上限与采样次数。
+
+## 示例源码
+
+下面内容在网站构建时直接读取 `packages/framework/examples/hybrid_program.py`，与仓库里的可执行示例保持一致。
+
+<HybridExample />
+
+## 理解任务依赖
+
+`Runtime.submit()` 返回结果引用。把该引用交给量子后端的 `submit()` 或另一个经典任务，PivotQ 会将依赖交给 Ray 调度，下游任务在输入就绪后执行。Python 主程序通过循环和条件判断控制后续迭代。
+
+`Runtime.get()` 等待并取回最终值。通常只在程序需要打印、判断分支或更新参数时取回结果；已完成的中间结果可以用 `release()` 释放。使用 `with Runtime(...)` 可以在退出时关闭运行时。
+
+## 阅读量子结果
+
+`counts` 是有限次采样统计，各计数之和等于 `shots`；模拟器的 `probabilities` 是这些计数除以 `shots`。固定 `seed` 可以复现同一模拟器调用。`backend` 与 `is_simulated` 记录实际执行来源。
+
+位串遵循 Qiskit 顺序，最高编号的经典位在左。例如 `measure(0, 0)`、`measure(1, 1)` 后，`"01"` 表示 c0 为 1、c1 为 0。详见[量子后端](../quantum-backends/#测量与位序)。
+
+## 继续编程
+
+接下来可以更换预处理与后处理函数，或用 Qiskit 构造自己的已绑定电路。[经典任务](../classical-tasks/)介绍函数调用，[混合程序](../hybrid-programs/)介绍循环与分支。

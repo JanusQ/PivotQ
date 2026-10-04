@@ -1,0 +1,37 @@
+{
+  "schema_version": "v1",
+  "nodes": [
+    {
+      "node_id": 1, "job_id": "quantum_example",
+      "node_type": "CPU_COMPUTE", "device_type": "CPU", "dependencies": [],
+      "input_bytes": 0, "output_bytes": 4096, "estimated_duration_us": 100,
+      "attrs": {"phase": "prepare"}
+    },
+    {
+      "node_id": 2, "job_id": "quantum_example",
+      "node_type": "POINT_TO_POINT_COMM", "device_type": "NETWORK_LINK", "dependencies": [1],
+      "input_bytes": 4096, "output_bytes": 4096, "estimated_duration_us": 0,
+      "attrs": {"phase": "upload", "src_resource": "cpu0", "dst_resource": "qpu0"}
+    },
+    {
+      "node_id": 3, "job_id": "quantum_example",
+      "node_type": "QPU_EXEC", "device_type": "QPU", "dependencies": [2],
+      "input_bytes": 4096, "output_bytes": 1024, "estimated_duration_us": 0,
+      "resource_constraints": {"qubits": 8},
+      "attrs": {"phase": "quantum_execution", "circuit_count": 4, "shots_per_circuit": 1000,
+                "transpiled_circuit_depth": 20}
+    },
+    {
+      "node_id": 4, "job_id": "quantum_example",
+      "node_type": "POINT_TO_POINT_COMM", "device_type": "NETWORK_LINK", "dependencies": [3],
+      "input_bytes": 1024, "output_bytes": 1024, "estimated_duration_us": 0,
+      "attrs": {"phase": "download", "src_resource": "qpu0", "dst_resource": "cpu0"}
+    },
+    {
+      "node_id": 5, "job_id": "quantum_example",
+      "node_type": "CPU_COMPUTE", "device_type": "CPU", "dependencies": [4],
+      "input_bytes": 1024, "output_bytes": 0, "estimated_duration_us": 200,
+      "attrs": {"phase": "postprocess"}
+    }
+  ]
+}

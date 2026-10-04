@@ -21,10 +21,10 @@ Ray 检查存活节点的总容量，已安装但繁忙的设备继续走原路�
 ```python
 from types import SimpleNamespace
 from qiskit import QuantumCircuit
-from ray_quantum.executors import LocalExecutor
-from ray_quantum.framework import ComponentRegistry, FusionFramework
-from ray_quantum.qpu_integration import QPUCircuitService, QuantumCircuitRequest
-from ray_quantum.qpu_integration.component import register_qpu_client
+from pivotq._internal.executors import LocalExecutor
+from pivotq._internal.framework import ComponentRegistry, FusionFramework
+from pivotq._internal.qpu_integration import QPUCircuitService, QuantumCircuitRequest
+from pivotq._internal.qpu_integration.component import register_qpu_client
 
 registry = ComponentRegistry()
 try:
@@ -75,13 +75,13 @@ CPU 组件直接对原始 Qiskit `QuantumCircuit` 计算理想 statevector，不
 框架的可选入口为：
 
 ```python
-registration_target = "ray_quantum.integrations.h2o:register_components"
-runner_target = "ray_quantum.integrations.h2o:run"
+registration_target = "pivotq._internal.integrations.h2o:register_components"
+runner_target = "pivotq._internal.integrations.h2o:run"
 ```
 
 在 `RayJobDriverConfig` 中设置 `simulation=True`，或在
-`python -m ray_quantum.jobs.driver` 命令中传入 `--simulation`，并使用这两个入口。
-仅导入 `ray_quantum.integrations.h2o` 不加载 AIMD 或 Torch；实际调用入口时才需要已安装
+`python -m pivotq.jobs.driver` 命令中传入 `--simulation`，并使用这两个入口。
+仅导入 `pivotq._internal.integrations.h2o` 不加载 AIMD 或 Torch；实际调用入口时才需要已安装
 `single_h20_aimd` 及其科学计算依赖。
 
 该 bridge 使用原 AIMD 注册流程和 `execute_aimd_run_task` 的现有注入接口。应用继续声明

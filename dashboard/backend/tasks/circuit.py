@@ -7,7 +7,7 @@ TASK = TaskDefinition('quantum-circuit','1.0','量子电路实验','编辑门序
         'seed':{'type':'integer','title':'采样种子','default':42,'minimum':0,'maximum':4294967295},
     }}, (StageDefinition('circuit_execution','电路执行','按目标硬件执行电路；Simulation 模式使用 CPU 状态向量与采样','gpu',('gpu',)),))
 
-def validate_and_plan(request):
+def validate_and_plan(request, *, prediction=False):
     values = request.get('inputs') or {}
     errors, normalized = [], {}
     for key, schema in TASK.input_schema['properties'].items():
@@ -17,7 +17,7 @@ def validate_and_plan(request):
         normalized[key] = value
     if set(values) - set(normalized):
         errors.append({'path':'inputs','message':'存在未知参数'})
-    default, allowed = stage_policy(TASK.stages[0])
+    default, allowed = stage_policy(TASK.stages[0], prediction=prediction)
     device = request.get('hardware',{}).get('circuit_execution', default)
     if device not in allowed:
         errors.append({'path':'hardware','message':f'当前电路执行模式支持 {", ".join(allowed)}'})

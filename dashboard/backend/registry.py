@@ -7,11 +7,11 @@ from .tasks import circuit
 from .stage_hardware import stage_policy
 
 
-def task_types() -> list[dict[str, Any]]:
-    return [serialize_definition(task_definition()), serialize_definition(circuit.TASK)]
+def task_types(*, prediction=False) -> list[dict[str, Any]]:
+    return [serialize_definition(task_definition(), prediction=prediction), serialize_definition(circuit.TASK, prediction=prediction)]
 
 
-def serialize_definition(definition) -> dict[str, Any]:
+def serialize_definition(definition, *, prediction=False) -> dict[str, Any]:
     return {
         "id": definition.id,
         "version": definition.version,
@@ -23,8 +23,8 @@ def serialize_definition(definition) -> dict[str, Any]:
                 "id": stage.id,
                 "title": stage.title,
                 "description": stage.description,
-                "default_device": stage_policy(stage)[0],
-                "allowed_devices": list(stage_policy(stage)[1]),
+                "default_device": stage_policy(stage, prediction=prediction)[0],
+                "allowed_devices": list(stage_policy(stage, prediction=prediction)[1]),
                 "depends_on": list(stage.depends_on),
                 "fixed_device": stage.fixed_device,
             }
@@ -33,14 +33,14 @@ def serialize_definition(definition) -> dict[str, Any]:
     }
 
 
-def get_task(task_id: str) -> dict[str, Any] | None:
-    return next((item for item in task_types() if item['id'] == task_id), None)
+def get_task(task_id: str, *, prediction=False) -> dict[str, Any] | None:
+    return next((item for item in task_types(prediction=prediction) if item['id'] == task_id), None)
 
 
-def validate_and_plan(request: dict[str, Any]):
+def validate_and_plan(request: dict[str, Any], *, prediction=False):
     if request.get('task_id') == circuit.TASK.id:
-        return circuit.validate_and_plan(request)
+        return circuit.validate_and_plan(request, prediction=prediction)
     if request.get("task_id") not in (None, task_definition().id):
         return [{"path": "task_id", "message": "未知任务模板"}], None
-    errors = validate(request)
-    return errors, None if errors else build_plan(request)
+    errors = validate(request, prediction=prediction)
+    return errors, None if errors else build_plan(request, prediction=prediction)

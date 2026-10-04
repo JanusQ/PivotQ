@@ -10,7 +10,7 @@ from datetime import timedelta
 from pathlib import Path
 from unittest.mock import mock_open, patch
 
-from ray_quantum.framework import (
+from pivotq._internal.framework import (
     ComponentSpec,
     ExecutionMode,
     InvocationResult,
@@ -18,8 +18,8 @@ from ray_quantum.framework import (
     InvocationStatus,
     ResourceRequest,
 )
-from ray_quantum.models import StringMetadata
-from ray_quantum.observability import (
+from pivotq._internal.models import StringMetadata
+from pivotq._internal.observability import (
     TRACE_SCHEMA_VERSION,
     TraceCollector,
     build_trace_record,
@@ -177,7 +177,7 @@ class TraceExporterTest(unittest.TestCase):
             if name == "ray" or name.startswith("ray.")
         }
 
-        importlib.import_module("ray_quantum.observability")
+        importlib.import_module("pivotq._internal.observability")
 
         after = {
             name

@@ -182,7 +182,7 @@ class RayExecutionAdapter:
                 sys.path.insert(0, str(path))
         try:
             from single_h20_aimd.integration.fusion_framework.submit_job import build_job_spec
-            from ray_quantum import jobs
+            from pivotq._internal import jobs
         except ImportError as error:
             raise RayExecutionError(
                 "real Ray mode requires the existing framework and AIMD packages on the backend"
@@ -282,7 +282,7 @@ class RayExecutionAdapter:
         resources = target.ray_resources.get('resources', {})
         output_dir = f'{self.output_root.rstrip("/")}/{run.id}'
         spec = jobs.RayJobSpec(submission_id=run.id,
-            entrypoint=shlex.join([self.python_command,'-m','ray_quantum.jobs.driver','--run-id',run.id,
+            entrypoint=shlex.join([self.python_command,'-m','pivotq.jobs.driver','--run-id',run.id,
                 '--registration','backend.circuit_runner:register_components','--runner','backend.circuit_runner:run_circuit',
                 '--namespace',run.id,'--output-dir',output_dir]),
             runtime_environment=jobs.RayJobRuntimeEnvironment(env_vars={

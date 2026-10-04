@@ -13,7 +13,7 @@ from pathlib import Path
 from threading import Event, Lock
 from typing import Any
 
-from ray_quantum.errors import CancellationError
+from pivotq._internal.errors import CancellationError
 
 
 _CALL_LOCK = Lock()

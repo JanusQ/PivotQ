@@ -53,7 +53,7 @@ class RayMigrationTests(unittest.TestCase):
         self.assertEqual(result['stage_results'][0]['device'], 'cpu')
 
     def test_circuit_job_uses_dashboard_module_and_selected_gpu_resources(self):
-        from ray_quantum import jobs
+        from pivotq._internal import jobs
         root = Path(__file__).resolve().parents[3]
         with tempfile.TemporaryDirectory() as temp, patch.dict(os.environ, {
             'FUSION_RAY_WORKING_DIR': temp,

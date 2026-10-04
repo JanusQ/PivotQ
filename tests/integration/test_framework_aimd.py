@@ -34,8 +34,8 @@ class FrameworkAimdIntegrationTests(unittest.TestCase):
         cls.ray_temp.cleanup()
 
     def test_aimd_quantum_component_runs_through_ray_framework(self) -> None:
-        from ray_quantum.executors import RayExecutor
-        from ray_quantum.framework import (
+        from pivotq._internal.executors import RayExecutor
+        from pivotq._internal.framework import (
             ComponentRegistry,
             ComponentSpec,
             ExecutionMode,

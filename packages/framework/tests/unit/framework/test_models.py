@@ -10,8 +10,8 @@ import unittest
 from dataclasses import FrozenInstanceError
 from datetime import datetime, timedelta, timezone
 
-from ray_quantum.errors import ExecutionError, TimeoutError
-from ray_quantum.framework.models import (
+from pivotq._internal.errors import ExecutionError, TimeoutError
+from pivotq._internal.framework.models import (
     ComponentSpec,
     ExecutionMode,
     InvocationHandle,
@@ -20,7 +20,7 @@ from ray_quantum.framework.models import (
     InvocationStatus,
     ResourceRequest,
 )
-from ray_quantum.models import StringMetadata
+from pivotq._internal.models import StringMetadata
 
 
 NOW = datetime(2026, 7, 25, 12, 0, tzinfo=timezone.utc)
@@ -347,7 +347,7 @@ class InvocationBoundaryTest(unittest.TestCase):
             if name == "ray" or name.startswith("ray.")
         }
 
-        importlib.import_module("ray_quantum.framework")
+        importlib.import_module("pivotq._internal.framework")
 
         after = {
             name

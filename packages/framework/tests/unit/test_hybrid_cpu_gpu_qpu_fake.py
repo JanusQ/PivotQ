@@ -16,8 +16,8 @@ from examples.hybrid_cpu_gpu_qpu_fake.submit_job import (
     _terminal_exit_code,
     build_job_spec,
 )
-from ray_quantum.jobs import RayJobStatus
-from ray_quantum.qpu_integration.component import DEFAULT_QPU_COMPONENT_ID
+from pivotq._internal.jobs import RayJobStatus
+from pivotq._internal.qpu_integration.component import DEFAULT_QPU_COMPONENT_ID
 
 
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]

@@ -2,11 +2,11 @@
 
 ## 目标
 
-本目录把独立 H₂O F2/A2 ADAPT-inspired Hybrid Potential 接到 `ray_quantum` FusionFramework。客户端对一条完整轨迹只提交一次 Ray Job；框架 Driver 在集群侧运行 CPU AIMD coordinator，并把量子特征派发为 Task、把经典能量头部署为常驻 Actor。
+本目录把独立 H₂O F2/A2 ADAPT-inspired Hybrid Potential 接到 `pivotq._internal` FusionFramework。客户端对一条完整轨迹只提交一次 Ray Job；框架 Driver 在集群侧运行 CPU AIMD coordinator，并把量子特征派发为 Task、把经典能量头部署为常驻 Actor。
 
 ```text
 submit_job
-  -> ray_quantum.jobs.driver
+  -> pivotq._internal.jobs.driver
      -> register_components(framework)
      -> run_aimd(framework, context)
         -> QPUCircuitService
@@ -43,7 +43,7 @@ GPU 路径要求框架实际分配 CUDA 节点，Classical Actor 也会拒绝没
 
 ## 提交
 
-提交端必须安装融合框架提供的 `ray_quantum`，并能访问 Ray Jobs API：
+提交端必须安装融合框架提供的 `pivotq._internal`，并能访问 Ray Jobs API：
 
 ```bash
 python -m single_h20_aimd.integration.fusion_framework.submit_job \

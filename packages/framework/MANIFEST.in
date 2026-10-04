@@ -1,0 +1,6 @@
+include setup.py
+recursive-include pivotq/_internal/performance/lib *.so
+recursive-include pivotq/_internal/performance/include *.h
+recursive-include pivotq/_internal/performance/examples *.json *.yaml
+global-exclude *.pyc *.pyo
+prune tests

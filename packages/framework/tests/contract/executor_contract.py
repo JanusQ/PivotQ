@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from ray_quantum.errors import ExecutionError, ValidationError
-from ray_quantum.framework import (
+from pivotq._internal.errors import ExecutionError, ValidationError
+from pivotq._internal.framework import (
     ComponentSpec,
     ExecutionMode,
     InvocationSpec,

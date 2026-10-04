@@ -200,7 +200,7 @@ class FusionFrameworkBridgeTests(unittest.TestCase):
         self.assertEqual(len(framework.released), 3)
 
     def test_registration_maps_h2o_resources_without_importing_ray(self) -> None:
-        framework_module = ModuleType("ray_quantum.framework")
+        framework_module = ModuleType("pivotq._internal.framework")
 
         class ExecutionMode:
             TASK = "task"
@@ -217,12 +217,12 @@ class FusionFrameworkBridgeTests(unittest.TestCase):
         framework_module.ExecutionMode = ExecutionMode
         framework_module.ResourceRequest = FrameworkResourceRequest
         framework_module.ComponentSpec = ComponentSpec
-        package_module = ModuleType("ray_quantum")
+        package_module = ModuleType("pivotq._internal")
         package_module.framework = framework_module
         framework = _DocumentedFramework()
         with patch.dict(
             sys.modules,
-            {"ray_quantum": package_module, "ray_quantum.framework": framework_module},
+            {"pivotq._internal": package_module, "pivotq._internal.framework": framework_module},
         ):
             ids = register_fusion_components(framework, load_config(CONFIG_PATH))
         self.assertEqual(ids.quantum_cpu, "h2o-f2-quantum-features-cpu")
@@ -309,19 +309,19 @@ class FusionFrameworkBridgeTests(unittest.TestCase):
                 "RayJobSpec": JobSpec,
             },
         )
-        ray_quantum = ModuleType("ray_quantum")
-        qpu_integration = ModuleType("ray_quantum.qpu_integration")
-        qpu_registration = ModuleType("ray_quantum.qpu_integration.registration")
+        internal_package = ModuleType("pivotq._internal")
+        qpu_integration = ModuleType("pivotq._internal.qpu_integration")
+        qpu_registration = ModuleType("pivotq._internal.qpu_integration.registration")
         qpu_registration.QOS_HELPER_MODULE_ENV = "QOS_HELPER_MODULE"
         qpu_registration.QOS_DATA_TREE_TARGET_ENV = "QOS_DATA_TREE_TARGET"
         qpu_integration.registration = qpu_registration
-        ray_quantum.qpu_integration = qpu_integration
+        internal_package.qpu_integration = qpu_integration
         with patch.dict(
             sys.modules,
             {
-                "ray_quantum": ray_quantum,
-                "ray_quantum.qpu_integration": qpu_integration,
-                "ray_quantum.qpu_integration.registration": qpu_registration,
+                "pivotq._internal": internal_package,
+                "pivotq._internal.qpu_integration": qpu_integration,
+                "pivotq._internal.qpu_integration.registration": qpu_registration,
             },
         ), patch(
             "single_h20_aimd.integration.fusion_framework.submit_job._jobs_api",

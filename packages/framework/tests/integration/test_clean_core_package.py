@@ -28,9 +28,11 @@ class CleanCorePackageTest(unittest.TestCase):
             distribution.mkdir()
             shutil.copy2(_REPOSITORY_ROOT / "pyproject.toml", project)
             shutil.copy2(_REPOSITORY_ROOT / "README.md", project)
+            shutil.copy2(_REPOSITORY_ROOT / "setup.py", project)
+            shutil.copy2(_REPOSITORY_ROOT / "MANIFEST.in", project)
             shutil.copytree(
-                _REPOSITORY_ROOT / "ray_quantum",
-                source / "ray_quantum",
+                _REPOSITORY_ROOT / "pivotq",
+                source / "pivotq",
                 ignore=shutil.ignore_patterns(
                     "__pycache__", "*.pyc", "*.pyo", "*.zip"
                 ),
@@ -48,15 +50,22 @@ class CleanCorePackageTest(unittest.TestCase):
                 os.chdir(previous)
             wheel_path = distribution / wheel_name
             self.assertTrue(wheel_path.is_file())
+            self.assertTrue(wheel_name.endswith("-py3-none-linux_x86_64.whl"))
 
             with zipfile.ZipFile(wheel_path) as archive:
                 names = tuple(archive.namelist())
-                self.assertIn("ray_quantum/__init__.py", names)
-                self.assertIn("ray_quantum/jobs/driver.py", names)
-                self.assertIn("ray_quantum/observability/events.py", names)
-                self.assertIn("ray_quantum/qpu_integration/service.py", names)
+                self.assertIn("pivotq/__init__.py", names)
+                self.assertIn("pivotq/jobs/driver.py", names)
+                self.assertIn("pivotq/_internal/__init__.py", names)
+                self.assertIn("pivotq/_internal/performance/lib/libfusion.so", names)
+                self.assertIn("pivotq/_internal/performance/include/fusion_api.h", names)
+                self.assertIn("pivotq/_internal/performance/examples/h2o/prediction_parameters.json", names)
+                self.assertFalse(any(name.startswith("ray_quantum/") for name in names))
+                self.assertIn("pivotq/_internal/jobs/driver.py", names)
+                self.assertIn("pivotq/_internal/observability/events.py", names)
+                self.assertIn("pivotq/_internal/qpu_integration/service.py", names)
                 self.assertIn(
-                    "ray_quantum/qpu_integration/device_adapter.py",
+                    "pivotq/_internal/qpu_integration/device_adapter.py",
                     names,
                 )
                 self.assertFalse(
@@ -64,8 +73,8 @@ class CleanCorePackageTest(unittest.TestCase):
                 )
                 self.assertFalse(
                     any(
-                        name.startswith("ray_quantum/ir/")
-                        or name.startswith("ray_quantum/source/")
+                        name.startswith("pivotq/_internal/ir/")
+                        or name.startswith("pivotq/_internal/source/")
                         for name in names
                     )
                 )
@@ -80,6 +89,9 @@ class CleanCorePackageTest(unittest.TestCase):
                     name for name in names if name.endswith(".dist-info/METADATA")
                 )
                 metadata = archive.read(metadata_name).decode("utf-8")
+                wheel_metadata = archive.read(next(name for name in names if name.endswith(".dist-info/WHEEL"))).decode()
+                self.assertIn("Root-Is-Purelib: false", wheel_metadata)
+                self.assertIn("Tag: py3-none-linux_x86_64", wheel_metadata)
                 lowered = metadata.lower()
                 self.assertNotIn("requires-dist: ase", lowered)
                 self.assertNotIn("requires-dist: aimd", lowered)
@@ -112,18 +124,37 @@ import importlib.util
 from pathlib import Path
 import sys
 
-import ray_quantum
-import ray_quantum.jobs
-import ray_quantum.observability
-import ray_quantum.qpu_integration
-import ray_quantum.qpu_integration.qasm3_export
-import ray_quantum.qpu_integration.device_adapter
+import pivotq
+import pivotq.performance
+import pivotq.components
+import pivotq.workflow
+import pivotq.observability
+import pivotq.providers
+from pivotq.jobs import JobClient, JobSpec
+from pivotq.performance import Predictor, Workload, Hardware
+import pivotq.jobs.driver
+import pivotq._internal
+import pivotq._internal.jobs
+import pivotq._internal.observability
+import pivotq._internal.qpu_integration
+import pivotq._internal.qpu_integration.qasm3_export
+import pivotq._internal.qpu_integration.device_adapter
 
-installed = Path(ray_quantum.__file__).resolve()
+installed = Path(pivotq._internal.__file__).resolve()
 assert "site-packages" in installed.parts, installed
-assert importlib.util.find_spec("ray_quantum.ir") is None
-assert importlib.util.find_spec("ray_quantum.source") is None
+assert importlib.util.find_spec("pivotq._internal.ir") is None
+assert importlib.util.find_spec("pivotq._internal.source") is None
 assert importlib.util.find_spec("ray_quantum_ir") is None
+assert importlib.util.find_spec("ray_quantum") is None
+assert pivotq.Runtime is not None
+assert pivotq.QuantumResult is not None
+# Pure validation/preview works without any optional runtime dependencies.
+client = JobClient("http://127.0.0.1:8265")
+predictor = Predictor(library="/not-present/libfusion.so")
+workload = Workload()
+workload.cpu("prepare", duration_seconds=0.001)
+assert len(predictor.preview(workload, Hardware())["task_graph"]["nodes"]) == 1
+assert "libfusion.so" not in Path("/proc/self/maps").read_text()
 assert not any(name == "ray" or name.startswith("ray.") for name in sys.modules)
 assert not any(name == "qiskit" or name.startswith("qiskit.") for name in sys.modules)
 assert not any(name == "pyqos" or name.startswith("pyqos.") for name in sys.modules)

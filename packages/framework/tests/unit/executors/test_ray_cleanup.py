@@ -8,9 +8,9 @@ import pytest
 import ray
 from ray.exceptions import GetTimeoutError, RayTaskError
 
-from ray_quantum.executors.cleanup import ExecutorCleanupError
-from ray_quantum.executors.ray import RayExecutor, _RayActorEntry
-from ray_quantum.framework import ComponentRegistry
+from pivotq._internal.executors.cleanup import ExecutorCleanupError
+from pivotq._internal.executors.ray import RayExecutor, _RayActorEntry
+from pivotq._internal.framework import ComponentRegistry
 
 
 @pytest.fixture(autouse=True)

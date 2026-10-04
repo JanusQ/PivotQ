@@ -1,22 +1,11 @@
-"""Isolated generic QPerfSim prediction for saved virtual hardware snapshots."""
-import argparse
-import json
+"""Application workload adapter for saved virtual hardware; native execution belongs to PivotQ."""
 import os
 from pathlib import Path
-import sys
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--root", type=Path, required=True)
-    parser.add_argument("--request", type=Path, required=True)
-    parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--library", type=Path)
-    parser.add_argument("--preview", action="store_true")
-    args = parser.parse_args()
-    sys.path.insert(0, str(args.root / "scripts"))
-    from _prediction.common import read_json, write_json, empty_output, read_csv
-    from qperfsim_virtual import build_virtual_case, frozen_classical_model
+def predict(args):
+    from pivotq._internal.performance.common import read_json, write_json, empty_output, read_csv
+    from .qperfsim_virtual import build_virtual_case, frozen_classical_model
 
     payload = read_json(args.request)
     plan, program = payload["plan"], payload.get("program")
@@ -24,8 +13,7 @@ def main():
     parameters = read_json(parameters_path)
     classical_model = None
     if plan["task_id"] == "h2o-hybrid-aimd" and any(s["id"] == "classical_predict" and s["device"] == "cpu" for s in plan["stages"]):
-        sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-        from backend.program import checkpoint_path
+        from .program import checkpoint_path
         classical_model = frozen_classical_model(checkpoint_path(plan["normalized_inputs"]), (program or {}).get("checkpoint_sha256"))
     graph, scene, request, scope = build_virtual_case(plan, program, parameters, classical_model=classical_model)
     empty_output(args.out)
@@ -39,11 +27,8 @@ def main():
               "task_graph_path": str(inputs / "task_graph.json"), "task_graph": graph,
               "output_dir": str(args.out), "request": request, "model_scope": scope}
     if not args.preview:
-        from _prediction.native import FusionLibrary
-        from _prediction.task import prepare_task, execute_task
-        library = FusionLibrary(args.library)
-        prepared = prepare_task(library, inputs / "scenario.yaml", args.out / "native")
-        prediction = execute_task(library, prepared, backend="qpu")
+        from pivotq._internal.performance.runner import PredictionRunner
+        prediction = PredictionRunner(library=args.library).run_task(inputs / "scenario.yaml", args.out / "native", backend="qpu")
         summary = read_csv(args.out / "native/output/summary.csv")[0]
         prediction.update(request)
         prediction["task_completion_ratio"] = float(summary["task_completion_ratio"])
@@ -62,6 +47,4 @@ def main():
                             "wall_clock_s": prediction["simulator_wall_seconds"]}
     write_json(args.out / "platform_result.json", result)
 
-
-if __name__ == "__main__":
-    main()
+    return result

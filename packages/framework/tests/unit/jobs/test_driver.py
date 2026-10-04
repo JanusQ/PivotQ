@@ -10,16 +10,16 @@ import unittest
 import uuid
 from unittest.mock import patch
 
-from ray_quantum.framework import ComponentRegistry
-from ray_quantum.executors.cleanup import ExecutorCleanupReport
-from ray_quantum.jobs.driver import (
+from pivotq._internal.framework import ComponentRegistry
+from pivotq._internal.executors.cleanup import ExecutorCleanupReport
+from pivotq._internal.jobs.driver import (
     RayJobDriverConfig,
     RayJobDriverContext,
     RayJobDriverStatus,
     main,
     run_driver,
 )
-from ray_quantum.observability import TraceEventJournalConfig
+from pivotq._internal.observability import TraceEventJournalConfig
 
 
 _APPLICATION_CLEANUP_AVAILABLE = hasattr(RayJobDriverContext, "record_cleanup")
@@ -161,10 +161,10 @@ class RayJobDriverTest(unittest.TestCase):
     ):
         targets = [_registration, runner]
         with (
-            patch("ray_quantum.jobs.driver._load_callable", side_effect=targets),
-            patch("ray_quantum.jobs.driver._load_ray_module", return_value=ray or _FakeRay()),
-            patch("ray_quantum.jobs.driver._load_ray_executor", return_value=_FakeRayExecutor),
-            patch("ray_quantum.jobs.driver.ComponentRegistry", _RecordingRegistry),
+            patch("pivotq._internal.jobs.driver._load_callable", side_effect=targets),
+            patch("pivotq._internal.jobs.driver._load_ray_module", return_value=ray or _FakeRay()),
+            patch("pivotq._internal.jobs.driver._load_ray_executor", return_value=_FakeRayExecutor),
+            patch("pivotq._internal.jobs.driver.ComponentRegistry", _RecordingRegistry),
         ):
             return run_driver(
                 self._config(
@@ -369,7 +369,7 @@ class RayJobDriverTest(unittest.TestCase):
             exit_code=0,
         )
         with (
-            patch("ray_quantum.jobs.driver.run_driver", return_value=completed) as run,
+            patch("pivotq._internal.jobs.driver.run_driver", return_value=completed) as run,
             patch("sys.stdout"),
         ):
             exit_code = main(

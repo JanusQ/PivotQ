@@ -1,4 +1,4 @@
-"""Cluster-side AIMD coordinator imported by ``ray_quantum.jobs.driver``."""
+"""Cluster-side AIMD coordinator imported by ``pivotq._internal.jobs.driver``."""
 
 from __future__ import annotations
 
@@ -58,10 +58,10 @@ def _build_qpu_adapter(framework: Any, context: Any, request: AIMDRunRequest):
     if request.quantum_target != "qpu":
         return None
     try:
-        from ray_quantum.qpu_integration import QPUCircuitService
+        from pivotq._internal.qpu_integration import QPUCircuitService
     except ImportError as error:
         raise RuntimeError(
-            "quantum_target='qpu' 需要融合框架提供 ray_quantum.qpu_integration。"
+            "quantum_target='qpu' 需要融合框架提供 pivotq._internal.qpu_integration。"
         ) from error
 
     config = _load_job_config_from_environment()
@@ -113,7 +113,7 @@ def _build_request(context: Any) -> AIMDRunRequest:
         resources=resources,
         idempotency_key=str(context.run_id),
         metadata={
-            "entrypoint": "ray_quantum.jobs.driver",
+            "entrypoint": "pivotq._internal.jobs.driver",
             "integration": "single_h20_aimd.fusion_framework.v1",
         },
     )
@@ -158,7 +158,7 @@ def _export_trace(context: Any) -> Path | None:
     collector = context.trace_collector
     if collector is None:
         return None
-    from ray_quantum.observability import export_trace_jsonl
+    from pivotq._internal.observability import export_trace_jsonl
 
     return export_trace_jsonl(
         collector,

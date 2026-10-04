@@ -8,8 +8,8 @@ import unittest
 import uuid
 from typing import Any
 
-from ray_quantum.executors import RayExecutor
-from ray_quantum.framework import (
+from pivotq._internal.executors import RayExecutor
+from pivotq._internal.framework import (
     ComponentRegistry,
     ComponentSpec,
     ExecutionMode,
@@ -18,7 +18,7 @@ from ray_quantum.framework import (
     InvocationStatus,
     ResourceRequest,
 )
-from ray_quantum.observability import TraceCollector
+from pivotq._internal.observability import TraceCollector
 from tests.fixtures.fake_components import RuntimeProbeComponent
 
 try:

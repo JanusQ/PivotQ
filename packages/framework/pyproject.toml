@@ -1,11 +1,11 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=70.1", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ray-quantum"
+name = "pivotq"
 version = "0.1.0.dev0"
-description = "Ray extension for CPU, GPU, and QPU hybrid workloads."
+description = "CPU and QPU hybrid programming, distributed execution and performance prediction."
 readme = "README.md"
 requires-python = "==3.12.*"
 dependencies = [
@@ -20,14 +20,18 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+qpu = ["httpx>=0.27,<1"]
 test = [
     "pytest==9.1.1",
 ]
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["ray_quantum*"]
+include = ["pivotq*"]
 exclude = ["ray_quantum_ir", "ray_quantum_ir.*"]
+
+[tool.setuptools.package-data]
+"pivotq._internal.performance" = ["lib/*.so", "include/*.h", "examples/**/*.json", "examples/**/*.yaml"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

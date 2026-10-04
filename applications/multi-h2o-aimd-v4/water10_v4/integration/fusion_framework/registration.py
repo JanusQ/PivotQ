@@ -4,7 +4,7 @@ from .config import import_target, load_config
 
 
 def register_fusion_components(framework, config):
-    from ray_quantum.framework import ComponentSpec, ExecutionMode, ResourceRequest
+    from pivotq._internal.framework import ComponentSpec, ExecutionMode, ResourceRequest
     if config['quantum_target'] == 'cpu':
         framework.register(ComponentSpec(component_id=QUANTUM_ID, execution=ExecutionMode.TASK,
             resources=ResourceRequest(num_cpus=config.get('quantum_num_threads', 1)),

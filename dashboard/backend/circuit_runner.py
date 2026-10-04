@@ -83,7 +83,7 @@ class CPUCircuitComponent(CircuitComponent):
     device = 'cpu'
 
 def register_cpu_components(framework):
-    from ray_quantum.framework import ComponentSpec, ExecutionMode, ResourceRequest
+    from pivotq._internal.framework import ComponentSpec, ExecutionMode, ResourceRequest
     target = os.environ.get('CIRCUIT_LOGICAL_TARGET', 'cpu')
     if target not in {'cpu', 'gpu', 'qpu'}:
         raise ValueError('Unsupported logical circuit target')
@@ -101,7 +101,7 @@ def register_cpu_components(framework):
         )
 
 def register_components(framework):
-    from ray_quantum.framework import ComponentSpec, ExecutionMode, ResourceRequest
+    from pivotq._internal.framework import ComponentSpec, ExecutionMode, ResourceRequest
     framework.register(ComponentSpec(component_id='editor-circuit',execution=ExecutionMode.TASK,
         resources=ResourceRequest(num_cpus=1,num_gpus=1,custom_resources=json.loads(os.environ['CIRCUIT_NODE_RESOURCES'])),
         allowed_methods=('execute',),timeout_seconds=120),CircuitComponent)
@@ -127,5 +127,5 @@ def run_circuit(framework, context):
     out = Path(context.output_dir) / f'{context.run_id}.circuit-result.json'
     out.write_text(json.dumps(actual,ensure_ascii=False),encoding='utf-8')
     if context.trace_collector is not None:
-        from ray_quantum.observability import export_trace_jsonl
+        from pivotq._internal.observability import export_trace_jsonl
         export_trace_jsonl(context.trace_collector, Path(context.output_dir) / f'{context.run_id}.trace.jsonl')

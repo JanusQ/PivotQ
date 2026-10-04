@@ -13,15 +13,15 @@ from unittest.mock import Mock
 import pytest
 import ray
 
-from ray_quantum.framework import ComponentRegistry
-from ray_quantum.framework.models import ComponentSpec, ExecutionMode, InvocationSpec, ResourceRequest
-from ray_quantum.executors import ray as executor_module
-from ray_quantum.executors.ray import RayExecutor, _RayInvocationEntry
-from ray_quantum.jobs import driver
-from ray_quantum.observability.events import (
+from pivotq._internal.framework import ComponentRegistry
+from pivotq._internal.framework.models import ComponentSpec, ExecutionMode, InvocationSpec, ResourceRequest
+from pivotq._internal.executors import ray as executor_module
+from pivotq._internal.executors.ray import RayExecutor, _RayInvocationEntry
+from pivotq._internal.jobs import driver
+from pivotq._internal.observability.events import (
     TraceEventJournal, TraceEventKind, TraceEventSource,
 )
-from ray_quantum.framework.models import InvocationStatus
+from pivotq._internal.framework.models import InvocationStatus
 
 
 class _Component:

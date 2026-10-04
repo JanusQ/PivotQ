@@ -2,7 +2,13 @@
 import os
 
 
-def stage_policy(stage):
+def stage_policy(stage, *, prediction=False):
+    if prediction:
+        if stage.id == "circuit_execution":
+            return "qpu", ("cpu", "gpu", "qpu")
+        if stage.id == "quantum_features":
+            return stage.default_device, ("cpu", *stage.allowed_devices)
+        return stage.default_device, stage.allowed_devices
     mode = os.environ.get('FUSION_EXECUTOR')
     if mode == 'local_cpu':
         if stage.id in ('quantum_features', 'circuit_execution'):

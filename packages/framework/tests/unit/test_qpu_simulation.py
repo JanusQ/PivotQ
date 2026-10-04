@@ -8,14 +8,14 @@ import pytest
 from qiskit import QuantumCircuit
 from qiskit.circuit import Parameter
 
-from ray_quantum.errors import ValidationError
-from ray_quantum.executors import LocalExecutor
-from ray_quantum.framework import (
+from pivotq._internal.errors import ValidationError
+from pivotq._internal.executors import LocalExecutor
+from pivotq._internal.framework import (
     ComponentRegistry, ComponentSpec, ExecutionMode, FusionFramework, ResourceRequest,
 )
-from ray_quantum.qpu_integration import QPUCircuitService, QuantumCircuitRequest
-from ray_quantum.qpu_integration.component import register_qpu_client
-from ray_quantum.qpu_integration.simulation import StatevectorQPUComponent, qpu_is_configured
+from pivotq._internal.qpu_integration import QPUCircuitService, QuantumCircuitRequest
+from pivotq._internal.qpu_integration.component import register_qpu_client
+from pivotq._internal.qpu_integration.simulation import StatevectorQPUComponent, qpu_is_configured
 
 
 @pytest.fixture

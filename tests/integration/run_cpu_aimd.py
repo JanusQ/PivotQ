@@ -42,7 +42,7 @@ def source_manifest() -> dict[str, str]:
         APPLICATION_ROOT / "checkpoints/hybrid_model.pt",
     }
     for directory in (
-        REPOSITORY_ROOT / "packages/framework/ray_quantum",
+        REPOSITORY_ROOT / "packages/framework/pivotq",
         APPLICATION_ROOT / "single_h20_aimd",
     ):
         files.update(directory.rglob("*.py"))
@@ -268,14 +268,14 @@ def main() -> int:
     ):
         os.environ.pop(name, None)
     import ray
-    from ray_quantum.jobs.driver import RayJobDriverConfig, run_driver
+    from pivotq._internal.jobs.driver import RayJobDriverConfig, run_driver
 
     if ray.is_initialized():
         parser.error("run this launcher in a fresh Python process")
     config = RayJobDriverConfig(
         run_id=run_id,
-        registration_target="ray_quantum.integrations.h2o:register_components",
-        runner_target="ray_quantum.integrations.h2o:run",
+        registration_target="pivotq._internal.integrations.h2o:register_components",
+        runner_target="pivotq._internal.integrations.h2o:run",
         namespace=run_id,
         output_dir=str(output),
         trace_max_records=max(20_000, args.steps * 32 + 1000),

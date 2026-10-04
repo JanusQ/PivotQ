@@ -17,7 +17,7 @@ from typing import Any
 from urllib.parse import urlparse, parse_qs, unquote
 
 from .execution import DryRunExecutor
-from .hardware import HardwareRegistry
+from .hardware import ComputeTarget, HardwareRegistry
 from .models import Run
 from .registry import get_task, task_types, validate_and_plan
 from .ray_execution import RayExecutionAdapter, enrich_result
@@ -111,7 +111,29 @@ def active_hardware() -> tuple[HardwareRegistry, Any]:
     return result.registry, result
 
 
-def _normalize_request(body: dict[str, Any]) -> dict[str, Any]:
+def prediction_hardware() -> HardwareRegistry:
+    """Server-owned profiles, independent of leases, Ray discovery and health."""
+    from .hardware_profiles import PROFILES, target_snapshot
+    targets = {target.id: replace(target, available=True) for target in HARDWARE.all()}
+    if NETWORK_DEVICES and DEVICES is not None:
+        # Registration records are already validated; do not call snapshot(),
+        # which consults live Ray nodes. Credentials never enter the model.
+        with DEVICES.lock:
+            for item in DEVICES.entries.values():
+                targets[item['device_id']] = ComputeTarget(
+                    item['device_id'], item['kind'], item['title'], True, {},
+                    'registered-offline-profile')
+    for target_id, profile in PROFILES.items():
+        existing = targets.get(target_id)
+        if existing is None:
+            targets[target_id] = ComputeTarget(target_id, profile['kind'], profile['title'],
+                                                True, {}, 'prediction-profile', target_snapshot(target_id))
+        elif existing.target_snapshot is None and existing.kind == profile['kind']:
+            targets[target_id] = replace(existing, target_snapshot=target_snapshot(target_id))
+    return HardwareRegistry(tuple(targets.values()))
+
+
+def _normalize_request(body: dict[str, Any], *, prediction: bool = False) -> dict[str, Any]:
     """Convert UI target IDs to task-level device kinds before validation."""
     for key in ('inputs', 'hardware', 'hardware_profile_digests'):
         if body.get(key) is not None and not isinstance(body[key], dict):
@@ -124,10 +146,13 @@ def _normalize_request(body: dict[str, Any]) -> dict[str, Any]:
     target_ids: dict[str, str] = {}
     snapshots: dict[str, dict] = {}
     expected_digests = request.get('hardware_profile_digests') or {}
-    hardware_registry, discovery = active_hardware()
-    if discovery.live and discovery.error:
-        raise ValueError(f"Ray 实际资源发现失败：{discovery.error}")
-    task = get_task(str(request.get("task_id", "")))
+    if prediction:
+        hardware_registry = prediction_hardware()
+    else:
+        hardware_registry, discovery = active_hardware()
+        if discovery.live and discovery.error:
+            raise ValueError(f"Ray 实际资源发现失败：{discovery.error}")
+    task = get_task(str(request.get("task_id", "")), prediction=prediction)
     if task is None:
         return request
     stages = {stage["id"]: stage for stage in task["stages"]}
@@ -140,12 +165,12 @@ def _normalize_request(body: dict[str, Any]) -> dict[str, Any]:
         if stage is None:
             continue
         target = hardware_registry.resolve(str(value), tuple(stage["allowed_devices"]))
-        if os.environ.get("FUSION_EXECUTOR", "dry_run").lower() == "ray" and stage_id == "classical_predict" and target.kind != "gpu":
+        if not prediction and os.environ.get("FUSION_EXECUTOR", "dry_run").lower() == "ray" and stage_id == "classical_predict" and target.kind != "gpu":
             raise ValueError("当前 H₂O Ray runner 的经典模型必须选择 GPU")
-        if os.environ.get('FUSION_EXECUTOR', 'dry_run').lower() == 'ray' and stage_id == 'trajectory_analysis' and target.kind != 'cpu':
+        if not prediction and os.environ.get('FUSION_EXECUTOR', 'dry_run').lower() == 'ray' and stage_id == 'trajectory_analysis' and target.kind != 'cpu':
             raise ValueError('当前 H₂O 轨迹分析在 CPU 协调器上执行')
         if (
-            os.environ.get("FUSION_EXECUTOR", "dry_run").lower() == "ray"
+            not prediction and os.environ.get("FUSION_EXECUTOR", "dry_run").lower() == "ray"
             and target.kind == "qpu_simulator"
         ):
             raise ValueError("当前真实 Ray H₂O runner 尚未接入 qpu_simulator，请选择 GPU 或真实 QPU")
@@ -162,7 +187,7 @@ def _normalize_request(body: dict[str, Any]) -> dict[str, Any]:
                 snapshot['logical_qubits'] = width
             snapshots[stage_id] = snapshot
     request["hardware"] = hardware
-    if NETWORK_DEVICES:
+    if NETWORK_DEVICES and not prediction:
         for stage_id in ('force_and_integration', 'trajectory_analysis'):
             if target_ids.get(stage_id) != target_ids.get('initialization'):
                 raise ValueError('当前 H₂O 初始化、积分与轨迹分析必须使用同一个 CPU 协调节点')
@@ -445,10 +470,10 @@ class Handler(BaseHTTPRequestHandler):
 
         if path in {"/api/v1/performance/preview", "/api/v1/performance/run"}:
             try:
-                body = _normalize_request(body)
+                body = _normalize_request(body, prediction=True)
             except ValueError as error:
                 return self._send(422, {"valid": False, "errors": [{"path": "hardware", "message": str(error)}]})
-            errors, plan = validate_and_plan(body)
+            errors, plan = validate_and_plan(body, prediction=True)
             if errors or plan is None:
                 return self._send(422, {"valid": False, "errors": errors})
             reason = QPerfSimClient.prediction_reason(plan)
@@ -456,12 +481,11 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(422, {'error': 'unsupported_configuration', 'message': reason})
             if body.get('program'):
                 body['program'] = seal_program(body, plan)
-            active_registry, discovery = active_hardware()
-            if discovery.live and discovery.error:
-                return self._send(503, {"error": "ray_resources_unavailable", "message": discovery.error})
             client = QPerfSimClient()
-            availability = client.availability()
             preview = path.endswith("/preview")
+            availability = ({"available": None, "checked": False, "reason": "preview 未探测原生引擎",
+                             "version": None, "interface": "c_api", "executable": None,
+                             "library": str(client.library)} if preview else client.availability())
             if not preview and not availability["available"]:
                 return self._send(503, {
                     "error": "qperfsim_unavailable",

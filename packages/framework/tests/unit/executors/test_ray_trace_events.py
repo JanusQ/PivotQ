@@ -7,19 +7,19 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
-from ray_quantum.executors.ray import (
+from pivotq._internal.executors.ray import (
     _create_trace_event_sink,
     _finalize_trace_event_sink,
     _send_trace_event,
 )
-from ray_quantum.framework.models import (
+from pivotq._internal.framework.models import (
     ComponentSpec,
     ExecutionMode,
     InvocationSpec,
     InvocationStatus,
     ResourceRequest,
 )
-from ray_quantum.observability.events import (
+from pivotq._internal.observability.events import (
     TraceEventJournalConfig,
     TraceEventKind,
     TraceEventSource,
@@ -131,11 +131,11 @@ class RayTraceEventWiringTest(unittest.TestCase):
             _ActorFactory.config_seen = None
             with (
                 patch(
-                    "ray_quantum.executors.ray.ray.get_runtime_context",
+                    "pivotq._internal.executors.ray.ray.get_runtime_context",
                     return_value=_RuntimeContext(),
                 ),
                 patch(
-                    "ray_quantum.executors.ray._TraceEventJournalActor",
+                    "pivotq._internal.executors.ray._TraceEventJournalActor",
                     _ActorFactory,
                 ),
             ):
@@ -152,8 +152,8 @@ class RayTraceEventWiringTest(unittest.TestCase):
     def test_finalize_waits_boundedly_and_kills_sink_without_propagating(self) -> None:
         sink = _Sink()
         with (
-            patch("ray_quantum.executors.ray.ray.get") as ray_get,
-            patch("ray_quantum.executors.ray.ray.kill") as ray_kill,
+            patch("pivotq._internal.executors.ray.ray.get") as ray_get,
+            patch("pivotq._internal.executors.ray.ray.kill") as ray_kill,
         ):
             _finalize_trace_event_sink(sink, timeout_seconds=2.5)
 
@@ -165,7 +165,7 @@ class RayTraceEventWiringTest(unittest.TestCase):
 
         broken = Mock()
         broken.finalize.remote.side_effect = RuntimeError("unavailable")
-        with patch("ray_quantum.executors.ray.ray.kill", side_effect=RuntimeError):
+        with patch("pivotq._internal.executors.ray.ray.kill", side_effect=RuntimeError):
             _finalize_trace_event_sink(broken, timeout_seconds=1)
 
 

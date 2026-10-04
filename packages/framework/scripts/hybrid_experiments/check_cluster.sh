@@ -24,7 +24,7 @@ PYTHON_BIN="${RAY_QUANTUM_PYTHON_BIN:-/opt/ray-quantum/venv/bin/python}"
 
 test -x "${RAY_BIN}"
 test -x "${PYTHON_BIN}"
-test -d "${PROJECT_ROOT}/ray_quantum"
+test -d "${PROJECT_ROOT}/pivotq"
 cd "${PROJECT_ROOT}"
 "${RAY_BIN}" status
 curl --fail --silent --show-error http://127.0.0.1:8265/api/version

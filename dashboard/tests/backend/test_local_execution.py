@@ -193,8 +193,8 @@ class LocalExecutorTests(unittest.TestCase):
 
 class LogicalExecutionTests(unittest.TestCase):
     def framework(self):
-        from ray_quantum.executors import LocalExecutor
-        from ray_quantum.framework import ComponentRegistry, FusionFramework
+        from pivotq._internal.executors import LocalExecutor
+        from pivotq._internal.framework import ComponentRegistry, FusionFramework
         registry = ComponentRegistry()
         framework = FusionFramework(LocalExecutor(registry), simulation=True)
         self.addCleanup(registry.close)
@@ -229,7 +229,7 @@ class LogicalExecutionTests(unittest.TestCase):
         self.assertEqual(results[1], results[2])
 
     def test_h2o_registration_matches_logical_cpu_and_reference_targets(self):
-        from ray_quantum.integrations.h2o.bridge import register_components
+        from pivotq._internal.integrations.h2o.bridge import register_components
         root = Path(__file__).resolve().parents[3]
         application = root / 'applications/h2o-hybrid-aimd'
         job = {'task_id': 'h2o-hybrid-aimd',
@@ -258,7 +258,7 @@ class LogicalExecutionTests(unittest.TestCase):
                 self.assertEqual(quantum_selection.actual_devices, ('CPU',))
 
     def test_h2o_logical_cpu_client_routes_frozen_requests_to_cpu_components(self):
-        from ray_quantum.integrations.h2o.bridge import register_components, _simulation_client
+        from pivotq._internal.integrations.h2o.bridge import register_components, _simulation_client
         from single_h20_aimd.execution import ActorRequest, ActorCallRequest, TaskRequest, ResourceRequest
         application = Path(__file__).resolve().parents[3] / 'applications/h2o-hybrid-aimd'
         hardware = {'quantum_features': 'cpu', 'classical_predict': 'cpu'}

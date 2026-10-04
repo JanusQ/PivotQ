@@ -112,7 +112,7 @@ def _trace_context(values: Mapping[str, str]) -> Any:
     """Use the framework's bounded string metadata type when it is installed."""
 
     try:
-        from ray_quantum.models import StringMetadata
+        from pivotq._internal.models import StringMetadata
     except ImportError:
         # Keep this module importable before the framework package is delivered.
         return dict(values)

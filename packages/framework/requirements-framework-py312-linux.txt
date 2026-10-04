@@ -1,4 +1,4 @@
-# ray-quantum framework development/test environment
+# PivotQ framework development/test environment
 # Platform: Linux x86_64, glibc 2.17+
 # Python: CPython 3.12 on Ubuntu 22.04 x86_64
 # Project constraint: >=3.12,<3.13; Ray: 2.31.0
@@ -53,7 +53,7 @@ pydantic_core==2.46.4
 Pygments==2.21.0
 pytest==9.1.1
 PyYAML==6.0.3
-qiskit==2.2.3
+qiskit==2.5.1
 ray==2.31.0
 referencing==0.37.0
 requests==2.34.2

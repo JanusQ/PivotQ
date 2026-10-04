@@ -1,5 +1,9 @@
 # QPerfSim 交付物使用与模块对接说明
 
+当前 Python 预测实现已并入唯一发行包 `pivotq`，公开入口为 `pivotq.performance`。请先按仓库或网站安装说明安装 `pivotq`；本目录的两个 Python 命令和 `_prediction` 导入转发到包内实现，参数和结果文件约定继续保留。Dashboard 与 SDK 共享隔离预测 Worker。此处 `lib/`、头文件及参考参数保留交付原件，包内副本的动态库字节和摘要与原件一致。
+
+随包原生引擎支持 Linux x86-64：Ubuntu 24.04 可直接加载；Ubuntu 22.04 可通过 `FUSION_QPERFSIM_RUNTIME` 指定已有的兼容运行库目录。程序不会下载或替换系统运行库。下文的平台文件名表描述原生接口的命名约定；当前仓库仅交付 Linux 动态库。
+
 QPerfSim 根据设备配置和任务信息估算执行时延、吞吐及通信开销。合作方负责生成任务图，平台读取预测结果并负责展示和执行路径选择。预测按无外部平台排队、资源可用处理，任务图内部的依赖和配置的资源容量仍参与模拟。
 
 本文随QperfSim包放置为 `README.md`。下文所有命令均在QperfSim包根目录执行，输出目录均使用新目录。
@@ -42,7 +46,7 @@ QPerfSim/
 
 `scripts/` 需要完整保留。`examples/h2o/prediction_parameters.json` 保存已校准的水分子参数；`examples/generic_quantum/` 提供通用任务的输入样例，其中的设备数值为演示配置。头文件供 C/C++ 编译时使用，Python 运行时直接加载库文件。
 
-运行脚本使用 Python 3.10 或以上版本，Python 部分仅依赖标准库。系统的解释器命令为 `python` 时，将示例中的 `python3` 替换为 `python`。动态库必须与运行进程的操作系统和处理器架构匹配，并具备其所需的系统运行库。执行性能预测本身无需连接真实 GPU 或 QPU。
+当前脚本随 `pivotq` 使用 Python 3.12，预测实现本身仅依赖标准库。系统的解释器命令为 `python` 时，将示例中的 `python3` 替换为 `python`。动态库必须与运行进程的操作系统和处理器架构匹配，并具备其所需的系统运行库。执行性能预测本身无需连接真实 GPU 或 QPU。
 
 | 操作系统 | `lib/` 中的库文件 |
 |---|---|
@@ -50,7 +54,7 @@ QPerfSim/
 | macOS | `libfusion.dylib` |
 | Windows | `QPerfSim.dll` |
 
-脚本优先查找包根目录下的 `lib/`，随后查找 `build/` 和 `build/Release/`。这些位置相对于脚本所在的包解析。库放在其他位置时，用 `--library` 指定文件；该选项的相对路径按启动命令时的工作目录解析。
+脚本默认使用安装在 `pivotq` 内的原生库。指定其他交付文件时，用 `--library` 指定文件；该选项的相对路径按启动命令时的工作目录解析。
 
 **水分子预测由 `predict_h2o.py` 自动构造任务图。** 例如，估算 100 步实验在两条路径上的耗时：
 

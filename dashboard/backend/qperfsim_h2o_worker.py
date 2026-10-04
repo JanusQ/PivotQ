@@ -1,23 +1,12 @@
-"""Process boundary around the versioned QPerfSim delivery (no Ray or real QPU calls)."""
-import argparse
-import json
+"""Historical AIMD model adapter; native execution uses the shared PivotQ process runner."""
 from pathlib import Path
 import os
-import sys
 
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--root", type=Path, required=True)
-    parser.add_argument("--request", type=Path, required=True)
-    parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--library", type=Path)
-    parser.add_argument("--preview", action="store_true")
-    args = parser.parse_args()
-    sys.path.insert(0, str(args.root / "scripts"))
-    from _prediction.common import read_json, write_json, empty_output
-    from _prediction.h2o import write_case, execute_case
-    from _prediction.native import FusionLibrary
+def predict(args):
+    from pivotq._internal.performance.common import read_json, write_json, empty_output
+    from pivotq._internal.performance.h2o import write_case
+    from pivotq._internal.performance.runner import PredictionRunner
 
     plan = read_json(args.request)
     parameters_path = Path(os.environ.get("FUSION_QPERFSIM_PARAMETERS", str(args.root / "examples/h2o/prediction_parameters.json")))
@@ -46,12 +35,10 @@ def main():
                         "circuits_per_energy_force_query": 38},
     }
     if not args.preview:
-        prediction = execute_case(FusionLibrary(args.library), folder, graph, request, parameters)
+        prediction = PredictionRunner(library=args.library).run_h2o(folder, parameters)
         result["result"] = {"prediction": prediction, "interface": "h2o_prediction",
                             "files": sorted(p.name for p in (folder / "output").glob("*.csv")),
                             "wall_clock_s": prediction["simulator_wall_seconds"]}
     write_json(args.out / "platform_result.json", result)
 
-
-if __name__ == "__main__":
-    main()
+    return result

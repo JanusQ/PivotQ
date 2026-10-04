@@ -1,0 +1,52 @@
+---
+title: 可复用工作流
+description: 先定义 CPU 与量子任务依赖，再为不同输入和后端执行同一个工作流。
+---
+
+import SDKExample from '../../../components/SDKExample.astro';
+
+`Workflow` 保存一次混合计算的任务依赖。它把算法结构与运行时对象分开：定义时用别名引用组件和量子后端，运行时再提供当前 Runtime 中的对象。
+
+## 定义与运行
+
+依次调用 `workflow.input()` 声明输入，用 `task()`、`component()`、`quantum()` 添加节点，用 `output()` 声明需要取回的输出。每个节点只能引用已声明输入或较早的节点，因此图不会出现循环。
+
+```python
+workflow = pq.Workflow("feedback")
+theta = workflow.input("theta")
+circuit = workflow.task(build_circuit, theta, name="prepare")
+measured = workflow.quantum("quantum", circuit, shots=1024, name="measure")
+updated = workflow.task(update_parameter, theta, measured, name="update")
+workflow.output("updated", updated)
+
+with pq.Runtime() as runtime:
+    quantum = runtime.quantum_backend("simulator")
+    run = runtime.run(workflow, inputs={"theta": 1.0}, bindings={"quantum": quantum})
+    result = runtime.get(run.outputs["updated"])
+    run.release()
+```
+
+上面的 `build_circuit`、`update_parameter` 是用户函数；下面的完整示例提供可直接运行的实现。`NodeRef` 表示图中的值，执行后 `WorkflowRun.outputs` 才包含可供 `get()` 使用的 `ResultRef`。
+
+## 完整示例
+
+程序重复运行同一个工作流，用 Actor 累积量子结果，最后导出执行记录：
+
+```bash
+python packages/framework/examples/system_workflow.py --report-path execution.json
+python packages/framework/examples/system_workflow.py --executor ray --address local
+```
+
+源码在构建时直接读取被测试的 Python 文件：
+
+<SDKExample example="workflow" />
+
+## 复用、失败与释放
+
+第一次提交时工作流结构会冻结。之后可更换输入和绑定再次运行，每次得到独立的引用。绑定的 `ComponentHandle`、`QuantumBackend` 必须属于运行该图的 Runtime；输入和绑定名称必须与声明匹配。
+
+运行时会预检结构和接口。执行系统在实际提交过程中仍可能故障；如果部分节点已被接收，`WorkflowSubmissionError.partial_run` 保留这些引用，不能假定整图未执行后重新提交。
+
+`run.refs` 包含该次执行所有节点的引用。先用 `runtime.wait(run.refs, num_returns=len(run.refs))` 等待需要释放的节点完成，再调用 `run.release()`。只有一个分支的输出已完成，不表示其他分支也已完成。
+
+算法的 `for`、`while` 与结果相关分支继续写在普通 Python 中。工作流描述执行依赖；[性能工作量模型](../performance/)是另一个由用户编写的模型，不会自动从图中推断准确计算耗时。

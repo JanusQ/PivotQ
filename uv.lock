@@ -75,6 +75,19 @@ wheels = [
 ]
 
 [[package]]
+name = "anyio"
+version = "4.15.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "idna" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a9/d2/f4d173e22df740bc37b1db102b386ba719b66e95b0f0d751f556b387e6d2/anyio-4.15.1.tar.gz", hash = "sha256:9f28306018cbd6d329e64a36d58256edff76dd996fe423bc957326e578b82a94", size = 276966, upload-time = "2026-09-05T10:42:39.44Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/12/b8/4bd346e22b28902df4d651910f5242c28d84e4a5c2435ca5c3f797ed7e2e/anyio-4.15.1-py3-none-any.whl", hash = "sha256:6152fdbbf9a77fdec97731721bebf7c4c44f7c29b424b0065826173efc7ed101", size = 132079, upload-time = "2026-09-05T10:42:37.923Z" },
+]
+
+[[package]]
 name = "ase"
 version = "3.29.0"
 source = { registry = "https://pypi.org/simple" }
@@ -304,6 +317,15 @@ wheels = [
 ]
 
 [[package]]
+name = "h11"
+version = "0.16.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/01/ee/02a2c011bdab74c6fb3c75474d40b3052059d95df7e73351460c8588d963/h11-0.16.0.tar.gz", hash = "sha256:4e35b956cf45792e4caa5885e69fba00bdbc6ffafbfa020300e549b208ee5ff1", size = 101250, upload-time = "2025-04-24T03:35:25.427Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl", hash = "sha256:63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86", size = 37515, upload-time = "2025-04-24T03:35:24.344Z" },
+]
+
+[[package]]
 name = "h2o-hybrid-aimd"
 version = "0.1.0"
 source = { editable = "applications/h2o-hybrid-aimd" }
@@ -339,6 +361,34 @@ sdist = { url = "https://files.pythonhosted.org/packages/db/33/acd0ce6863b6c0d77
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9e/e9/1a19e42cd43cc1365e127db6aae85e1c671da1d9a5d746f4d34a50edb577/h5py-3.16.0-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:dfc21898ff025f1e8e67e194965a95a8d4754f452f83454538f98f8a3fcb207e", size = 5405250, upload-time = "2026-03-06T13:48:09.628Z" },
     { url = "https://files.pythonhosted.org/packages/51/d7/ab693274f1bd7e8c5f9fdd6c7003a88d59bedeaf8752716a55f532924fbb/h5py-3.16.0-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:2b2c02b0a160faed5fb33f1ba8a264a37ee240b22e049ecc827345d0d9043074", size = 5419216, upload-time = "2026-03-06T13:48:13.322Z" },
+]
+
+[[package]]
+name = "httpcore"
+version = "1.0.9"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "certifi" },
+    { name = "h11" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/06/94/82699a10bca87a5556c9c59b5963f2d039dbd239f25bc2a63907a05a14cb/httpcore-1.0.9.tar.gz", hash = "sha256:6e34463af53fd2ab5d807f399a9b45ea31c3dfa2276f15a2c3f00afff6e176e8", size = 85484, upload-time = "2025-04-24T22:06:22.219Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7e/f5/f66802a942d491edb555dd61e3a9961140fd64c90bce1eafd741609d334d/httpcore-1.0.9-py3-none-any.whl", hash = "sha256:2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55", size = 78784, upload-time = "2025-04-24T22:06:20.566Z" },
+]
+
+[[package]]
+name = "httpx"
+version = "0.28.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anyio" },
+    { name = "certifi" },
+    { name = "httpcore" },
+    { name = "idna" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b1/df/48c586a5fe32a0f01324ee087459e112ebb7224f646c0b5023f5e79e9956/httpx-0.28.1.tar.gz", hash = "sha256:75e98c5f16b0f35b567856f597f06ff2270a374470a5c2392242528e3e3e42fc", size = 141406, upload-time = "2024-12-06T15:37:23.222Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2a/39/e50c7c3a983047577ee07d2a9e53faf5a69493943ec3f6a384bdc792deb2/httpx-0.28.1-py3-none-any.whl", hash = "sha256:d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad", size = 73517, upload-time = "2024-12-06T15:37:21.509Z" },
 ]
 
 [[package]]
@@ -620,6 +670,41 @@ wheels = [
 ]
 
 [[package]]
+name = "pivotq"
+version = "0.1.0.dev0"
+source = { editable = "packages/framework" }
+dependencies = [
+    { name = "google-api-core" },
+    { name = "googleapis-common-protos" },
+    { name = "numpy" },
+    { name = "proto-plus" },
+    { name = "protobuf" },
+    { name = "qiskit" },
+    { name = "ray", extra = ["default"] },
+    { name = "setuptools" },
+]
+
+[package.optional-dependencies]
+qpu = [
+    { name = "httpx" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "google-api-core", specifier = "==2.15.0" },
+    { name = "googleapis-common-protos", specifier = "==1.62.0" },
+    { name = "httpx", marker = "extra == 'qpu'", specifier = ">=0.27,<1" },
+    { name = "numpy", specifier = ">=2.0,<3.0" },
+    { name = "proto-plus", specifier = "==1.23.0" },
+    { name = "protobuf", specifier = "==4.25.8" },
+    { name = "pytest", marker = "extra == 'test'", specifier = "==9.1.1" },
+    { name = "qiskit", specifier = "==2.5.1" },
+    { name = "ray", extras = ["default"], specifier = "==2.31.0" },
+    { name = "setuptools", specifier = "==80.9.0" },
+]
+provides-extras = ["qpu", "test"]
+
+[[package]]
 name = "platformdirs"
 version = "4.11.4"
 source = { registry = "https://pypi.org/simple" }
@@ -846,9 +931,9 @@ source = { virtual = "." }
 dependencies = [
     { name = "h2o-hybrid-aimd" },
     { name = "multi-h2o-aimd-v4" },
+    { name = "pivotq", extra = ["qpu"] },
     { name = "pyscf" },
     { name = "qiskit-aer" },
-    { name = "ray-quantum" },
     { name = "scipy" },
     { name = "threadpoolctl" },
     { name = "torch" },
@@ -863,9 +948,9 @@ dev = [
 requires-dist = [
     { name = "h2o-hybrid-aimd", editable = "applications/h2o-hybrid-aimd" },
     { name = "multi-h2o-aimd-v4", editable = "applications/multi-h2o-aimd-v4" },
+    { name = "pivotq", extras = ["qpu"], editable = "packages/framework" },
     { name = "pyscf", specifier = "==2.14.0" },
     { name = "qiskit-aer", specifier = ">=0.17,<1" },
-    { name = "ray-quantum", editable = "packages/framework" },
     { name = "scipy", specifier = ">=1.15,<2" },
     { name = "threadpoolctl", specifier = ">=3.6,<4" },
     { name = "torch", specifier = "==2.13.0+cpu", index = "https://download.pytorch.org/whl/cpu" },
@@ -942,35 +1027,6 @@ default = [
     { name = "smart-open" },
     { name = "virtualenv" },
 ]
-
-[[package]]
-name = "ray-quantum"
-version = "0.1.0.dev0"
-source = { editable = "packages/framework" }
-dependencies = [
-    { name = "google-api-core" },
-    { name = "googleapis-common-protos" },
-    { name = "numpy" },
-    { name = "proto-plus" },
-    { name = "protobuf" },
-    { name = "qiskit" },
-    { name = "ray", extra = ["default"] },
-    { name = "setuptools" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "google-api-core", specifier = "==2.15.0" },
-    { name = "googleapis-common-protos", specifier = "==1.62.0" },
-    { name = "numpy", specifier = ">=2.0,<3.0" },
-    { name = "proto-plus", specifier = "==1.23.0" },
-    { name = "protobuf", specifier = "==4.25.8" },
-    { name = "pytest", marker = "extra == 'test'", specifier = "==9.1.1" },
-    { name = "qiskit", specifier = "==2.5.1" },
-    { name = "ray", extras = ["default"], specifier = "==2.31.0" },
-    { name = "setuptools", specifier = "==80.9.0" },
-]
-provides-extras = ["test"]
 
 [[package]]
 name = "referencing"

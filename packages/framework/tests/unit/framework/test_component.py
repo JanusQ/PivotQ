@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import unittest
 
-from ray_quantum.framework.component import (
+from pivotq._internal.framework.component import (
     ComponentAdapter,
     ComponentFactory,
     validate_component_factory,
     validate_component_instance,
     validate_invocation,
 )
-from ray_quantum.framework.models import (
+from pivotq._internal.framework.models import (
     ComponentSpec,
     ExecutionMode,
     InvocationSpec,

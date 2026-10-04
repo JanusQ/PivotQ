@@ -10,7 +10,7 @@ from .paths import execution_mode
 
 def readiness(executor_error: str | None = None) -> dict:
     mode = execution_mode()
-    missing = [name for name in ("torch", "ray", "numpy", "psutil", "ray_quantum") if importlib.util.find_spec(name) is None]
+    missing = [name for name in ("torch", "ray", "numpy", "psutil", "pivotq") if importlib.util.find_spec(name) is None]
     compute_reason = executor_error or ("缺少 Python 依赖：" + ", ".join(missing) if missing else None)
     h2o_missing = [name for name in ("yaml", "qiskit", "ase", "single_h20_aimd") if importlib.util.find_spec(name) is None]
     model_reason = ("缺少 Python 依赖：" + ", ".join(h2o_missing)) if h2o_missing else None
@@ -21,7 +21,7 @@ def readiness(executor_error: str | None = None) -> dict:
     def capability(reason):
         return {"available": reason is None, "reason": reason}
     circuit = {"compile": capability(None), "run": capability(None if mode == "dry_run" else compute_reason),
-               "performance": capability(None if mode == 'local_cpu' else "自定义电路预测需要 Simulation 模式的 Fake SC-36")}
+               "performance": capability(None)}
     h2o_compile_reason = model_reason or (compute_reason if missing else None)
     h2o = {"compile": capability(h2o_compile_reason),
            "run": capability(h2o_compile_reason or (None if mode == "dry_run" else compute_reason)),

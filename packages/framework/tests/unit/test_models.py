@@ -7,7 +7,7 @@ import pickle
 from dataclasses import FrozenInstanceError
 from datetime import datetime, timedelta, timezone
 
-from ray_quantum.models import (
+from pivotq._internal.models import (
     BackendJobHandle,
     BackendJobStatus,
     BackendSelector,

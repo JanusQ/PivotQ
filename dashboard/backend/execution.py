@@ -51,4 +51,4 @@ class RayExecutionAdapter:
     """生产接入点：将 WorkflowPlan 转换为现有 RayJobSpec。"""
 
     def build_job_spec(self, plan: WorkflowPlan):
-        raise NotImplementedError("请在部署环境中接入现有 ray_quantum.jobs.RayJobSpec")
+        raise NotImplementedError("请在部署环境中接入现有 pivotq._internal.jobs.RayJobSpec")
