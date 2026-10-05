@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 const source =
-  "from qhai.quantum import QuantumCircuit\ncircuit = QuantumCircuit(2)\ncircuit.h(0)\ncircuit.cx(0, 1)\ncircuit.measure([0, 1])";
+  "from pivotq.quantum import QuantumCircuit\ncircuit = QuantumCircuit(2)\ncircuit.h(0)\ncircuit.cx(0, 1)\ncircuit.measure([0, 1])";
 const nodes = Array.from({ length: 36 }, (_, i) => i);
 const edges = nodes.flatMap((i) => [
   ...(i % 6 < 5 ? [[i, i + 1]] : []),
@@ -186,21 +186,13 @@ test("selects the virtual chip, shows its topology and shares targets across run
     page.getByRole("combobox", { name: "电路执行硬件" }),
   ).toHaveValue("fake-sc-36");
   await expect(
-    page.getByRole("button", { name: "Simulation · CPU 数值计算" }),
+    page.getByRole("img", { name: "编译后的量子电路" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "计算资源", exact: true }).click();
-  const topology = page.getByRole("img", {
-    name: /拓扑：36 个比特，60 条无向边/,
-  });
-  await expect(topology.locator("circle")).toHaveCount(36);
-  await expect(topology.locator("line")).toHaveCount(60);
-  await expect(page.getByText("10,000 shots/s", { exact: true })).toBeVisible();
-  await expect(page.getByText("1 ms", { exact: true })).toBeVisible();
-  await page.keyboard.press("Escape");
-  await page.getByRole("button", { name: "编译", exact: true }).click();
-  await expect(page.getByText("编译通过", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "运行", exact: true }).click();
-  await expect(page.getByText("已完成", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "提交任务", exact: true }).click();
+  await expect(page).toHaveURL(/results\.html\?run=fake-run/);
+  await expect(
+    page.getByLabel("运行结果").getByText("已完成", { exact: true }),
+  ).toBeVisible();
   await expect(page.getByText("CPU 实测用时", { exact: true })).toBeVisible();
   const assignments = page.getByLabel("保存的目标硬件配置");
   await expect(
@@ -211,14 +203,34 @@ test("selects the virtual chip, shows its topology and shares targets across run
       exact: true,
     }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "预测", exact: true }).click();
-  await expect(page.getByText("QPerfSim · 示例参数估算")).toBeVisible();
-  await expect(page.getByText("目标硬件预测耗时")).toBeVisible();
-  await page.getByText("预测范围", { exact: true }).click();
+  await assignments.getByText("已保存的芯片参数", { exact: true }).click();
+  const topology = assignments.getByRole("img", {
+    name: /拓扑：36 个比特，60 条无向边/,
+  });
+  await expect(topology.locator("circle")).toHaveCount(36);
+  await expect(topology.locator("line")).toHaveCount(60);
+  await expect(
+    assignments.getByText("10,000 shots/s", { exact: true }),
+  ).toBeVisible();
+  await expect(assignments.getByText("1 ms", { exact: true })).toBeVisible();
+  await page.getByRole("link", { name: "工作台", exact: true }).click();
+  await expect(
+    page.getByRole("img", { name: "编译后的量子电路" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "性能预测", exact: true }).click();
+  await expect(page).toHaveURL(/performance\.html\?prediction=fake-prediction/);
+  await expect(page.getByText("预计总耗时", { exact: true })).toBeVisible();
+  await expect(page.getByText("QPU 采样", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "预测范围" })).toBeVisible();
   await expect(page.getByText("吞吐模型示例参数", { exact: true })).toHaveCount(
-    1,
+    2,
   );
-  expect(requests).toHaveLength(3);
+  expect(
+    requests.filter((request) => request.path.endsWith("/run")),
+  ).toHaveLength(2);
+  expect(
+    requests.filter((request) => request.path.endsWith("/compile")),
+  ).toHaveLength(2);
   for (const request of requests) {
     expect(request.body.hardware).toEqual({ circuit_execution: "fake-sc-36" });
     expect(request.body.hardware_profile_digests).toEqual({
@@ -226,7 +238,7 @@ test("selects the virtual chip, shows its topology and shares targets across run
     });
   }
   await page.reload();
-  await expect(page.getByText("QPerfSim · 示例参数估算")).toBeVisible();
+  await expect(page.getByText("预计总耗时", { exact: true })).toBeVisible();
   await expect(page.getByText(/参数版本 fake-sc-36-v1/)).toBeVisible();
 });
 
@@ -253,7 +265,7 @@ test("preserves old CPU drafts and explains the absent target model", async ({
     page.getByRole("combobox", { name: "电路执行硬件" }),
   ).toHaveValue("cpu-0");
   await expect(
-    page.getByRole("button", { name: "运行", exact: true }),
+    page.getByRole("button", { name: "提交任务", exact: true }),
   ).toBeEnabled();
   await expect(
     page.getByRole("button", { name: /预测：所选量子目标暂无预测模型/ }),
@@ -262,7 +274,7 @@ test("preserves old CPU drafts and explains the absent target model", async ({
     .getByRole("combobox", { name: "电路执行硬件" })
     .selectOption("fake-sc-36");
   await expect(
-    page.getByRole("button", { name: "预测", exact: true }),
+    page.getByRole("button", { name: "性能预测", exact: true }),
   ).toBeEnabled();
 });
 
@@ -291,7 +303,7 @@ test("restores historical prediction parameters independently of current discove
       },
     }),
   );
-  await page.goto("/?prediction=fake-prediction");
+  await page.goto("/performance.html?prediction=fake-prediction");
   const saved = page.getByLabel("保存的目标硬件配置");
   await expect(
     saved.getByText(`目标：${profile.title}`, { exact: true }),

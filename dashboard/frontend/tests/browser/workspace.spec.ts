@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 const source =
-  "from qhai.quantum import QuantumCircuit\ncircuit = QuantumCircuit(2)\ncircuit.h(0)\ncircuit.cx(0, 1)\ncircuit.measure([0, 1])";
+  "from pivotq.quantum import QuantumCircuit\ncircuit = QuantumCircuit(2)\ncircuit.h(0)\ncircuit.cx(0, 1)\ncircuit.measure([0, 1])";
 const circuit = {
   valid: true,
   qubits: 2,
@@ -134,35 +134,62 @@ test("submits current source, polls to completion and restores a run URL", async
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "计算工作台" })).toBeVisible();
   await expect(page.getByRole("button", { name: /预测：/ })).toBeDisabled();
-  await page.getByRole("button", { name: "编译", exact: true }).click();
   await expect(
     page.getByRole("img", { name: "编译后的量子电路" }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "运行", exact: true }).click();
-  await expect(page.getByText("已完成", { exact: true })).toBeVisible({
+  await page.getByRole("button", { name: "提交任务", exact: true }).click();
+  await expect(
+    page.getByLabel("运行结果").getByText("已完成", { exact: true }),
+  ).toBeVisible({
     timeout: 10000,
   });
   await expect(page.getByText("50.00%", { exact: true })).toHaveCount(2);
-  await expect(page).toHaveURL(/run=run-test/);
+  await expect(page).toHaveURL(/results\.html\?run=run-test/);
   await page.reload();
-  await expect(page.getByText("已完成", { exact: true })).toBeVisible();
+  await expect(
+    page.getByLabel("运行结果").getByText("已完成", { exact: true }),
+  ).toBeVisible();
 });
 test("ignores a compile result after the source is edited", async ({
   page,
 }) => {
+  let releaseCompile!: () => void;
+  const compileReleased = new Promise<void>((resolve) => {
+    releaseCompile = resolve;
+  });
+  let compileStarted!: () => void;
+  const compileRequested = new Promise<void>((resolve) => {
+    compileStarted = resolve;
+  });
+  await page.route("**/api/v1/projects/*/compile", async (route) => {
+    compileStarted();
+    await compileReleased;
+    await route.fulfill({ json: { valid: true, program, circuit, plan } });
+  });
   await page.goto("/");
-  await page.getByRole("button", { name: "编译", exact: true }).click();
+  await compileRequested;
   await page
     .getByRole("textbox", { name: "程序编辑器" })
     .fill(source + "\n# newer edit");
+  releaseCompile();
   await expect(page.getByText("代码已变化，请重新编译")).toBeVisible();
   await expect(page.getByRole("img", { name: "编译后的量子电路" })).toHaveCount(
     0,
   );
 });
-test("persists drafts and supports keyboard drawer dismissal", async ({
+test("persists drafts and supports keyboard source viewer dismissal", async ({
   page,
 }) => {
+  await page.route("**/api/v1/projects/project-circuit-demo", (route) =>
+    route.fulfill({
+      json: {
+        files: [
+          { path: "main.py", content: source },
+          { path: "helper.py", content: "# read-only helper" },
+        ],
+      },
+    }),
+  );
   await page.goto("/");
   await page
     .getByRole("textbox", { name: "程序编辑器" })
@@ -171,8 +198,11 @@ test("persists drafts and supports keyboard drawer dismissal", async ({
   await expect(page.getByRole("textbox", { name: "程序编辑器" })).toContainText(
     "# local draft",
   );
-  await page.getByRole("button", { name: "计算资源", exact: true }).click();
-  await expect(page.getByRole("dialog", { name: "计算资源" })).toBeVisible();
+  await page.getByRole("button", { name: "helper.py", exact: true }).click();
+  await page.getByRole("button", { name: "展开查看源码" }).click();
+  await expect(
+    page.getByRole("dialog", { name: "源码查看 helper.py" }),
+  ).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toHaveCount(0);
 });
@@ -266,7 +296,7 @@ test("plays only recorded trajectory frames and retains coordinates without WebG
     else return route.fallback();
     await route.fulfill({ json: payload });
   });
-  await page.goto("/?run=run-trajectory");
+  await page.goto("/results.html?run=run-trajectory");
   await expect(page.getByText("当前浏览器无法显示三维视图")).toBeVisible();
   await expect(page.getByText("不完整", { exact: true })).toBeVisible();
   await page.getByRole("slider", { name: "轨迹帧" }).focus();
