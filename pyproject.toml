@@ -5,7 +5,6 @@ description = "Unified Linux CPU simulation environment for QHAI framework and a
 requires-python = "==3.12.*"
 dependencies = [
     "h2o-hybrid-aimd",
-    "multi-h2o-aimd-v4",
     "pivotq[qpu]",
     "torch==2.13.0+cpu",
     "qiskit-aer>=0.17,<1",
@@ -28,7 +27,6 @@ required-environments = [
 
 [tool.uv.sources]
 h2o-hybrid-aimd = { path = "applications/h2o-hybrid-aimd", editable = true }
-multi-h2o-aimd-v4 = { path = "applications/multi-h2o-aimd-v4", editable = true }
 pivotq = { path = "packages/framework", editable = true }
 torch = { index = "pytorch-cpu" }
 

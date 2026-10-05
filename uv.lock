@@ -573,31 +573,6 @@ wheels = [
 ]
 
 [[package]]
-name = "multi-h2o-aimd-v4"
-version = "0.1.0"
-source = { editable = "applications/multi-h2o-aimd-v4" }
-dependencies = [
-    { name = "ase" },
-    { name = "h5py" },
-    { name = "numpy" },
-    { name = "psutil" },
-    { name = "qiskit" },
-    { name = "qiskit-aer" },
-    { name = "torch" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "ase", specifier = ">=3.29,<4" },
-    { name = "h5py", specifier = ">=3.14,<4" },
-    { name = "numpy", specifier = ">=2.5,<3" },
-    { name = "psutil", specifier = ">=7,<8" },
-    { name = "qiskit", specifier = ">=2.4,<3" },
-    { name = "qiskit-aer", specifier = ">=0.17,<1" },
-    { name = "torch", specifier = "==2.13.0+cpu" },
-]
-
-[[package]]
 name = "multidict"
 version = "6.7.1"
 source = { registry = "https://pypi.org/simple" }
@@ -930,7 +905,6 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "h2o-hybrid-aimd" },
-    { name = "multi-h2o-aimd-v4" },
     { name = "pivotq", extra = ["qpu"] },
     { name = "pyscf" },
     { name = "qiskit-aer" },
@@ -947,7 +921,6 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "h2o-hybrid-aimd", editable = "applications/h2o-hybrid-aimd" },
-    { name = "multi-h2o-aimd-v4", editable = "applications/multi-h2o-aimd-v4" },
     { name = "pivotq", extras = ["qpu"], editable = "packages/framework" },
     { name = "pyscf", specifier = "==2.14.0" },
     { name = "qiskit-aer", specifier = ">=0.17,<1" },

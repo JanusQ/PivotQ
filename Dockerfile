@@ -15,7 +15,6 @@ WORKDIR /app
 COPY pyproject.toml uv.lock .python-version ./
 COPY packages/ ./packages/
 COPY applications/h2o-hybrid-aimd/ ./applications/h2o-hybrid-aimd/
-COPY applications/multi-h2o-aimd-v4/ ./applications/multi-h2o-aimd-v4/
 RUN uv sync --locked --no-dev
 COPY dashboard/ ./dashboard/
 COPY --from=frontend /build/dist/ ./dashboard/frontend/dist/
