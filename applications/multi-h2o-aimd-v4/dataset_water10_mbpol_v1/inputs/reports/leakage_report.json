@@ -1,9 +1,0 @@
-{
-  "status": "passed",
-  "all_candidate_cross_lineage_near_duplicates": 0,
-  "cross_split_lineage_overlap": 0,
-  "threshold_rmsd_angstrom": 0.03,
-  "threshold_oo_rms_angstrom": 0.03,
-  "method": "complete sorted OO necessary prefilter; weighted graph molecular permutations; 1024 H exchanges; proper Kabsch all-atom alignment",
-  "within_lineage_duplicates_removed": 537
-}

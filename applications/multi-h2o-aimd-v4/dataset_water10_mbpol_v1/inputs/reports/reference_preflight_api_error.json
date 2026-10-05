@@ -1,7 +1,0 @@
-[
-  {
-    "attempt": 1,
-    "error": "AttributeError(\"module 'pyscf.data.radii' has no attribute 'BRAGG_RADII'\")",
-    "traceback": "Traceback (most recent call last):\n  File \"/home/hzhang/code/qhai-2026/applications/multi-h2o-aimd-v3/water10_wb97mv_tzvppd_v1/code/reference_pyscf.py\", line 64, in compute\n    mol,mf,r=make_reference(c,x,adir,overrides)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/hzhang/code/qhai-2026/applications/multi-h2o-aimd-v3/water10_wb97mv_tzvppd_v1/code/reference_pyscf.py\", line 33, in make_reference\n    grid.atomic_radii=radii.BRAGG_RADII\n                      ^^^^^^^^^^^^^^^^^\nAttributeError: module 'pyscf.data.radii' has no attribute 'BRAGG_RADII'\n"
-  }
-]

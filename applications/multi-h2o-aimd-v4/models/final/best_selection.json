@@ -1,7 +1,0 @@
-{
-  "epoch": 6,
-  "validation_rmse_ev": 0.39959581942629585,
-  "checkpoint": "best_trained.pkl",
-  "criterion": "minimum validation RMSE over completed trained epochs; ties retain earlier epoch",
-  "test_labels_accessed": false
-}
