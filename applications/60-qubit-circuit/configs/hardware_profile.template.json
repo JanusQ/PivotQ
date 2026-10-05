@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "n_qubits": 60,
+  "capability_status": "unconfirmed",
+  "mapping_version": null,
+  "physical_labels": null,
+  "coupling_edges": null,
+  "initial_layout": null,
+  "native_gates": [
+    "rx",
+    "rz",
+    "cz"
+  ],
+  "terminal_measurement": "server_z",
+  "result_format": "shot_table",
+  "shot_index_base": 0,
+  "max_depth": null,
+  "max_gates": null
+}

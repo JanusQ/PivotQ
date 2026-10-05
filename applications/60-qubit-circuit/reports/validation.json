@@ -1,0 +1,753 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "host": "user-System-Product-Name",
+  "python": "3.12.13 | packaged by conda-forge | (main, Mar  5 2026, 16:50:00) [GCC 14.3.0]",
+  "training_updates": 0,
+  "scientific_status": "not_validated",
+  "real_qpu_validated": false,
+  "semantic_structure": {
+    "shared_parameters": 48,
+    "classical_parameters": 9857,
+    "block_checks": [
+      {
+        "body": 1,
+        "feature": 0,
+        "structurally_different": true
+      },
+      {
+        "body": 1,
+        "feature": 1,
+        "structurally_different": true
+      },
+      {
+        "body": 1,
+        "feature": 2,
+        "structurally_different": true
+      },
+      {
+        "body": 2,
+        "feature": 0,
+        "structurally_different": true
+      },
+      {
+        "body": 2,
+        "feature": 1,
+        "structurally_different": true
+      },
+      {
+        "body": 2,
+        "feature": 2,
+        "structurally_different": true
+      },
+      {
+        "body": 2,
+        "feature": 3,
+        "structurally_different": true
+      },
+      {
+        "body": 2,
+        "feature": 4,
+        "structurally_different": true
+      },
+      {
+        "body": 2,
+        "feature": 5,
+        "structurally_different": true
+      },
+      {
+        "body": 2,
+        "feature": 6,
+        "structurally_different": true
+      },
+      {
+        "body": 2,
+        "feature": 7,
+        "structurally_different": true
+      },
+      {
+        "body": 2,
+        "feature": 8,
+        "structurally_different": true
+      },
+      {
+        "body": 2,
+        "feature": 9,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 0,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 1,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 2,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 3,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 4,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 5,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 6,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 7,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 8,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 9,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 10,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 11,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 12,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 13,
+        "structurally_different": true
+      },
+      {
+        "body": 3,
+        "feature": 14,
+        "structurally_different": true
+      }
+    ],
+    "order": "encoding1B2B3B_trainable1B2B3B",
+    "n_qubits": 60,
+    "terminal_features": 120,
+    "encoding_policy": "continuous_no_floor; bx/by share one orientation slot as v4 AIMD"
+  },
+  "pytest": {
+    "returncode": 0,
+    "stdout": ".........................................                                [100%]\n41 passed in 6.18s\n",
+    "stderr": ""
+  },
+  "mbx_label_audit": {
+    "energy_recompute_error_ev": 0.0,
+    "max_force_recompute_error_ev_per_angstrom": 0.0,
+    "force_finite_difference_error_ev_per_angstrom": 7.608939931250114e-09
+  },
+  "full_water20_checks": [
+    {
+      "sample_index": 0,
+      "sample_id": "w20_d29cca9e1faf218662102634",
+      "active_pairs": 15,
+      "active_triples": 6,
+      "logical_rotations": 1158,
+      "native_gates": 1410,
+      "native_depth": 473,
+      "max_observable_difference": 2.2870594307278225e-14,
+      "max_force_check_difference_ev_per_angstrom": 7.235425139029417e-07,
+      "energy_ev": -4.6232951426925055,
+      "net_force_ev_per_angstrom": [
+        2.0538239303702355e-08,
+        -1.0180481457844337e-09,
+        3.286143912539785e-09
+      ],
+      "execution_metadata": {
+        "backend": "cpu_exact_tensor_factors",
+        "dtype": "complex128",
+        "real_qpu": false,
+        "n_qubits": 60,
+        "all_qubits_retained": true,
+        "truncated": false,
+        "factor_qubits": [
+          [
+            0,
+            6,
+            9,
+            12,
+            15,
+            18,
+            21,
+            24,
+            33,
+            39,
+            42,
+            48,
+            51,
+            54,
+            57
+          ],
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ],
+          [
+            5
+          ],
+          [
+            7
+          ],
+          [
+            8
+          ],
+          [
+            10
+          ],
+          [
+            11
+          ],
+          [
+            13
+          ],
+          [
+            14
+          ],
+          [
+            16
+          ],
+          [
+            17
+          ],
+          [
+            19
+          ],
+          [
+            20
+          ],
+          [
+            22
+          ],
+          [
+            23
+          ],
+          [
+            25
+          ],
+          [
+            26
+          ],
+          [
+            27
+          ],
+          [
+            28
+          ],
+          [
+            29
+          ],
+          [
+            30
+          ],
+          [
+            31
+          ],
+          [
+            32
+          ],
+          [
+            34
+          ],
+          [
+            35
+          ],
+          [
+            36
+          ],
+          [
+            37
+          ],
+          [
+            38
+          ],
+          [
+            40
+          ],
+          [
+            41
+          ],
+          [
+            43
+          ],
+          [
+            44
+          ],
+          [
+            45
+          ],
+          [
+            46
+          ],
+          [
+            47
+          ],
+          [
+            49
+          ],
+          [
+            50
+          ],
+          [
+            52
+          ],
+          [
+            53
+          ],
+          [
+            55
+          ],
+          [
+            56
+          ],
+          [
+            58
+          ],
+          [
+            59
+          ]
+        ],
+        "max_factor_qubits": 15
+      }
+    },
+    {
+      "sample_index": 1500,
+      "sample_id": "w20_41c4e2fb916946f50366b962",
+      "active_pairs": 15,
+      "active_triples": 4,
+      "logical_rotations": 1052,
+      "native_gates": 1265,
+      "native_depth": 405,
+      "max_observable_difference": 1.0325074129013956e-14,
+      "max_force_check_difference_ev_per_angstrom": 1.36097849967598e-06,
+      "energy_ev": -4.456540530790643,
+      "net_force_ev_per_angstrom": [
+        -1.451523549272915e-08,
+        2.4324739555936503e-08,
+        3.090591338406057e-09
+      ],
+      "execution_metadata": {
+        "backend": "cpu_exact_tensor_factors",
+        "dtype": "complex128",
+        "real_qpu": false,
+        "n_qubits": 60,
+        "all_qubits_retained": true,
+        "truncated": false,
+        "factor_qubits": [
+          [
+            0,
+            3,
+            15,
+            18,
+            21,
+            30,
+            39,
+            54
+          ],
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            4
+          ],
+          [
+            5
+          ],
+          [
+            6,
+            9,
+            12,
+            24,
+            33,
+            36,
+            42,
+            51
+          ],
+          [
+            7
+          ],
+          [
+            8
+          ],
+          [
+            10
+          ],
+          [
+            11
+          ],
+          [
+            13
+          ],
+          [
+            14
+          ],
+          [
+            16
+          ],
+          [
+            17
+          ],
+          [
+            19
+          ],
+          [
+            20
+          ],
+          [
+            22
+          ],
+          [
+            23
+          ],
+          [
+            25
+          ],
+          [
+            26
+          ],
+          [
+            27
+          ],
+          [
+            28
+          ],
+          [
+            29
+          ],
+          [
+            31
+          ],
+          [
+            32
+          ],
+          [
+            34
+          ],
+          [
+            35
+          ],
+          [
+            37
+          ],
+          [
+            38
+          ],
+          [
+            40
+          ],
+          [
+            41
+          ],
+          [
+            43
+          ],
+          [
+            44
+          ],
+          [
+            45
+          ],
+          [
+            46
+          ],
+          [
+            47
+          ],
+          [
+            48
+          ],
+          [
+            49
+          ],
+          [
+            50
+          ],
+          [
+            52
+          ],
+          [
+            53
+          ],
+          [
+            55
+          ],
+          [
+            56
+          ],
+          [
+            57
+          ],
+          [
+            58
+          ],
+          [
+            59
+          ]
+        ],
+        "max_factor_qubits": 8
+      }
+    },
+    {
+      "sample_index": 3499,
+      "sample_id": "w20_4d5833c800f9f847f2b71fa9",
+      "active_pairs": 16,
+      "active_triples": 13,
+      "logical_rotations": 1569,
+      "native_gates": 1970,
+      "native_depth": 972,
+      "max_observable_difference": 2.7977620220553945e-14,
+      "max_force_check_difference_ev_per_angstrom": 6.124754829528456e-06,
+      "energy_ev": -4.571069904182552,
+      "net_force_ev_per_angstrom": [
+        6.89315804436319e-09,
+        -3.130059436640131e-08,
+        5.841693795360925e-09
+      ],
+      "execution_metadata": {
+        "backend": "cpu_exact_tensor_factors",
+        "dtype": "complex128",
+        "real_qpu": false,
+        "n_qubits": 60,
+        "all_qubits_retained": true,
+        "truncated": false,
+        "factor_qubits": [
+          [
+            0,
+            3,
+            6,
+            9,
+            12,
+            15,
+            21,
+            24,
+            33,
+            36,
+            42,
+            45,
+            48,
+            51,
+            57
+          ],
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            4
+          ],
+          [
+            5
+          ],
+          [
+            7
+          ],
+          [
+            8
+          ],
+          [
+            10
+          ],
+          [
+            11
+          ],
+          [
+            13
+          ],
+          [
+            14
+          ],
+          [
+            16
+          ],
+          [
+            17
+          ],
+          [
+            18,
+            54
+          ],
+          [
+            19
+          ],
+          [
+            20
+          ],
+          [
+            22
+          ],
+          [
+            23
+          ],
+          [
+            25
+          ],
+          [
+            26
+          ],
+          [
+            27
+          ],
+          [
+            28
+          ],
+          [
+            29
+          ],
+          [
+            30
+          ],
+          [
+            31
+          ],
+          [
+            32
+          ],
+          [
+            34
+          ],
+          [
+            35
+          ],
+          [
+            37
+          ],
+          [
+            38
+          ],
+          [
+            39
+          ],
+          [
+            40
+          ],
+          [
+            41
+          ],
+          [
+            43
+          ],
+          [
+            44
+          ],
+          [
+            46
+          ],
+          [
+            47
+          ],
+          [
+            49
+          ],
+          [
+            50
+          ],
+          [
+            52
+          ],
+          [
+            53
+          ],
+          [
+            55
+          ],
+          [
+            56
+          ],
+          [
+            58
+          ],
+          [
+            59
+          ]
+        ],
+        "max_factor_qubits": 15
+      }
+    }
+  ],
+  "versions": {
+    "numpy": "2.5.1",
+    "qiskit": "2.4.2",
+    "ase": "3.29.0",
+    "h5py": "3.16.0",
+    "httpx": "0.28.1",
+    "pytest": "9.1.1"
+  },
+  "model_status": "initialized_untrained",
+  "model_sha256": "4512c4e5c37ed6b00c7ae9bf2b050b2a6d3565f52fb7150d213cf4908379e226",
+  "wall_seconds": 12.906798555050045,
+  "local_crosscheck": {
+    "host": "zhanghaodeMacBook-Air.local",
+    "python": "3.11.15 | packaged by conda-forge | (main, Jun 11 2026, 03:29:05) [Clang 19.1.7 ]",
+    "status": "passed",
+    "versions": {
+      "numpy": "2.4.6",
+      "qiskit": "2.5.2",
+      "ase": "3.29.0",
+      "h5py": "3.16.0",
+      "httpx": "0.28.1",
+      "pytest": "9.1.1"
+    },
+    "pytest": {
+      "returncode": 0,
+      "stdout": ".........................................                                [100%]\n41 passed in 5.50s\n",
+      "stderr": ""
+    },
+    "wall_seconds": 10.39061245904304,
+    "max_local_server_energy_difference_ev": 0.0,
+    "max_native_observable_difference": 2.90878432451791e-14
+  },
+  "task_acceptance": {
+    "application_design_complete": true,
+    "dataset_regenerated": true,
+    "colored_logical_svg_exported": true,
+    "native_transpile_svg_exported": true,
+    "real_device_protocol_implemented": true,
+    "offline_full_application_http_roundtrip_passed": true,
+    "server_cpu_aimd_and_ray_passed": true,
+    "real_qpu_test_required": false,
+    "training_performed": false,
+    "deployment_requires_confirmed_60_qubit_profile": true
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "host": "user-System-Product-Name",
+  "required_qubits": 60,
+  "submitted_jobs": 0,
+  "real_qpu_validated": false,
+  "checks": {
+    "profile": "Missing 60 distinct confirmed physical readout labels",
+    "http_health": "ConnectTimeout"
+  },
+  "ready": false,
+  "remaining_hardware_evidence": [
+    "60-qubit connected topology and native gate/depth budgets",
+    "register-slot/readout mapping and per-wire excitation probes",
+    "joint-readout correlation probe",
+    "successful execution of the actual global application circuit"
+  ],
+  "current_task_requires_physical_qpu_test": false,
+  "status": "not_required_for_current_task",
+  "captured_before_user_waived_connection_testing": true
+}

@@ -1,0 +1,583 @@
+{
+  "schema_version": 1,
+  "server": "109-32cpu",
+  "remote_application": "/home/hzhang/code/PivotQ/applications/60-qubit-circuit",
+  "cpu_aimd": {
+    "status": "succeeded",
+    "backend": "cpu",
+    "mode": "aimd",
+    "sample_id": "w20_d29cca9e1faf218662102634",
+    "host": "user-System-Product-Name",
+    "n_atoms": 60,
+    "n_qubits": 60,
+    "n_features": 120,
+    "model_status": "initialized_untrained",
+    "training_updates": 0,
+    "scientific_status": "not_validated",
+    "force_method": "adjoint",
+    "force_geometry_derivative": "central_difference_of_continuous_classical_encoder",
+    "geometry_sha256": "d29cca9e1faf2186621026341523455e8c55c15e0eeae3563894b06aa1223b47",
+    "model_sha256": "4512c4e5c37ed6b00c7ae9bf2b050b2a6d3565f52fb7150d213cf4908379e226",
+    "steps": 1,
+    "dt_fs": 0.1,
+    "frames": 2,
+    "initial_energy_ev": -4.6232951426925055,
+    "final_energy_ev": -4.661096074079271,
+    "all_frames_finite": true,
+    "quantum_evaluations": 2,
+    "execution_metadata": {
+      "backend": "cpu_exact_tensor_factors",
+      "dtype": "complex128",
+      "real_qpu": false,
+      "n_qubits": 60,
+      "all_qubits_retained": true,
+      "truncated": false,
+      "factor_qubits": [
+        [
+          0,
+          6,
+          9,
+          12,
+          15,
+          18,
+          21,
+          24,
+          33,
+          39,
+          42,
+          48,
+          51,
+          54,
+          57
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5
+        ],
+        [
+          7
+        ],
+        [
+          8
+        ],
+        [
+          10
+        ],
+        [
+          11
+        ],
+        [
+          13
+        ],
+        [
+          14
+        ],
+        [
+          16
+        ],
+        [
+          17
+        ],
+        [
+          19
+        ],
+        [
+          20
+        ],
+        [
+          22
+        ],
+        [
+          23
+        ],
+        [
+          25
+        ],
+        [
+          26
+        ],
+        [
+          27
+        ],
+        [
+          28
+        ],
+        [
+          29
+        ],
+        [
+          30
+        ],
+        [
+          31
+        ],
+        [
+          32
+        ],
+        [
+          34
+        ],
+        [
+          35
+        ],
+        [
+          36
+        ],
+        [
+          37
+        ],
+        [
+          38
+        ],
+        [
+          40
+        ],
+        [
+          41
+        ],
+        [
+          43
+        ],
+        [
+          44
+        ],
+        [
+          45
+        ],
+        [
+          46
+        ],
+        [
+          47
+        ],
+        [
+          49
+        ],
+        [
+          50
+        ],
+        [
+          52
+        ],
+        [
+          53
+        ],
+        [
+          55
+        ],
+        [
+          56
+        ],
+        [
+          58
+        ],
+        [
+          59
+        ]
+      ],
+      "max_factor_qubits": 15
+    },
+    "wall_seconds": 2.192085023969412,
+    "peak_rss_platform_units": 150000
+  },
+  "ray_energy": {
+    "backend": "cpu",
+    "training_updates": 0,
+    "scientific_status": "not_validated",
+    "namespace": "water20-81465817e04a4348b4c9fe8d64ccd423",
+    "energy_ev": -4.6232951426925055,
+    "second_energy_ev": -4.6232951426925055,
+    "metadata": {
+      "energy_ev": -4.6232951426925055,
+      "classical_calls": 2,
+      "quantum_metadata": {
+        "backend": "cpu_exact_tensor_factors",
+        "dtype": "complex128",
+        "real_qpu": false,
+        "n_qubits": 60,
+        "all_qubits_retained": true,
+        "truncated": false,
+        "factor_qubits": [
+          [
+            0,
+            6,
+            9,
+            12,
+            15,
+            18,
+            21,
+            24,
+            33,
+            39,
+            42,
+            48,
+            51,
+            54,
+            57
+          ],
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ],
+          [
+            5
+          ],
+          [
+            7
+          ],
+          [
+            8
+          ],
+          [
+            10
+          ],
+          [
+            11
+          ],
+          [
+            13
+          ],
+          [
+            14
+          ],
+          [
+            16
+          ],
+          [
+            17
+          ],
+          [
+            19
+          ],
+          [
+            20
+          ],
+          [
+            22
+          ],
+          [
+            23
+          ],
+          [
+            25
+          ],
+          [
+            26
+          ],
+          [
+            27
+          ],
+          [
+            28
+          ],
+          [
+            29
+          ],
+          [
+            30
+          ],
+          [
+            31
+          ],
+          [
+            32
+          ],
+          [
+            34
+          ],
+          [
+            35
+          ],
+          [
+            36
+          ],
+          [
+            37
+          ],
+          [
+            38
+          ],
+          [
+            40
+          ],
+          [
+            41
+          ],
+          [
+            43
+          ],
+          [
+            44
+          ],
+          [
+            45
+          ],
+          [
+            46
+          ],
+          [
+            47
+          ],
+          [
+            49
+          ],
+          [
+            50
+          ],
+          [
+            52
+          ],
+          [
+            53
+          ],
+          [
+            55
+          ],
+          [
+            56
+          ],
+          [
+            58
+          ],
+          [
+            59
+          ]
+        ],
+        "max_factor_qubits": 15
+      },
+      "model_sha256": "4512c4e5c37ed6b00c7ae9bf2b050b2a6d3565f52fb7150d213cf4908379e226",
+      "scientific_status": "not_validated",
+      "training_updates": 0
+    },
+    "execution_report": {
+      "simulation_enabled": false,
+      "selections": []
+    },
+    "geometry_sha256": "d29cca9e1faf2186621026341523455e8c55c15e0eeae3563894b06aa1223b47",
+    "status": "succeeded",
+    "wall_seconds": 1.9329665061086416,
+    "executor_closed": true
+  },
+  "trace_record_count": 4,
+  "trace_components": [
+    "water20.quantum",
+    "water20.classical",
+    "water20.quantum",
+    "water20.classical"
+  ],
+  "independent_cpu_ray_energy_difference_ev": 0.0,
+  "same_model_sha256": true,
+  "same_geometry_sha256": true,
+  "actual_ray_execution": true,
+  "real_qpu_test_required": false,
+  "training_updates": 0,
+  "scientific_status": "not_validated",
+  "artifact_hashes": {
+    "outputs/server-aimd/summary.json": "c5fe5c73927d94e0bd912975ad199224d346d0222409f994e043139584fa340d",
+    "outputs/server-aimd/input.json": "d4d5abb1cebb7c5358d416e67150c14f85d383415556d49f53c608157a41ed0d",
+    "outputs/server-aimd/trajectory.extxyz": "c38b7e7fb4019d967a1f754d38646676c2073e417649ef0e135b79a21c521ce1",
+    "outputs/server-fusion-verified/summary.json": "b222d37d43d100cf208f73177cdf0fce136ad6983222ab52abe3b01de1e814e9",
+    "outputs/server-fusion-verified/framework_trace.jsonl": "bb912d38c82b7181d49f833ca0bb0439f03c11320ec31b2120b7d30d5e451599",
+    "outputs/server-stress/summary.json": "ce49a4ee134dc184859ec4b1d9a6f1974712a39d529f7ba6cd64d338b0dead6b",
+    "outputs/server-stress/input.json": "b7decae110ba229c20aef623470371ffe9e908118f9e6a1cab7238f13866076c"
+  },
+  "largest_connected_training_geometry": {
+    "sample_index": 2979,
+    "selection": "largest pair-cutoff connected component over 3500 training geometries; maximum size 19",
+    "run": {
+      "status": "succeeded",
+      "backend": "cpu",
+      "mode": "energy",
+      "sample_id": "w20_31b1e72b069014ea0d2a2a5d",
+      "host": "user-System-Product-Name",
+      "n_atoms": 60,
+      "n_qubits": 60,
+      "n_features": 120,
+      "model_status": "initialized_untrained",
+      "training_updates": 0,
+      "scientific_status": "not_validated",
+      "force_method": "adjoint",
+      "force_geometry_derivative": "central_difference_of_continuous_classical_encoder",
+      "geometry_sha256": "31b1e72b069014ea0d2a2a5dfd2fb932e62da82c21deac2bc564d372c64e5281",
+      "model_sha256": "4512c4e5c37ed6b00c7ae9bf2b050b2a6d3565f52fb7150d213cf4908379e226",
+      "energy_ev": -4.014482447181611,
+      "quantum_evaluations": 1,
+      "execution_metadata": {
+        "backend": "cpu_exact_tensor_factors",
+        "dtype": "complex128",
+        "real_qpu": false,
+        "n_qubits": 60,
+        "all_qubits_retained": true,
+        "truncated": false,
+        "factor_qubits": [
+          [
+            0,
+            3,
+            6,
+            9,
+            12,
+            15,
+            18,
+            21,
+            24,
+            27,
+            30,
+            33,
+            36,
+            39,
+            45,
+            48,
+            51,
+            54,
+            57
+          ],
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            4
+          ],
+          [
+            5
+          ],
+          [
+            7
+          ],
+          [
+            8
+          ],
+          [
+            10
+          ],
+          [
+            11
+          ],
+          [
+            13
+          ],
+          [
+            14
+          ],
+          [
+            16
+          ],
+          [
+            17
+          ],
+          [
+            19
+          ],
+          [
+            20
+          ],
+          [
+            22
+          ],
+          [
+            23
+          ],
+          [
+            25
+          ],
+          [
+            26
+          ],
+          [
+            28
+          ],
+          [
+            29
+          ],
+          [
+            31
+          ],
+          [
+            32
+          ],
+          [
+            34
+          ],
+          [
+            35
+          ],
+          [
+            37
+          ],
+          [
+            38
+          ],
+          [
+            40
+          ],
+          [
+            41
+          ],
+          [
+            42
+          ],
+          [
+            43
+          ],
+          [
+            44
+          ],
+          [
+            46
+          ],
+          [
+            47
+          ],
+          [
+            49
+          ],
+          [
+            50
+          ],
+          [
+            52
+          ],
+          [
+            53
+          ],
+          [
+            55
+          ],
+          [
+            56
+          ],
+          [
+            58
+          ],
+          [
+            59
+          ]
+        ],
+        "max_factor_qubits": 19
+      },
+      "wall_seconds": 4.158652337966487,
+      "peak_rss_platform_units": 225280
+    }
+  }
+}

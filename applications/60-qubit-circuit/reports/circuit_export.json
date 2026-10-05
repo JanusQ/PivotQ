@@ -1,0 +1,327 @@
+{
+  "sample_id": "w20_d29cca9e1faf218662102634",
+  "logical": {
+    "panels": 82,
+    "primitive_gates": 1644,
+    "width": 3720,
+    "height": 15210
+  },
+  "transpiled": {
+    "panels": 1,
+    "layout": "continuous_horizontal_full_60_wire_circuit",
+    "displayed_qubits": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59
+    ],
+    "gates": 1890,
+    "displayed_gates": 1890,
+    "columns": 735,
+    "displayed_columns": 735,
+    "depth": 473,
+    "width": 47955,
+    "height": 1834,
+    "parameter_representation": "symbolic_theta_coefficients_hidden",
+    "compilation_scope": "symbolic_native_basis_only_no_physical_topology"
+  },
+  "active_groups": {
+    "1": [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5
+      ],
+      [
+        6
+      ],
+      [
+        7
+      ],
+      [
+        8
+      ],
+      [
+        9
+      ],
+      [
+        10
+      ],
+      [
+        11
+      ],
+      [
+        12
+      ],
+      [
+        13
+      ],
+      [
+        14
+      ],
+      [
+        15
+      ],
+      [
+        16
+      ],
+      [
+        17
+      ],
+      [
+        18
+      ],
+      [
+        19
+      ]
+    ],
+    "2": [
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        2,
+        11
+      ],
+      [
+        3,
+        8
+      ],
+      [
+        3,
+        13
+      ],
+      [
+        3,
+        16
+      ],
+      [
+        4,
+        14
+      ],
+      [
+        4,
+        17
+      ],
+      [
+        5,
+        13
+      ],
+      [
+        6,
+        17
+      ],
+      [
+        6,
+        18
+      ],
+      [
+        7,
+        19
+      ],
+      [
+        8,
+        19
+      ],
+      [
+        11,
+        19
+      ]
+    ],
+    "3": [
+      [
+        0,
+        4,
+        5
+      ],
+      [
+        0,
+        4,
+        17
+      ],
+      [
+        0,
+        5,
+        13
+      ],
+      [
+        3,
+        5,
+        13
+      ],
+      [
+        3,
+        13,
+        16
+      ],
+      [
+        7,
+        8,
+        19
+      ]
+    ]
+  },
+  "logical_rotations": 1158,
+  "shared_parameters": 48,
+  "feature_count": 120,
+  "parameter_ids": {
+    "\u03b81": "b1_f0_g0",
+    "\u03b82": "b1_f0_g1",
+    "\u03b83": "b1_f1_g0",
+    "\u03b84": "b1_f1_g1",
+    "\u03b85": "b1_f2_g0",
+    "\u03b86": "b1_f2_g1",
+    "\u03b87": "b2_f0_g0",
+    "\u03b88": "b2_f0_g1",
+    "\u03b89": "b2_f0_g2",
+    "\u03b810": "b2_f1_g0",
+    "\u03b811": "b2_f2_g0",
+    "\u03b812": "b2_f3_g0",
+    "\u03b813": "b2_f3_g1",
+    "\u03b814": "b2_f3_g2",
+    "\u03b815": "b2_f4_g0",
+    "\u03b816": "b2_f5_g0",
+    "\u03b817": "b2_f6_g0",
+    "\u03b818": "b2_f6_g1",
+    "\u03b819": "b2_f6_g2",
+    "\u03b820": "b2_f7_g0",
+    "\u03b821": "b2_f8_g0",
+    "\u03b822": "b2_f9_g0",
+    "\u03b823": "b2_f9_g1",
+    "\u03b824": "b2_f9_g2",
+    "\u03b825": "b3_f0_g0",
+    "\u03b826": "b3_f0_g1",
+    "\u03b827": "b3_f0_g2",
+    "\u03b828": "b3_f1_g0",
+    "\u03b829": "b3_f2_g0",
+    "\u03b830": "b3_f3_g0",
+    "\u03b831": "b3_f3_g1",
+    "\u03b832": "b3_f4_g0",
+    "\u03b833": "b3_f4_g1",
+    "\u03b834": "b3_f5_g0",
+    "\u03b835": "b3_f6_g0",
+    "\u03b836": "b3_f6_g1",
+    "\u03b837": "b3_f7_g0",
+    "\u03b838": "b3_f8_g0",
+    "\u03b839": "b3_f8_g1",
+    "\u03b840": "b3_f9_g0",
+    "\u03b841": "b3_f9_g1",
+    "\u03b842": "b3_f10_g0",
+    "\u03b843": "b3_f11_g0",
+    "\u03b844": "b3_f12_g0",
+    "\u03b845": "b3_f12_g1",
+    "\u03b846": "b3_f12_g2",
+    "\u03b847": "b3_f13_g0",
+    "\u03b848": "b3_f14_g0"
+  },
+  "execution_qasm": {
+    "gates": 1410,
+    "depth": 473,
+    "parameter_representation": "bound_numeric"
+  },
+  "initialized_untrained": true,
+  "training_updates": 0,
+  "real_qpu_validated": false,
+  "circuit_config_sha256": "65bd5e1ae1c4ef1cb9c272aff1854b8378ceb83bc9f71c700b5805cd0779d1fd",
+  "artifact_hashes": {
+    "20 \u5206\u5b50\u7535\u8def\u5f69\u8272\u903b\u8f91\u56fe.svg": "a7bd45fa193ae7a2e9942c0ab917e6d811aa76468f759bd4695747e1d232225c",
+    "20 \u5206\u5b50\u7535\u8deftranspile\u56fe.svg": "ee3e8ae472cfb7712fc72fc0f41e1fc2bbd6bd524d82064f753d10ba31657fb6"
+  },
+  "figure_qa": {
+    "svg_parse_passed": true,
+    "displayed_wire_labels": 60,
+    "layout": "single_horizontal_row",
+    "trainable_parameters": {
+      "20 \u5206\u5b50\u7535\u8def\u5f69\u8272\u903b\u8f91\u56fe.svg": {
+        "symbols": 48,
+        "theta_labeled_rotations": 534,
+        "trainable_numeric_angles_hidden": true
+      },
+      "20 \u5206\u5b50\u7535\u8deftranspile\u56fe.svg": {
+        "symbols": 48,
+        "theta_labeled_rotations": 534,
+        "trainable_numeric_angles_hidden": true
+      }
+    },
+    "symbolic_binding_max_feature_error": 1.1102230246251565e-15,
+    "all_gates_accounted_for": true
+  }
+}

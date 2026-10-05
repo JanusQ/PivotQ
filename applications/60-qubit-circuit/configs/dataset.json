@@ -1,0 +1,38 @@
+{
+  "seed": 20261004,
+  "n_groups": 50,
+  "frames_per_group": 100,
+  "workers": 8,
+  "minimize_steps": 150,
+  "warmup_steps": 80,
+  "stride_steps": 4,
+  "dt_fs": 0.15,
+  "group_splits": {
+    "train": 35,
+    "validation": 5,
+    "test_id": 5,
+    "test_trajectory": 3,
+    "test_ood": 2
+  },
+  "temperatures_K": [
+    200,
+    300,
+    450
+  ],
+  "mbx_settings": {
+    "MBX": {
+      "box": [],
+      "realspace_cutoff": 100.0,
+      "twobody_cutoff": 100.0,
+      "threebody_cutoff": 7.0,
+      "dipole_tolerance": 1e-14,
+      "dipole_max_it": 500,
+      "dipole_method": "cg",
+      "alpha_ewald_elec": 0.0,
+      "alpha_ewald_disp": 0.0,
+      "ignore_1b_poly": [],
+      "ignore_2b_poly": [],
+      "ignore_3b_poly": []
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "host": "109-32cpu",
+  "remote_application": "/home/hzhang/code/PivotQ/applications/60-qubit-circuit",
+  "local_application": "/Users/zhanghao/code/PivotQ/applications/60-qubit-circuit",
+  "mode": "push",
+  "identical": true,
+  "file_count": 55,
+  "persistent_bytes": 15664788,
+  "aggregate_sha256": "16bdb388072c19d1ee0f53201e09a3867f0752e4122b8d4766b663f38a658002",
+  "differences": [],
+  "excluded_control_file": "reports/synchronization.json"
+}

@@ -1,0 +1,40 @@
+{
+  "source_thread": "codex://threads/01a10263-1211-7c31-b562-4fce16fef16f",
+  "handoff_root": "/Users/zhanghao/MyFile/02-组会记录/26-9/发布会项目图片/005 真机接口示例",
+  "handoff_files": {
+    "README_FIRST.md": "0d5a206b13cce9e9fa93fedaab9903f3e7f1c2152181a7096f806c014e20c405",
+    "handoff/01_AI_MIGRATION_GUIDE_ZH.md": "658c0d5ed536e19ff7836d31efe2fca9f48415a88452418e8708c23ea1b6bbc0",
+    "handoff/02_INTERFACE_AND_SOURCE_MAP.md": "9ec8f6163bfea47c66a626b84d86a88ff298c9c964d47c316a471d987b828e91",
+    "handoff/03_PROMPT_FOR_TARGET_AI.md": "4e6db68744c98fd4dd9699c3f80ab8fb488a88e9993eadd44e6eac529da5ed2a",
+    "handoff/04_DEPENDENCIES_AND_VALIDATION.md": "da3e7103cde8f747d12975825be37f5de9b532965618c640768a83169d50e61a",
+    "project/framework/src/ray_quantum/qpu_integration/device_adapter.py": "77e116ab6ffaadd9dc3d977dd5f82a92b35739af77328de9b0ce4fe9f88597f1",
+    "project/framework/src/ray_quantum/qpu_integration/parallel_shots.py": "4f753443f4fe42e4b7179dc4297423d93f75b3666973377071b150d201544ede",
+    "project/framework/src/ray_quantum/qpu_integration/qasm3_export.py": "9f588ccc838c85ca506ade3b57a0b136cbd78f5a8bcb9bcf6ba6604ef9435144",
+    "project/artifacts/parallel-qpu-wire-probe-20261002/summary.json": "47c06241a58527ff90d55dcb67d403c52681eaa5e9b09c6325d51c4bdacb3243"
+  },
+  "v4_files": {
+    "models/final/best_model.json": "f1aed05637583741c025f5d667d20586c3b50e303e4d46325e6cc8a498ba12e1",
+    "water10_v4/dense_force/geometry.py": "fa327831a53d30de7f09d15ed19f7d67d10950ba4025d022960e13218b4d6320",
+    "water10_v4/circuit.py": "d2db8ece534ead8f4cbb6c52f7a81229f7f7b240c680957fbcbb1a66c42339e2",
+    "water10_v4/integration/fusion_framework/BRIDGE.md": "94fbe962e95224edfd5aa5f91dba83a9750768ec4f9465ed91218940a55a7501",
+    "融合框架与性能模拟器对接.md": "bd2b504418ed994acf5fa011629c96a9225594764612a07b193090610f7739b6",
+    "文档/001-ten_water_30qubit_circuit_codex.md": "e466763efa8e4cf139838a1a65b6e8a921f2f3bdbb2428734b6a2bba8721563c",
+    "文档/10 分子电路彩色逻辑图.svg": "38bae31df131b414cfc01f0958088fedc6f1a4bfc1f829afaffef31989961396",
+    "文档/10 分子电路transpile图.svg": "7c179b9bccbb7000891e803e46c85d857e2e31c4aff55e6d3bd6dac464dc6415"
+  },
+  "runtime_reads_source_projects": false,
+  "weights_reused": false,
+  "training_updates": 0,
+  "sources_unchanged": true,
+  "protocol_reference": "Actual device_adapter HTTP envelope and parallel_shots shot columns; generalized global 60-wire decoder",
+  "hardware_tests_requested": false,
+  "latest_user_instruction": "你现在不用连接真机测试",
+  "reliable_web_sources": [
+    "https://github.com/paesanilab/MBX",
+    "https://quantum.cloud.ibm.com/docs/en/api/qiskit/qasm3",
+    "https://qiskit.qotlabs.org/docs/api/qiskit/qiskit.transpiler.TranspileLayout"
+  ],
+  "mbx_associated_source_archive_sha256": "10e245d5a6518ccba5a1ce946491966faa34211df590be065aca22a480917da8",
+  "mbx_associated_source_configure_version": "1.4.0",
+  "mbx_binary_upstream_commit": "not_recovered; exact binary hashes in dataset manifest"
+}

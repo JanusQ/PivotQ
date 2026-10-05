@@ -1,0 +1,948 @@
+{
+  "schema_version": 1,
+  "n_molecules": 20,
+  "n_qubits": 60,
+  "encoding_version": "centered_bisector_xyz_no_floor_v1",
+  "templates": {
+    "encoding": {
+      "1": [
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "X",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "Y",
+            "sites": [
+              2
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              2
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "Z",
+            "sites": [
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ]
+      ],
+      "2": [
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "X",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "XZ",
+            "sites": [
+              0,
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              2
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "Y",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "XZ",
+            "sites": [
+              0,
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              5
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "Y",
+            "sites": [
+              4
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "XZ",
+            "sites": [
+              3,
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              4
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              5
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "X",
+            "sites": [
+              4
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "XZ",
+            "sites": [
+              0,
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ]
+      ],
+      "3": [
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "X",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "XZZ",
+            "sites": [
+              0,
+              3,
+              6
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              2
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "Y",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "XZZ",
+            "sites": [
+              3,
+              0,
+              6
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              5
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "Y",
+            "sites": [
+              4
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              4
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              5
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "XZZ",
+            "sites": [
+              6,
+              0,
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "X",
+            "sites": [
+              4
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              7
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              8
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              6
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "X",
+            "sites": [
+              7
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          },
+          {
+            "axis": "XZZ",
+            "sites": [
+              0,
+              3,
+              6
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              7
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              8
+            ],
+            "origin": "heuristic",
+            "scale": 1.0
+          }
+        ]
+      ]
+    },
+    "trainable": {
+      "1": [
+        [
+          {
+            "axis": "X",
+            "sites": [
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "Y",
+            "sites": [
+              2
+            ],
+            "origin": "heuristic",
+            "scale": 0.23
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "Z",
+            "sites": [
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 0.23
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              2
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "Y",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 0.23
+          }
+        ]
+      ],
+      "2": [
+        [
+          {
+            "axis": "X",
+            "sites": [
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "Y",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 0.23
+          },
+          {
+            "axis": "YZ",
+            "sites": [
+              3,
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 0.28
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              2
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "X",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 0.23
+          },
+          {
+            "axis": "YZ",
+            "sites": [
+              3,
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 0.28
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              5
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "X",
+            "sites": [
+              4
+            ],
+            "origin": "heuristic",
+            "scale": 0.23
+          },
+          {
+            "axis": "YZ",
+            "sites": [
+              0,
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 0.28
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              4
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              5
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "Y",
+            "sites": [
+              4
+            ],
+            "origin": "heuristic",
+            "scale": 0.23
+          },
+          {
+            "axis": "YZ",
+            "sites": [
+              3,
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 0.28
+          }
+        ]
+      ],
+      "3": [
+        [
+          {
+            "axis": "X",
+            "sites": [
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "Y",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 0.23
+          },
+          {
+            "axis": "YZZ",
+            "sites": [
+              3,
+              0,
+              6
+            ],
+            "origin": "heuristic",
+            "scale": 0.28
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              2
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              0
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "X",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 0.23
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              1
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "YZZ",
+            "sites": [
+              6,
+              0,
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 0.28
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              5
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "X",
+            "sites": [
+              4
+            ],
+            "origin": "heuristic",
+            "scale": 0.23
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              4
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              5
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "YZZ",
+            "sites": [
+              0,
+              3,
+              6
+            ],
+            "origin": "heuristic",
+            "scale": 0.28
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              3
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "Y",
+            "sites": [
+              4
+            ],
+            "origin": "heuristic",
+            "scale": 0.23
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              7
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              8
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              6
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          },
+          {
+            "axis": "Y",
+            "sites": [
+              7
+            ],
+            "origin": "heuristic",
+            "scale": 0.23
+          },
+          {
+            "axis": "YZZ",
+            "sites": [
+              3,
+              0,
+              6
+            ],
+            "origin": "heuristic",
+            "scale": 0.28
+          }
+        ],
+        [
+          {
+            "axis": "Y",
+            "sites": [
+              7
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ],
+        [
+          {
+            "axis": "X",
+            "sites": [
+              8
+            ],
+            "origin": "heuristic",
+            "scale": 0.55
+          }
+        ]
+      ]
+    }
+  },
+  "radii": {
+    "pair_radii": [
+      2.575886559081984,
+      2.925886559081984
+    ],
+    "triple_radii": [
+      2.5315025148677117,
+      2.8315025148677115
+    ]
+  },
+  "shared_parameters": 48,
+  "feature_order": "X0..X59,Z0..Z59",
+  "widths": [
+    120,
+    64,
+    32,
+    1
+  ],
+  "source_template_sha256": "f1aed05637583741c025f5d667d20586c3b50e303e4d46325e6cc8a498ba12e1",
+  "source_template": "multi-h2o-aimd-v4 final epoch 6 structure only; no weights reused"
+}

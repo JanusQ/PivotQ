@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "water20-60qubit-aimd"
+version = "0.1.0"
+description = "Inference-only twenty-water AIMD circuit and real-device HTTP adapter"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "numpy>=2,<3",
+    "qiskit>=2.4,<3",
+    "h5py>=3.10,<4",
+    "ase>=3.26,<4",
+    "httpx>=0.28,<1",
+    "scipy>=1.13,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "qiskit-qasm3-import>=0.6,<1"]
+figures = ["cairosvg>=2.7,<3"]
+fusion = ["ray>=2.31,<3"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["water20*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

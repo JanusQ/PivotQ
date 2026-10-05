@@ -1,0 +1,21 @@
+{
+  "oh_mean": 0.9669554248715452,
+  "oh_scale": 0.025342112741933945,
+  "oxygen_mean": [
+    -0.001274095164716945,
+    -0.001062857931254096,
+    0.0009178256687133606
+  ],
+  "oxygen_scale": [
+    2.183714157131469,
+    2.200510532323619,
+    2.1871214386149127
+  ],
+  "energy_mean_ev": -4.421420778257406,
+  "energy_scale_ev": 0.6486332301054116,
+  "fit_split": "train",
+  "train_count": 3500,
+  "train_ids_sha256": "6af4d4845fb5c5c5edeca9f8aca495f3eb2d06e81a6f43ec09fee4ab77e9e492",
+  "coordinate_policy": "mass_centered",
+  "encoding_version": "centered_bisector_xyz_no_floor_v1"
+}

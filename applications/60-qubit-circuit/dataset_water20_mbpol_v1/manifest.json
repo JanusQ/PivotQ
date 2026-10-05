@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "dataset_id": "water20_mbpol_v1",
+  "n_samples": 5000,
+  "n_atoms": 60,
+  "splits": {
+    "train": 3500,
+    "validation": 500,
+    "test_id": 500,
+    "test_trajectory": 300,
+    "test_ood": 200
+  },
+  "categories": {
+    "thermal": 3150,
+    "distortion": 900,
+    "boundary": 450,
+    "trajectory": 300,
+    "ood": 200
+  },
+  "isolated_groups": {
+    "train": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34
+    ],
+    "validation": [
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "test_id": [
+      40,
+      41,
+      42,
+      43,
+      44
+    ],
+    "test_trajectory": [
+      45,
+      46,
+      47
+    ],
+    "test_ood": [
+      48,
+      49
+    ]
+  },
+  "config": {
+    "seed": 20261004,
+    "n_groups": 50,
+    "frames_per_group": 100,
+    "workers": 8,
+    "minimize_steps": 150,
+    "warmup_steps": 80,
+    "stride_steps": 4,
+    "dt_fs": 0.15,
+    "group_splits": {
+      "train": 35,
+      "validation": 5,
+      "test_id": 5,
+      "test_trajectory": 3,
+      "test_ood": 2
+    },
+    "temperatures_K": [
+      200,
+      300,
+      450
+    ],
+    "mbx_settings": {
+      "MBX": {
+        "box": [],
+        "realspace_cutoff": 100.0,
+        "twobody_cutoff": 100.0,
+        "threebody_cutoff": 7.0,
+        "dipole_tolerance": 1e-14,
+        "dipole_max_it": 500,
+        "dipole_method": "cg",
+        "alpha_ewald_elec": 0.0,
+        "alpha_ewald_disp": 0.0,
+        "ignore_1b_poly": [],
+        "ignore_2b_poly": [],
+        "ignore_3b_poly": []
+      }
+    }
+  },
+  "host": "user-System-Product-Name",
+  "wall_seconds": 51.76522194594145,
+  "library_sha256": "580369a11d8940b05af6b009e3141c05fdca19848b555b1151ed7e604bf0fff1",
+  "mbx_core_sha256": "9a81a7038cfff4c51571806fe085ee3941239905db43ebf7ab74e97b8f9ef4f5",
+  "config_sha256": "4e92bcf546cabdc3a5cc40eb681f29f1841cd64b92bf64c8f486b1c87bdfbc56",
+  "dataset_sha256": "d944827486000072287544e075de5fe0bb2fd37b8a2b4ddd9769ef5b211e03fe",
+  "energy_range_ev": [
+    -5.819629591333218,
+    -1.9609581505720322
+  ],
+  "max_force_ev_per_angstrom": 8.86118906907995,
+  "minimization_converged_groups": [],
+  "reference": "Full interacting MBX System.Energy(true), h2o; no sum of water10 labels",
+  "is_dft": false,
+  "scientific_status": "reference_dataset_generated; quantum_model_not_trained"
+}
