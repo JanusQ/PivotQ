@@ -28,11 +28,11 @@ with Runtime(executor="ray", address="local") as runtime:
 | `simulator` | CPU 状态向量与有限采样 | 默认上限 20 比特，可显式配置 | 提供采样计数 | 支持 |
 | 已注册的 QPU Provider | 由适配器连接相应的量子设备 | 由 `BackendCapabilities` 声明 | 提供原始计数时返回，否则为 `None` | 不支持 |
 
-状态向量内存随比特数指数增长；增加 `max_qubits` 不会增加可用内存。模拟器采样为理想结果，不包含设备噪声。
+存储状态向量所需的内存随量子比特数呈指数增长；增加 `max_qubits` 不会增加可用内存。模拟器采样为理想结果，不包含设备噪声。
 
 ## 支持的电路
 
-提交已绑定参数的 `QuantumCircuit`，或一个最终返回此对象的任务引用。`pivotq.QuantumCircuit` 直接复用 Qiskit 原始类型，已有的 Qiskit 电路同样兼容；电路、参数、编译与序列化入口见[电路 API](../api/quantum/#电路构造与参数)。标准幺正门与可分解的幺正电路可被模拟；支持末尾的全量、部分及置换测量。
+可以提交已绑定参数的 `QuantumCircuit`，也可以提交上游任务的结果引用；该任务的返回值须为已绑定参数的 `QuantumCircuit`。`pivotq.QuantumCircuit` 直接复用 Qiskit 原始类型，已有的 Qiskit 电路同样兼容；电路、参数、编译与序列化入口见[电路 API](../api/quantum/#电路构造与参数)。标准幺正门与可分解的幺正电路可被模拟；支持末尾的全量、部分及置换测量。
 
 当前不支持中途测量、reset、initialize、经典条件、控制流和未绑定参数。使用 `assign_parameters()` 绑定参数，再提交电路。执行不会修改输入电路；提交后直到任务完成，请勿修改同一个电路对象。
 
@@ -44,7 +44,7 @@ with Runtime(executor="ray", address="local") as runtime:
 
 没有显式测量时，默认测量全部量子比特，位串按 `q[n−1]…q0` 排列。例：两比特电路只有 `x(0)`，不含测量时结果为 `"01"`。
 
-测量置换保持原语义：若 `q0=1, q1=0`，同时 `measure(0, 1)`、`measure(1, 0)`，返回 `"10"`。SDK 不会把这种映射静默改成按 qubit 编号输出。
+测量置换保留原有映射：若 `q0=1, q1=0`，并调用 `measure(0, 1)` 和 `measure(1, 0)`，则返回 `"10"`。SDK 不会把这种映射静默改成按 qubit 编号输出。
 
 ## 接入 QPU 后端
 
@@ -62,10 +62,10 @@ def register_qpu(runtime, provider_factory, capabilities, **config):
 
 注册与创建后端不构造 Provider，也不连接量子设备。提交后，运行时在执行进程中构造实例并调用 `run()`；电路也可以来自上游 CPU 任务引用。读取结果统一使用 `runtime.get(backend.submit(circuit, shots=1024))`。
 
-Provider 负责原生门编译、物理布局还原及结果读取；SDK 负责保留末尾测量映射并生成统一的 `QuantumResult`。不同测量基需要用户先在电路中加入相应基变换。
+Provider 负责原生门编译、物理布局还原及结果读取；SDK 负责保留末尾测量映射并生成统一的 `QuantumResult`。若需在不同测量基下测量，用户须先在电路中加入相应的基变换。
 
 ## 结果来源与失败
 
-`simulator` 返回采样计数和计数归一化概率。QPU Provider 可以返回设备确认的原始计数或概率；仅提供概率时 `counts=None`，SDK 不会根据概率伪造原始计数。`shots` 记录采样次数或设备确认的重复次数，`metadata.source` 记录 Provider 提供的数据来源。
+`simulator` 返回采样计数，以及对计数归一化后得到的概率。QPU Provider 可以返回设备确认的原始计数或概率；仅提供概率时 `counts=None`，SDK 不会根据概率伪造原始计数。`shots` 记录采样次数或设备确认的重复次数，`metadata.source` 记录 Provider 提供的数据来源。
 
-设备连接、提交或执行失败时会抛出错误，不会自动改用 CPU 模拟。若报错表示任务状态未知，SDK 不会自动重试；任务可能仍在设备执行，需保留作业标识并核实状态后再决定下一步。
+设备连接、提交或执行失败时会抛出错误，不会自动改用 CPU 模拟。若报错表示任务状态未知，SDK 不会自动重试；任务可能仍在设备上执行，需保留作业标识，核实状态后再决定下一步。

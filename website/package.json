@@ -13,7 +13,8 @@
     "build:release": "node scripts/site-settings.mjs --release && npm run check && npm run build && npm run check:release",
     "check:release": "node scripts/check-release.mjs",
     "preview": "astro preview --host 127.0.0.1",
-    "test:browser": "node scripts/browser-check.mjs"
+    "test:browser": "node scripts/browser-check.mjs",
+    "test:comments": "node scripts/check-comments.mjs"
   },
   "dependencies": {
     "@astrojs/starlight": "0.42.5",

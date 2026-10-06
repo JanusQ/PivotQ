@@ -1,6 +1,5 @@
 ---
 import { PanelLeft } from '@lucide/astro';
-import Search from '@astrojs/starlight/components/Search.astro';
 import PortalHeader from './PortalHeader.astro';
 const base = import.meta.env.BASE_URL;
 const { hasSidebar } = Astro.locals.starlightRoute;
@@ -9,7 +8,6 @@ const { hasSidebar } = Astro.locals.starlightRoute;
   <PortalHeader active="docs">
     <div slot="controls" class="docs-controls">
       {hasSidebar && <button class="docs-sidebar-toggle" popovertarget="starlight__sidebar" aria-label="打开文档目录" title="文档目录"><PanelLeft size={20} /></button>}
-      <Search />
     </div>
   </PortalHeader>
 </div>
@@ -22,6 +20,8 @@ const { hasSidebar } = Astro.locals.starlightRoute;
     '使用指南': 'aimd/',
     'guide-应用示例': 'examples/',
     '应用示例': 'examples/',
+    'guide-应用教程': 'examples/',
+    '应用教程': 'examples/',
     '1-选择应用并编译电路': 'aimd/#1-选择应用并编译电路',
     '2-分配计算硬件并发起性能预测': 'aimd/#2-分配计算硬件并发起性能预测',
     '3-查看性能预测结果': 'aimd/#3-查看性能预测结果',

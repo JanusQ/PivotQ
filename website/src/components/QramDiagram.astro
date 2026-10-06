@@ -2,11 +2,11 @@
 interface Props { compact?: boolean; addressLabel?: string; }
 const { compact = false, addressLabel = '|address⟩' } = Astro.props;
 ---
-<svg viewBox="0 0 420 255" role="img" aria-label="QRAM 概念示意：地址经树形路径选择存储单元，非实际运行结果" class:list={['qram-diagram', { compact }]}>
+<svg viewBox="0 0 420 255" role="img" aria-label="量子随机存储器概念示意：地址经树形路径选择存储单元，非实际运行结果" class:list={['qram-diagram', { compact }]}>
   <g fill="none" stroke="#b1c8ee" stroke-width="2"><path d="M210 30v40m0 0-104 64m104-64 104 64M106 134l-51 66m51-66 51 66m157-66-51 66m51-66 51 66"/></g>
   <path d="M210 30v40l104 64-51 66" fill="none" stroke="#2462c5" stroke-width="3.5"/>
   <g fill="#fff" stroke="#b1c8ee" stroke-width="2"><circle cx="210" cy="70" r="17"/><circle cx="106" cy="134" r="15"/><circle cx="314" cy="134" r="15"/><rect x="31" y="195" width="48" height="34" rx="5"/><rect x="133" y="195" width="48" height="34" rx="5"/><rect x="239" y="195" width="48" height="34" rx="5"/><rect x="341" y="195" width="48" height="34" rx="5"/></g>
   <rect x="239" y="195" width="48" height="34" rx="5" fill="#2462c5"/>
-  <g fill="#234879" text-anchor="middle" font-size="16" font-family="Arial,sans-serif"><text x="210" y="27">{addressLabel}</text><text x="55" y="218">00</text><text x="157" y="218">01</text><text x="263" y="218" fill="white">10</text><text x="365" y="218">11</text></g>
+  <g fill="#234879" text-anchor="middle" font-size={compact ? 24 : 22} font-family="Arial,sans-serif"><text x="210" y="27">{addressLabel}</text><text x="55" y="218">00</text><text x="157" y="218">01</text><text x="263" y="218" fill="white">10</text><text x="365" y="218">11</text></g>
 </svg>
 <style>.qram-diagram{width:100%;height:auto;display:block}</style>

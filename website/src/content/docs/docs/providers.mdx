@@ -21,7 +21,7 @@ backend = runtime.quantum_backend("my-device", endpoint="device-address")
 
 `MyProvider` 是部署方提供或用户实现的类，`device_qubit_limit` 来自实际设备能力。`endpoint` 仅示范该类可接收的配置项；实际配置参数由 Provider 定义。SDK 不会只凭名称或地址自动适配任意 QPU。
 
-执行时通过 `MyProvider(**config)` 构造实例。注册与创建后端均不构造该类，也不连接设备；factory 在执行进程中首次调用时构造实例。配置须可序列化，并在创建后端时生成独立快照。
+执行时通过 `MyProvider(**config)` 构造实例。注册与创建后端时均不会创建 `MyProvider` 实例，也不会连接设备；执行进程首次调用工厂函数时才创建实例。配置须可序列化，并在创建后端时生成独立快照。
 
 注册属于当前 Runtime，名称不能重复或覆盖已有后端。`backend.describe()` 返回注册时提供的静态能力，不探测设备。
 
@@ -45,21 +45,23 @@ counts 与 probabilities 至少提供一种，具体类型取决于后端实际�
 
 `source` 明确填写结果来源。metadata 可含 `backend_job_id`、`device_id`，不能覆盖 source、request_id、backend、is_simulated、bit_order，也不能包含不可序列化对象或凭据。
 
-确认未提交的输入问题使用 `pivotq.errors.ValidationError`；已可能执行但响应丢失时使用 `ResultUnknownError` 并保留设备作业标识。真实 Provider 的未分类异常或无效结果也按执行状态未知处理，沿后续 CPU 依赖保留核实信息。SDK 不自动重试或回退模拟器。
+确认请求尚未提交时，输入问题使用 `pivotq.errors.ValidationError`；请求可能已经执行但响应丢失时，使用 `ResultUnknownError` 并保留设备作业标识。真实设备 Provider 的未分类异常或无效结果也按“执行状态未知”处理；供核实的信息会随依赖关系传递给后续 CPU 任务。SDK 不自动重试或回退模拟器。
 
 ## Task 与 Actor
 
-模拟 Provider 默认使用 Task，每次构造和关闭实例，申请 1 CPU；可设置 `execution="actor"` 保留状态，默认串行。`num_cpus` 可调整模拟 Provider 的 CPU 请求。
+模拟 Provider 默认使用 Task，每次调用都会创建并关闭实例，申请 1 CPU；可设置 `execution="actor"` 保留状态，默认串行。`num_cpus` 可调整模拟 Provider 的 CPU 请求。
 
 真实设备 Provider 使用固定的串行 Actor、0 CPU 资源请求。串行约束作用于同一个后端对象；多个客户端对同一设备的全局排队仍由设备服务负责。
 
-## 可运行的离线扩展示例
+<span id="可运行的离线扩展示例"></span>
+
+## 可运行的离线扩展教程
 
 ```bash
 python packages/framework/examples/custom_backend.py
 python packages/framework/examples/custom_backend.py --executor ray
 ```
 
-示例注册用户实现的 CPU 量子模拟器，验证部分测量与结果依赖，全程不访问真实设备。源码与测试使用同一文件：
+教程中的程序注册用户实现的 CPU 量子模拟器，验证部分测量与结果依赖，全程不访问真实设备。完整教程代码如下：
 
 <SDKExample example="provider" />

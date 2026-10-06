@@ -15,6 +15,7 @@ export default defineConfig({
     title: site.name,
     description: site.description,
     disable404Route: true,
+    pagefind: false,
     defaultLocale: 'root',
     locales: { root: { label: '简体中文', lang: 'zh-CN' } },
     customCss: ['./src/styles/docs.css'],
@@ -37,7 +38,7 @@ export default defineConfig({
           { label: '快速上手', slug: 'docs/quickstart' },
           { label: '常见问题', slug: 'docs/troubleshooting' },
         ] },
-        { label: '混合编程', collapsed: true, items: [
+        { label: '混合编程', items: [
           { label: '经典任务', slug: 'docs/classical-tasks' },
           { label: 'GPU 与异构资源', slug: 'docs/gpu-computing' },
           { label: '量子后端', slug: 'docs/quantum-backends' },
@@ -45,18 +46,18 @@ export default defineConfig({
           { label: '组件与 Actor', slug: 'docs/components-actors' },
           { label: '可复用工作流', slug: 'docs/workflows' },
         ] },
-        { label: '运行与管理', collapsed: true, items: [
+        { label: '运行与管理', items: [
           { label: '集群作业', slug: 'docs/jobs' },
           { label: '状态与执行报告', slug: 'docs/observability' },
         ] },
-        { label: '性能建模与预测', collapsed: true, items: [
+        { label: '性能建模与预测', items: [
           { label: '硬件性能模型', slug: 'docs/hardware-profiles' },
           { label: '性能预测', slug: 'docs/performance' },
         ] },
-        { label: '后端扩展', collapsed: true, items: [
+        { label: '后端扩展', items: [
           { label: '扩展量子后端', slug: 'docs/providers' },
         ] },
-        { label: 'API 参考', collapsed: true, items: [
+        { label: 'API 参考', items: [
           { label: 'API 索引', slug: 'docs/api' },
           { label: '运行时与结果引用', slug: 'docs/api/runtime' },
           { label: '组件与 Actor', slug: 'docs/api/components' },
@@ -69,8 +70,10 @@ export default defineConfig({
           { label: '异常类型', slug: 'docs/api/errors' },
         ] },
       ] },
-      { label: '应用示例', items: [
-        { label: '示例导航', slug: 'docs/examples' },
+      { label: '应用教程', items: [
+        { label: '介绍', slug: 'docs/examples' },
+        { label: '水分子动力学模拟', link: '/examples/aimd/' },
+        { label: '量子随机存储器', link: '/examples/qram/' },
       ] },
     ],
     head: [{ tag: 'meta', attrs: { name: 'theme-color', content: '#ffffff' } }],

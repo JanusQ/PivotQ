@@ -3,7 +3,7 @@ title: API 参考
 description: 按执行编程、系统管理与性能预测查找 PivotQ 公开接口。
 ---
 
-按模块查阅签名、参数、返回值和生命周期约定。第一次编写程序可先阅读[快速上手](../quickstart/)，完整操作示例位于各主题教程。
+按模块查阅签名、参数、返回值和生命周期约定。第一次编写程序可先阅读[快速上手](../quickstart/)，完整操作过程位于各主题教程。
 
 常用执行接口与 `QuantumCircuit`、`Parameter` 可从 `pivotq` 顶层导入；完整电路入口、作业管理与性能预测分别从 `pivotq.circuit`、`pivotq.jobs`、`pivotq.performance` 导入。
 

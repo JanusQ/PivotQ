@@ -13,11 +13,13 @@ python -m pip show pivotq
 python -c "import pivotq; print(pivotq.__file__)"
 ```
 
-从源码安装时，安装目录为仓库中的 `packages/framework`。仓库根统一环境使用 `uv sync --locked`。
+从源码安装时，安装目录为仓库中的 `packages/framework`。若使用仓库统一环境，请在仓库根目录执行 `uv sync --locked`。
 
-## 文档中的示例在哪里
+<span id="文档中的示例在哪里"></span>
 
-完整混合示例为 `packages/framework/examples/hybrid_program.py`。快速上手页面在构建时读取这一个文件；从仓库根目录运行它。网页中的代码块支持复制。
+## 文档中的教程程序在哪里
+
+混合程序教程的完整代码位于 `packages/framework/examples/hybrid_program.py`。快速上手页面展示该文件中的代码；请在仓库根目录运行该程序。网页中的代码块支持复制。
 
 `system_workflow.py`、`custom_backend.py`、`performance_prediction.py` 位于同一目录，分别用于工作流、Provider 扩展和性能预测；对应文档也直接读取这些源码。
 
@@ -29,7 +31,7 @@ SDK 不会为用户创建设备服务或自动适配任意 QPU；注册与创建
 
 ## 电路被拒绝
 
-先核对参数是否全部绑定，是否含中途测量、reset、initialize 或经典控制流。用 `backend.describe()` 检查 Provider 声明的比特范围；实际门集和编译能力还需符合设备适配器的约定。提交前可以打印 `circuit.num_qubits`、`circuit.num_parameters` 与电路图。
+先核对参数是否全部绑定，是否含中途测量、reset、initialize 或经典控制流。用 `backend.describe()` 检查 Provider 声明的比特范围；电路还需符合设备适配器支持的门集和编译要求。提交前可以打印 `circuit.num_qubits`、`circuit.num_parameters` 与电路图。
 
 ## 为什么位串看起来反了
 
@@ -57,11 +59,11 @@ Qiskit 把最高编号经典位放在左侧，`"01"` 的 c0 是 1。有显式测
 
 ## 第三方 Provider 的分布被拒绝
 
-检查返回位串是否覆盖全部逻辑量子位并遵循 `q[n-1]…q0`，shots 是否经后端确认，counts 总和与概率是否一致。SDK 会自行应用用户的末尾测量映射。真实后端返回无效结果可能意味着已执行但结果无法确认，不应直接重提。
+检查返回位串是否覆盖全部逻辑量子位并遵循 `q[n-1]…q0`，shots 是否经后端确认，counts 总和与概率是否一致。SDK 会自行应用用户的末尾测量映射。真实后端返回无效结果时，任务可能已经执行，只是结果无法确认；此时不应直接重新提交任务。
 
 ## 性能模拟器无法加载
 
-先调用 `Predictor().availability()` 查看环境，再核对 Linux x86-64 与兼容运行库。较旧系统可显式传入已有的 `native_runtime` 或设置 `FUSION_QPERFSIM_RUNTIME`；SDK 不下载运行库。`preview()` 可独立检查输入模型。
+先调用 `Predictor().availability()` 查看环境，再检查系统是否为 Linux x86-64、所需运行库是否兼容。较旧系统可显式传入已有的 `native_runtime` 或设置 `FUSION_QPERFSIM_RUNTIME`；SDK 不下载运行库。`preview()` 可独立检查输入模型。
 
 ## 集群作业提交结果未知
 

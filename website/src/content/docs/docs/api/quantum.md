@@ -45,7 +45,7 @@ bound = circuit.assign_parameters({theta: 0.7})
 runtime.quantum_backend(name, **config) -> QuantumBackend
 ```
 
-`name` 使用 `"simulator"` 或当前 Runtime 注册的后端名称。`config` 传给对应 Provider 工厂，必须可序列化且符合其构造参数。创建后端不会构造 Provider 或连接设备，首次执行请求时才构造。
+`name` 使用 `"simulator"` 或当前 Runtime 注册的后端名称。`config` 传给对应的 Provider 工厂，必须可序列化，并符合 Provider 构造函数的参数要求。创建后端不会构造 Provider 或连接设备，首次执行请求时才构造。
 
 内置模拟器配置为 `runtime.quantum_backend("simulator", max_qubits=20)`。它使用 Qiskit Statevector 并进行有限次数采样，默认最多 20 比特，可调整上限。
 
@@ -82,4 +82,4 @@ backend.submit(circuit_or_ref, *, shots=1024, seed=None) -> ResultRef
 
 显式测量时，位串按跨寄存器展平后的经典位从高到低排列，未测量的经典位为零；无测量时，默认测量全部量子位，按量子位从高到低排列。此约定遵循 Qiskit。
 
-模拟器返回采样计数和频率，有限次采样不保证等于理想概率。`counts=None` 表示设备未提供计数，不代表零计数。量子任务失败不会自动切换模拟器；执行状态未知时保留原请求信息，见[异常与错误处理](../errors/)。
+模拟器返回采样计数和频率；有限次采样得到的频率不保证等于理想概率。`counts=None` 表示设备未提供计数，不代表零计数。量子任务失败不会自动切换模拟器；执行状态未知时保留原请求信息，见[异常与错误处理](../errors/)。

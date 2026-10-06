@@ -1,18 +1,9 @@
 ---
-import Sidebar from '@astrojs/starlight/components/Sidebar.astro';
-import { ArrowUpRight } from '@lucide/astro';
-const base = import.meta.env.BASE_URL;
+import MobileMenuFooter from '@astrojs/starlight/components/MobileMenuFooter.astro';
+import SidebarPersister from '@astrojs/starlight/components/SidebarPersister.astro';
+import DocsSidebarList from './DocsSidebarList.astro';
 ---
-<Sidebar />
-<div class="docs-tutorial">
-  <a class="docs-tutorial-link" href={`${base}docs/aimd/`}>
-    <span>AIMD 工作台教程</span><ArrowUpRight size={16} aria-hidden="true" />
-  </a>
-  <p>独立教程 · 从编译电路到查看轨迹</p>
-</div>
-<style>
-  .docs-tutorial{margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--sl-color-gray-5)}
-  .docs-tutorial-link{display:flex;align-items:center;justify-content:space-between;gap:.5rem;color:var(--sl-color-accent);font-size:.9rem;font-weight:600;text-decoration:none}
-  .docs-tutorial-link:hover{text-decoration:underline;text-underline-offset:4px}
-  .docs-tutorial p{margin-top:.5rem;color:var(--sl-color-gray-3);font-size:.75rem;line-height:1.6}
-</style>
+<SidebarPersister>
+  <DocsSidebarList sublist={Astro.locals.starlightRoute.sidebar} />
+</SidebarPersister>
+<div class="md:sl-hidden"><MobileMenuFooter /></div>

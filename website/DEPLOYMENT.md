@@ -40,7 +40,7 @@ SITE_URL=https://janusq.github.io SITE_BASE=/PivotQ/ npm run preview -- --port 4
 PORTAL_TEST_URL=http://127.0.0.1:4324/PivotQ/ npm run test:browser
 ```
 
-正式构建会校验配置、类型、静态资源、canonical、sitemap、robots.txt、文档搜索索引与站内路径。浏览器回归覆盖导航、响应式布局、电路视图及已有轨迹播放，不提交计算任务。构建检查不代替实际公网验收。
+正式构建会校验配置、类型、静态资源、canonical、sitemap、robots.txt、文档路由与站内路径，并确认不生成搜索索引。浏览器回归覆盖导航、响应式布局、电路视图及已有轨迹播放，不提交计算任务。构建检查不代替实际公网验收。
 
 日常本地开发不设置上述变量，使用 `npm run dev`，默认地址为 `http://127.0.0.1:4321/`。若改用 `.env` 保存部署变量，应避免与当前预览目标冲突，且不提交 `.env`。
 
@@ -58,7 +58,7 @@ SITE_URL=https://你的正式域名 SITE_BASE=/ npm run build:release
 2. 参考 `deploy/nginx.conf.example` 配置 Nginx。模板监听 HTTP 8080，适用于已有 HTTPS 网关后方；独立提供服务时需配置实际域名、TLS 证书及 HTTP 到 HTTPS 的跳转。
 3. 在目标服务器执行 `nginx -t` 后再加载配置，并从校外网络验证实际 HTTPS 地址。
 
-不要启用“所有地址返回首页”的 SPA 重写。保留 `_astro/`、`pagefind/`、文档目录、`404.html`、`robots.txt` 与 sitemap 文件。
+不要启用“所有地址返回首页”的 SPA 重写。保留 `_astro/`、文档目录、`404.html`、`robots.txt` 与 sitemap 文件。
 
 ### 服务器子目录部署
 
@@ -84,7 +84,7 @@ location /PivotQ/_astro/ {
 ## 上线验收与更新
 
 - 首页、CPU/GPU/QPU 三维示意、AIMD、QRAM、全部 SDK/API 文档及独立 AIMD 工作台教程可以直接打开并刷新；错误路径返回 HTTP 404。
-- 中文搜索、手机导航、代码展示与轨迹播放正常，浏览器无本地资源加载错误。
+- 文档目录、手机导航、代码展示与轨迹播放正常，浏览器无本地资源加载错误。
 - canonical 和 sitemap 使用实际域名与路径，GitHub 入口指向 `https://github.com/JanusQ/PivotQ`。
 
 可对已发布站点执行只读浏览器验收：
@@ -93,4 +93,4 @@ location /PivotQ/_astro/ {
 PORTAL_TEST_URL=https://janusq.github.io/PivotQ/ npm run test:browser
 ```
 
-GitHub Pages 更新沿用工作流；自有服务器更新应先上传完整产物，再切换站点目录，保留上一版以便回退。HTML 与搜索索引需重新验证缓存，带哈希的 `_astro/` 资源可长期缓存。
+GitHub Pages 更新沿用工作流；自有服务器更新应先上传完整产物，再切换站点目录，保留上一版以便回退。HTML 需重新验证缓存，带哈希的 `_astro/` 资源可长期缓存。

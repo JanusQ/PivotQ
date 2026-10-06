@@ -8,9 +8,11 @@ const base = import.meta.env.BASE_URL;
   <Image class="flow-hero-photo" src={labPhoto} alt="实验室中的量子计算装置、线缆与计算机柜" format="webp" quality={88} loading="eager" fetchpriority="high" />
   <div class="flow-hero-scrim" aria-hidden="true"></div>
   <div class="container flow-hero-content">
+    <div class="flow-hero-copy">
     <h1 id="home-title">Pivot<span>Q</span></h1>
-    <p class="flow-hero-title">将 QPU、CPU、GPU 沿同一条工作流描述，<span style="white-space: nowrap;">自动编排执行</span>。</p>
-    <p class="flow-hero-description">量超智融合系统。开发者用 Python 编写计算步骤、<span class="flow-hero-description-line">指定设备与依赖，PivotQ 组织执行并传递结果。</span></p>
-    <div class="flow-hero-actions"><a class="flow-button flow-button-primary" href="#system">查看设备与代码 <ArrowRight size={17} /></a><a class="flow-button flow-button-outline" href={`${base}docs/`}><BookOpen size={17} /> 参考文档</a></div>
+    <p class="flow-hero-title">统一描述 QPU、CPU、GPU 的计算任务，由 PivotQ 自动调度并执行。</p>
+    <p class="flow-hero-description">PivotQ 帮助编程者构建和管理跨 CPU、GPU 与 QPU 的量子经典混合计算任务。</p>
+    <div class="flow-hero-actions"><a class="flow-button flow-button-primary" href="#system">查看编程模型 <ArrowRight size={17} /></a><a class="flow-button flow-button-outline" href={`${base}docs/`}><BookOpen size={17} /> 文档</a></div>
+    </div>
   </div>
 </section>

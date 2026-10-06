@@ -130,11 +130,11 @@ for (const screenshot of tutorialImages) {
   assert.ok(screenshot.alt?.trim(), '教程截图缺少文字说明。');
   await checkReference(screenshot.src, new URL(`${base}docs/aimd/`, origin));
 }
-const overviewHtml = await textFile(path.join(output, 'docs/index.html'));
-assert.ok([...overviewHtml.matchAll(/<a\b[^>]*>/g)].some(match => {
+const exampleHtml = await textFile(path.join(output, 'examples/aimd/index.html'));
+assert.ok([...exampleHtml.matchAll(/<a\b[^>]*>/g)].some(match => {
   const href = attrs(match[0]).href;
-  return href && new URL(href, new URL(`${base}docs/`, origin)).pathname === `${base}docs/aimd/`;
-}), '参考文档总览缺少独立的 AIMD 工作台教程链接。');
+  return href && new URL(href, new URL(`${base}examples/aimd/`, origin)).pathname === `${base}docs/aimd/`;
+}), '水分子动力学模拟教程缺少独立工作台教程链接。');
 
 const sitemapIndex = await readFile(path.join(output, 'sitemap-index.xml'), 'utf8');
 const sitemapFiles = [...sitemapIndex.matchAll(/<loc>(.*?)<\/loc>/g)].map(match => new URL(decode(match[1])));
@@ -154,6 +154,6 @@ for (const url of sitemapFiles) {
 for (const url of canonicalUrls) assert.ok(sitemapUrls.has(url), `站点地图缺少页面：${url}`);
 const robots = await readFile(path.join(output, 'robots.txt'), 'utf8');
 assert.ok(robots.includes(`Sitemap: ${expectedRoot}sitemap-index.xml`), 'robots.txt 未指向正确的站点地图。');
-await stat(path.join(output, 'pagefind', 'pagefind.js'));
-console.log(`发布产物检查通过：${canonicalUrls.size} 个页面、${resourceFiles.size} 个本地页面/资源、${anchorChecks.size} 个页面锚点、${docsRoutes.length} 个文档路由、教程六张截图、站点地图、robots.txt、搜索索引及 404。`);
+await assert.rejects(stat(path.join(output, 'pagefind', 'pagefind.js')), { code: 'ENOENT' }, '文档搜索已关闭，不应生成搜索索引。');
+console.log(`发布产物检查通过：${canonicalUrls.size} 个页面、${resourceFiles.size} 个本地页面/资源、${anchorChecks.size} 个页面锚点、${docsRoutes.length} 个文档路由、教程六张截图、站点地图、robots.txt、无搜索索引及 404。`);
 console.log(`目标网址：${expectedRoot}（仅检查本地构建产物，不代表已部署或验证域名可访问。）`);

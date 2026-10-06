@@ -9,7 +9,7 @@ const tasks = [
 ---
 <section class="execution-flow" aria-labelledby="execution-flow-heading">
   <div class="flow-heading"><h2 id="execution-flow-heading">执行流程</h2></div>
-  <div class="flow-scroll" tabindex="0" role="region" aria-label="AIMD 计算任务与目标硬件，窄屏可横向滚动">
+  <div class="flow-scroll" tabindex="0" role="region" aria-label="水分子动力学模拟计算任务与目标硬件，窄屏可横向滚动">
     <ol class="flow-tasks">
       {tasks.map((task, index) => <li class:list={['flow-task', { 'quantum-task': task.hardware === 'QPU' }]}>
         <div class="flow-task-card">

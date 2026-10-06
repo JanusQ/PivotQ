@@ -7,7 +7,7 @@ import SDKExample from '../../../components/SDKExample.astro';
 
 量超智融合系统的性能模拟器覆盖 CPU/GPU/QPU 场景。本页介绍公开 Python API 的 CPU/QPU 预测；GPU 场景通过 [QPerfSim 任务图与场景接口](../gpu-computing/#gpu-性能预测)接入。
 
-`pivotq.performance` 将用户编写的工作量图转换为仓库性能模拟器的输入。预测不会执行用户的 Python 算法或量子设备，也不会自动从任意程序推导运算量。
+`pivotq.performance` 将用户编写的工作量图转换为仓库性能模拟器的输入。预测过程不会运行用户的 Python 算法或调用量子设备，也不会自动从任意程序推导运算量。
 
 ## 描述工作量
 
@@ -24,7 +24,7 @@ predictor = Predictor()
 compiled = predictor.preview(workload, hardware)
 ```
 
-以上时间与速率是示例假设。`preview()` 校验图、硬件与编译结果，不启动原生模拟器、不写入文件。`cpu()` 可用已知时间或运算量/内存量，`qpu()` 描述电路宽度、shots 与电路数量；`transfer()` 描述显式通信。相关单位见[硬件性能模型](../hardware-profiles/)。
+以上时间与速率是教程采用的假设值。`preview()` 校验图、硬件与编译结果，不启动原生模拟器、不写入文件。`cpu()` 可用已知时间或运算量/内存量，`qpu()` 描述电路宽度、shots 与电路数量；`transfer()` 描述显式通信。相关单位见[硬件性能模型](../hardware-profiles/)。
 
 ## 运行与对比
 
@@ -35,13 +35,13 @@ print(prediction.latency_seconds)
 print(prediction.main_bottleneck)
 ```
 
-输出目录必须是新目录或空目录；未提供目录时中间文件使用临时目录。保留目录包含源模型、模拟器输入、原始 CSV 和 `prediction.json`。`compare({"配置名": (workload, hardware), ...})` 对每个配置分别预测。
+输出目录必须是新目录或空目录；未提供目录时中间文件使用临时目录。指定的输出目录中会保留源模型、模拟器输入、原始 CSV 和 `prediction.json`。`compare({"配置名": (workload, hardware), ...})` 对每个配置分别预测。
 
-`PredictionResult` 包括时延、吞吐、阶段耗时、通信信息、参数来源、验证范围、引擎版本和模型与模拟器哈希。`simulator_wall_seconds` 是模拟器运行所花时间；`latency_seconds` 是整个工作负载的最终完成时刻，`mean_job_latency_seconds` 是逐作业时延的平均值，三者用途不同。
+`PredictionResult` 包括时延、吞吐、阶段耗时、通信信息、参数来源、验证范围、引擎版本，以及模型和模拟器的哈希值。`simulator_wall_seconds` 是模拟器运行所花时间；`latency_seconds` 是整个工作负载的最终完成时刻，`mean_job_latency_seconds` 是逐作业时延的平均值，三者用途不同。
 
 ## 原生运行环境
 
-wheel 携带性能模拟器原生文件。当前直接运行目标是 Linux x86-64、Ubuntu 24.04 兼容环境。较旧系统（例如 Ubuntu 22.04）需要显式提供已有的兼容运行目录：
+wheel 携带性能模拟器原生文件。目前可直接运行于 Linux x86-64 平台上与 Ubuntu 24.04 兼容的环境。较旧系统（例如 Ubuntu 22.04）需要显式提供已有的兼容运行目录：
 
 ```python
 predictor = Predictor(native_runtime="/path/to/existing/runtime")
@@ -49,13 +49,15 @@ predictor = Predictor(native_runtime="/path/to/existing/runtime")
 
 也可设置 `FUSION_QPERFSIM_RUNTIME`。库文件选择顺序为显式 `library`、`QPERFSIM_LIBRARY`、`QPERFSIM_ROOT` 下的库、随包引擎。SDK 不会下载运行环境；缺少兼容库或加载器时明确抛出 `UnavailableError`，`preview()` 仍可用于检查输入。
 
-## 完整对比示例
+<span id="完整对比示例"></span>
+
+## 完整对比教程
 
 ```bash
 python packages/framework/examples/performance_prediction.py --out prediction-output
 ```
 
-示例比较用户提供的纯 CPU 模型、CPU/QPU 模型和另一种 QPU 吞吐配置。源码与测试使用同一文件：
+教程中的程序比较用户提供的纯 CPU 模型、CPU/QPU 模型和另一种 QPU 吞吐配置。完整教程代码如下：
 
 <SDKExample example="performance" />
 

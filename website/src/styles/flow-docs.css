@@ -42,12 +42,13 @@
   gap: 9px;
   margin-bottom: 13px;
   color: #426eac;
-  font: 700 11px/1.3 ui-monospace, SFMono-Regular, Consolas, monospace;
+  font: 700 var(--font-caption)/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
   letter-spacing: 0;
 }
 .flow-guide-eyebrow span { width: 7px; height: 7px; background: var(--guide-blue); border-radius: 50%; }
 .flow-guide-hero h1 { margin: 0; color: var(--guide-ink); font-size: 48px; line-height: 1.18; letter-spacing: 0; }
-.flow-guide-intro { max-width: 37em; margin-top: 16px; color: #52677d; font-size: 16px; line-height: 1.8; }
+.flow-guide-tutorial .flow-guide-hero h1 { font-size: clamp(32px, 4vw, 48px); }
+.flow-guide-intro { margin-top: 16px; color: #52677d; font-size: 16px; line-height: 1.8; }
 
 .flow-guide-diagram { position: relative; height: 158px; min-width: 0; }
 .flow-guide-diagram-line {
@@ -101,8 +102,8 @@
 .flow-guide-diagram-node--first { left: 0; }
 .flow-guide-diagram-node--second { left: calc(50% - 63px); border-color: #3f8cde; box-shadow: 0 1px 2px #1b407019, 0 12px 26px #2e7fd424; }
 .flow-guide-diagram-node--third { right: 0; }
-.flow-guide-diagram-number { color: #4c84c4; font: 700 11px/1 ui-monospace, SFMono-Regular, Consolas, monospace; }
-.flow-guide-diagram-node strong { color: #1e3b59; font-size: 14px; font-weight: 650; line-height: 1.3; }
+.flow-guide-diagram-number { color: #4c84c4; font: 700 var(--font-caption)/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; }
+.flow-guide-diagram-node strong { color: #1e3b59; font-size: var(--font-small); font-weight: 650; line-height: 1.4; }
 
 .flow-guide-shell {
   display: grid;
@@ -116,7 +117,7 @@
   top: calc(var(--site-header-height) + 28px);
   padding: 42px 20px 40px 0;
 }
-.flow-guide-sidebar-label { padding: 0 13px 14px; color: #77899d; font-size: 12px; font-weight: 650; line-height: 1.4; }
+.flow-guide-sidebar-label { padding: 0 13px 14px; color: #77899d; font-size: var(--font-caption); font-weight: 650; line-height: 1.5; }
 .flow-guide-chapters { display: flex; flex-direction: column; gap: 5px; }
 .flow-guide-chapters a {
   display: flex;
@@ -127,15 +128,16 @@
   border-left: 2px solid transparent;
   border-radius: 0 5px 5px 0;
   color: #4f6074;
-  font-size: 14px;
+  font-size: var(--font-small);
   line-height: 1.5;
+  text-wrap: balance;
   transition: background .18s, color .18s, border-color .18s;
 }
 .flow-guide-chapters a:hover { background: #f2f7fd; color: #145eb4; }
 .flow-guide-chapters a[aria-current] { border-left-color: var(--guide-blue); background: #eaf3ff; color: #135cb5; font-weight: 650; }
-.flow-guide-chapter-number { min-width: 20px; color: #9aacbf; font: 650 11px/1 ui-monospace, SFMono-Regular, Consolas, monospace; }
+.flow-guide-chapter-number { flex-shrink: 0; min-width: 20px; color: #9aacbf; font: 650 var(--font-caption)/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; }
 .flow-guide-chapters a[aria-current] .flow-guide-chapter-number { color: #2d77ce; }
-.flow-guide-supplement { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 20px 0 0 12px; padding: 14px 0; border-top: 1px solid var(--guide-line); color: #1769c9; font-size: 13px; font-weight: 650; line-height: 1.5; }
+.flow-guide-supplement { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 20px 0 0 12px; padding: 14px 0; border-top: 1px solid var(--guide-line); color: #1769c9; font-size: var(--font-small); font-weight: 650; line-height: 1.6; }
 .flow-guide-supplement:hover { color: #0e4b98; }
 
 .flow-guide-reading {
@@ -146,12 +148,13 @@
 }
 .flow-guide-reading-meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 28px;
   color: #879aaf;
-  font: 650 11px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace;
+  font: 650 var(--font-caption)/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
   letter-spacing: 0;
 }
 .flow-guide-progress { margin-left: auto; color: #477dc0; white-space: nowrap; }
@@ -168,16 +171,16 @@
 .flow-guide-content li { margin: 0 0 9px; padding-left: 3px; }
 .flow-guide-content li::marker { color: #2c7ed5; }
 .flow-guide-content hr { height: 1px; margin: 38px 0; border: 0; background: var(--guide-line); }
-.flow-guide-content code { padding: .13em .38em; border-radius: 3px; background: #edf4fb; color: #174f92; font: .87em/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; }
+.flow-guide-content code { padding: .13em .38em; border-radius: 3px; background: #edf4fb; color: #174f92; font: max(var(--font-caption), .9em)/1.5 ui-monospace, SFMono-Regular, Consolas, monospace; }
 .flow-guide-content pre { max-width: 100%; margin: 20px 0 24px; padding: 22px 24px; overflow: auto; border: 1px solid #d7e3f1; border-radius: 6px; background: #f6f9fd; color: #263d55; line-height: 1.7; }
-.flow-guide-content pre code { padding: 0; background: transparent; color: inherit; font-size: 13px; }
-.flow-guide-content table { display: block; max-width: 100%; margin: 20px 0 26px; overflow-x: auto; border-collapse: collapse; font-size: 14px; line-height: 1.6; }
+.flow-guide-content pre code { padding: 0; background: transparent; color: inherit; font-size: var(--font-caption); }
+.flow-guide-content table { display: block; max-width: 100%; margin: 20px 0 26px; overflow-x: auto; border-collapse: collapse; font-size: var(--font-small); line-height: 1.6; }
 .flow-guide-content th, .flow-guide-content td { min-width: 180px; padding: 12px 16px; border: 1px solid #dce6f1; text-align: left; vertical-align: top; }
 .flow-guide-content th { background: #f3f7fc; color: #254563; font-weight: 650; }
 .flow-guide-content img { display: block; width: 100%; height: auto; border: 1px solid #dae6f0; border-radius: 6px; background: #f6f9fd; }
 .flow-guide-content .flow-guide-image-link { display: block; border-radius: 6px; cursor: zoom-in; }
 .flow-guide-content .flow-guide-image-link:focus-visible { outline: 3px solid var(--guide-blue); outline-offset: 4px; }
-.flow-guide-content p > em:only-child { display: block; margin-top: -8px; color: #75869a; font-size: 13px; font-style: normal; line-height: 1.65; text-align: center; }
+.flow-guide-content p > em:only-child { display: block; margin-top: -8px; color: #75869a; font-size: var(--font-caption); font-style: normal; line-height: 1.65; text-align: center; }
 .flow-guide-content .flow-guide-chapter[hidden] { display: none; }
 .flow-guide-content .sl-anchor-link { display: none; }
 
@@ -187,8 +190,8 @@
 .flow-guide-pager-link[hidden] { display: none; }
 .flow-guide-pager-link:hover { border-color: #86b6e9; background: #f8fbff; }
 .flow-guide-pager-link--next { grid-column: 2; text-align: right; }
-.flow-guide-pager-direction { color: #73869a; font-size: 12px; line-height: 1.3; }
-.flow-guide-pager-link strong { color: #205b9e; font-size: 15px; font-weight: 650; line-height: 1.45; }
+.flow-guide-pager-direction { color: #73869a; font-size: var(--font-caption); line-height: 1.5; }
+.flow-guide-pager-link strong { color: #205b9e; font-size: var(--font-ui); font-weight: 650; line-height: 1.5; }
 
 @media (max-width: 950px) {
   .flow-guide-hero-inner { grid-template-columns: 1fr 340px; gap: 20px; }
@@ -216,7 +219,7 @@
   .flow-guide-content { font-size: 15px; line-height: 1.8; }
   .flow-guide-content h2 { font-size: 25px; }
   .flow-guide-content h3 { font-size: 19px; margin-top: 30px; }
-  .flow-guide-content table { font-size: 13px; }
+  .flow-guide-content table { font-size: var(--font-caption); }
   .flow-guide-content th, .flow-guide-content td { min-width: 140px; padding: 10px 12px; }
   .flow-guide-content pre { padding: 17px; }
   .flow-guide-pager { margin-top: 40px; }
@@ -224,14 +227,11 @@
 
 @media (max-width: 430px) {
   .flow-guide-hero h1 { font-size: 34px; }
-  .flow-guide-tutorial .flow-guide-hero h1 { text-wrap: balance; }
-  .flow-guide-chapters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; overflow-x: visible; }
-  .flow-guide-tutorial .flow-guide-chapters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .flow-guide-chapters a { justify-content: center; min-width: 0; min-height: 44px; padding: 8px 2px 10px; font-size: 11px; line-height: 1.35; text-align: center; white-space: normal; }
+  .flow-guide-chapters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; overflow-x: visible; }
+  .flow-guide-chapters a { justify-content: center; min-width: 0; min-height: 44px; padding: 10px 6px; line-height: 1.5; text-align: center; white-space: normal; overflow-wrap: anywhere; }
   .flow-guide-chapter-number { display: none; }
   .flow-guide-pager { gap: 8px; }
   .flow-guide-pager-link { padding: 13px; }
-  .flow-guide-pager-link strong { font-size: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

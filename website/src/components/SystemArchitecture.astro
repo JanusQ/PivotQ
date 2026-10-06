@@ -77,14 +77,14 @@ const { id = 'system-architecture' } = Astro.props;
   </g>
 </svg>
 <style>
-  .system-architecture { display: block; width: 100%; min-width: 560px; height: auto; }
+  .system-architecture { display: block; width: 100%; min-width: 600px; height: auto; }
   text { font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif; fill: #122d48; }
   .connector { fill: none; stroke: #7f99b7; stroke-width: 1.5; }
   .assessment-route { fill: none; stroke: #9bb0c8; stroke-width: 1.3; stroke-dasharray: 4 5; }
   .resource-route { fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
   .task-title, .framework-title, .simulator-title { font-size: 16px; font-weight: 600; }
   .resource-title { font-size: 18px; font-weight: 600; }
-  .detail, .framework-detail, .resource-detail, .simulator-detail, .assessment-label { font-size: 12.5px; font-weight: 400; fill: #42617e; }
+  .detail, .framework-detail, .resource-detail, .simulator-detail, .assessment-label { font-size: var(--font-caption); font-weight: 400; fill: #42617e; }
   .framework-title { fill: #fff; }
   .framework-detail { fill: #d5e5f5; }
   .cpu { fill: #1765c5; }

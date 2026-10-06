@@ -37,7 +37,7 @@ export function mountCodeEditor(source: HTMLElement) {
       value: source.dataset.modelSource || '', language: 'python', theme: 'aimd-light',
       readOnly: true, domReadOnly: true, ariaLabel: '水分子模型代码',
       fontFamily: 'Consolas, "SFMono-Regular", "Liberation Mono", monospace',
-      fontSize: compact ? 13 : 14, lineHeight: compact ? 23 : 25, fontWeight: '400', fontLigatures: false,
+      fontSize: 14, lineHeight: 25, fontWeight: '400', fontLigatures: false,
       lineNumbers: 'on', lineNumbersMinChars: 3, lineDecorationsWidth: 12,
       glyphMargin: false, folding: false, renderLineHighlight: 'line',
       minimap: { enabled: !compact, renderCharacters: true, maxColumn: 90, size: 'fit', showSlider: 'always' },
@@ -55,7 +55,7 @@ export function mountCodeEditor(source: HTMLElement) {
     compact = nextCompact;
     editor.updateOptions({
       minimap: { enabled: !compact }, wordWrap: compact ? 'on' : 'off',
-      fontSize: compact ? 13 : 14, lineHeight: compact ? 23 : 25,
+      fontSize: 14, lineHeight: 25,
     });
   });
   resizeObserver.observe(host);

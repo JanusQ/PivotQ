@@ -10,13 +10,13 @@ description: 使用 Docker 镜像、源码或 wheel 安装 PivotQ，并运行 Py
 | Python | 3.12 |
 | 已验证系统 | Linux x86-64；其他系统尚未验证 |
 | 任务调度 | Ray 2.31.0；快速上手在本机启动 Ray，也可连接已有集群 |
-| 示例量子后端 | 默认用 CPU 模拟量子电路；通过 Provider 接口可接入 QPU |
+| 教程使用的量子后端 | 默认用 CPU 模拟量子电路；通过 Provider 接口可接入 QPU |
 
-可以使用 Docker 镜像启动工作台并运行 Python，也可以在独立 Python 环境中通过源码或 wheel 安装 SDK。运行 SDK 快速上手不需要下载 AIMD 的训练数据或模型。
+可以使用 Docker 镜像启动工作台并运行 Python，也可以在独立 Python 环境中通过源码或 wheel 安装 SDK。运行 SDK 快速上手教程中的程序，无需下载水分子动力学模拟所用的训练数据或模型。
 
 ## 使用 Docker 安装
 
-安装 Docker，并确保支持 Linux x86-64 容器。镜像地址沿用 `janusq/pivotq:latest`：
+安装 Docker，并确保支持 Linux x86-64 容器。镜像地址为 `janusq/pivotq:latest`：
 
 ```bash
 docker pull janusq/pivotq:latest
@@ -79,7 +79,7 @@ docker run --rm --init \
 docker exec pivotq /app/.venv/bin/python -c "import pivotq; from pivotq import QuantumCircuit, Parameter; print(pivotq.__version__)"
 ```
 
-这也会检查当前镜像是否包含门户示例所需的电路与参数入口。若导入失败，可先使用下方的源码或 wheel 安装方式；后续镜像更新仍使用上面的镜像地址，重新执行 `docker pull` 并创建容器即可使用新版本。
+这也会检查当前镜像是否包含门户教程所需的电路与参数入口。若导入失败，可先使用下方的源码或 wheel 安装方式；后续镜像更新仍使用上面的镜像地址，重新执行 `docker pull` 并创建容器即可使用新版本。
 
 ## 从源码安装
 
@@ -111,7 +111,7 @@ python -m pip install ./dist/pivotq-0.1.0.dev0-py3-none-linux_x86_64.whl
 python -m pip install './dist/pivotq-0.1.0.dev0-py3-none-linux_x86_64.whl[qpu]'
 ```
 
-wheel 提供 SDK 及性能模拟器原生文件，因此带有 Linux x86-64 平台标记；教程示例保留在代码仓库的 `packages/framework/examples/` 下。
+wheel 提供 SDK 及性能模拟器原生文件，因此带有 Linux x86-64 平台标记；教程中的程序保留在代码仓库的 `packages/framework/examples/` 下。
 
 ## 验证安装
 
@@ -124,9 +124,9 @@ python packages/framework/examples/system_workflow.py
 python packages/framework/examples/custom_backend.py
 ```
 
-混合示例会启动本机 Ray，通过 Worker 执行经典任务与量子后端调用，输出量子后端、迭代次数和参数更新记录。`is_simulated` 为 `true` 表示量子电路由 CPU 模拟；任务依赖仍由 Ray 调度。下一步阅读[快速上手](../quickstart/)，了解代码如何连接这些计算步骤。
+混合程序教程中的脚本会启动本机 Ray，通过 Worker 执行经典任务与量子后端调用，输出量子后端、迭代次数和参数更新记录。`is_simulated` 为 `true` 表示量子电路由 CPU 模拟；任务依赖仍由 Ray 调度。下一步阅读[快速上手](../quickstart/)，了解代码如何连接这些计算步骤。
 
-后两个示例分别验证组件/工作流/执行报告和第三方 Provider；默认都在 CPU 上运行。Ray Jobs 需要独立部署的服务。性能预测原生引擎的兼容环境、输入预览和运行方式见[性能预测](../performance/#原生运行环境)。
+后两份教程中的程序分别验证组件/工作流/执行报告和第三方 Provider；默认都在 CPU 上运行。Ray Jobs 需要独立部署的服务。性能预测原生引擎的兼容环境、输入预览和运行方式见[性能预测](../performance/#原生运行环境)。
 
 ## QPU 适配器的可选依赖
 
@@ -136,7 +136,7 @@ QPU 通过 Provider 接口接入，所需设备 SDK 或通信依赖由适配器�
 python -m pip install -e './packages/framework[qpu]'
 ```
 
-该 extra 提供 HTTP 客户端依赖。设备连接配置由 Provider 实现定义，安装本身不会连接或执行 QPU。[量子后端](../quantum-backends/)说明统一提交接口，[扩展量子后端](../providers/)说明适配器的实现与注册。
+该 extra 提供 HTTP 客户端依赖。设备连接配置由 Provider 实现定义；安装依赖不会连接 QPU，也不会在 QPU 上执行任务。[量子后端](../quantum-backends/)说明统一提交接口，[扩展量子后端](../providers/)说明适配器的实现与注册。
 
 ## 使用整个仓库环境
 
@@ -147,7 +147,7 @@ uv sync --locked
 uv run --locked python packages/framework/examples/hybrid_program.py --executor ray --address local
 ```
 
-统一环境还包含工作台与 AIMD 应用依赖。两种安装方式都导入 `pivotq`；选择其中一种管理当前环境即可。
+统一环境还包含工作台和水分子动力学模拟应用的依赖。无论使用独立 SDK 环境还是仓库统一环境，均通过 `import pivotq` 导入；选择一种方式管理当前环境即可。
 
 ## 更新与排错
 

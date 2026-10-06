@@ -1,86 +1,80 @@
 ---
-import { RotateCcw } from '@lucide/astro';
 const base = import.meta.env.BASE_URL;
 ---
 <section class="flow-architecture" id="system" aria-labelledby="architecture-title">
   <div class="container">
     <div class="flow-section-heading">
       <div>
-        <p class="flow-section-kicker"><span>01</span> 设备与代码</p>
-        <h2 id="architecture-title"><span data-hardware-title="cpu">CPU</span> 准备数据，<span data-hardware-title="gpu">GPU</span> 调用 CUDA 计算电路参数，系统据此构造量子电路，并提交至 <span data-hardware-title="qpu">QPU</span> 测试后端。</h2>
+        <h2 id="architecture-title"><span class="flow-section-number">01</span> <span class="flow-section-label">编程模型：</span>用 Python 写清 CPU、QPU、GPU 各自的任务和先后关系，提交后由 PivotQ 统一安排运行。</h2>
+        <p class="flow-architecture-intro">以水分子动力学计算为例：CPU 读取 H-O-H 三个原子的坐标并准备输入；QPU 运行量子电路，CPU 将测量结果整理为量子特征；GPU 根据这些特征预测能量；CPU 再计算受力并更新原子位置。</p>
       </div>
     </div>
     <div class="flow-architecture-view" data-hardware-architecture data-active-hardware="qpu">
       <div class="flow-architecture-visual">
         <div class="flow-architecture-scene">
           <img class="flow-architecture-poster" src={`${base}images/hardware-render-poster.webp`} width="900" height="520" alt="CPU、QPU 与 GPU 互联的三维场景" loading="lazy" />
-          <canvas data-hardware-canvas data-scene-ready="pending" tabindex="0" role="img" aria-label="可拖动旋转的互联架构：左侧 CPU 准备数值，右侧 GPU 计算角度，中间 QPU 测试后端接收用该角度构造的电路。蓝色路径从 CPU 到 GPU，绿色路径从 GPU 到 QPU。画面不可缩放"></canvas>
+          <canvas data-hardware-canvas data-scene-ready="pending" tabindex="0" role="img" aria-label="可拖动旋转的互联架构：左侧 CPU 安排水分子模拟并更新原子位置，中间 QPU 运行量子电路，右侧 GPU 根据量子特征预测能量。箭头依次表示 CPU 到 QPU、QPU 到 GPU、GPU 回到 CPU。画面不可缩放"></canvas>
           <div class="flow-architecture-labels" aria-label="架构组件">
-            <button type="button" class="flow-scene-label" data-hardware="cpu" aria-pressed="false" style="left:22%;top:28%" title="旋转至 CPU"><strong>CPU</strong><small>提供数值</small></button>
-            <button type="button" class="flow-scene-label" data-hardware="qpu" aria-pressed="true" style="left:50%;top:20%" title="旋转至 QPU"><strong>QPU</strong><small>电路测试后端</small></button>
-            <button type="button" class="flow-scene-label" data-hardware="gpu" aria-pressed="false" style="left:78%;top:31%" title="旋转至 GPU"><strong>GPU</strong><small>CUDA 求角度</small></button>
+            <button type="button" class="flow-scene-label" data-hardware="cpu" aria-pressed="false" style="left:22%;top:28%" title="旋转至 CPU"><strong>CPU</strong><small>更新位置</small></button>
+            <button type="button" class="flow-scene-label" data-hardware="qpu" aria-pressed="true" style="left:50%;top:20%" title="旋转至 QPU"><strong>QPU</strong><small>运行电路</small></button>
+            <button type="button" class="flow-scene-label" data-hardware="gpu" aria-pressed="false" style="left:78%;top:31%" title="旋转至 GPU"><strong>GPU</strong><small>预测能量</small></button>
           </div>
-          <button class="flow-architecture-reset" type="button" data-scene-reset aria-label="重置三维视角" title="重置三维视角"><RotateCcw size={17} /></button>
         </div>
       </div>
-      <aside class="flow-architecture-code" aria-label="CPU、GPU、QPU 与程序提交代码">
+      <aside class="flow-architecture-code" aria-label="CPU 与 QPU 程序片段">
         <div class="flow-code-block" data-code-block="cpu">
-          <div class="flow-code-heading"><span data-code-title>CPU</span><small>输出 acos_input</small></div>
-          <pre><code><span class="flow-code-keyword">def</span> <span class="flow-code-function">prepare</span>():
-    <span class="flow-code-keyword">return</span> &#123;<span class="flow-code-data-cpu">"acos_input"</span>: -1.0&#125;
-cpu_handle = framework.submit(
-    CPU_COMPONENT_ID, <span class="flow-code-string">"prepare"</span>
-)</code></pre>
-        </div>
-        <div class="flow-code-block" data-code-block="gpu">
-          <div class="flow-code-heading"><span data-code-title>GPU</span><small>接收 CPU 数值，输出 angle_radians</small></div>
-          <pre><code><span class="flow-code-keyword">def</span> <span class="flow-code-function">compute</span>(prepared):
-    value = torch.tensor(
-        prepared[<span class="flow-code-data-cpu">"acos_input"</span>],
-        device=<span class="flow-code-string">"cuda"</span>
-    )
-    angle = torch.acos(value)
-    <span class="flow-code-keyword">return</span> &#123;<span class="flow-code-data-gpu">"angle_radians"</span>:
-            float(angle.cpu())&#125;
-gpu_handle = framework.submit(
-    GPU_COMPONENT_ID, <span class="flow-code-string">"compute"</span>,
-    cpu_handle
-)</code></pre>
+          <div class="flow-code-heading"><span data-code-title>CPU</span><small>读取原子坐标，计算受力并推进模拟</small></div>
+          <pre><code><span class="flow-code-data-cpu">geometry_A</span> = atoms.get_positions()
+prediction = potential.predict_geometry_energy_and_force(
+    <span class="flow-code-data-cpu">geometry_A</span>[None, :, :]
+)
+<span class="flow-code-data-gpu">energies_eV</span> = prediction.energies_eV[0]
+forces = prediction.forces_eV_per_A[0]
+dynamics = VelocityVerlet(atoms, timestep=dt_fs * units.fs)
+dynamics.run(steps)</code></pre>
+          <p class="flow-code-explain"><code class="flow-code-data-cpu">geometry_A</code> 是三个原子的坐标，单位为 Å；<code class="flow-code-data-cpu">forces</code> 是它们受到的力。</p>
         </div>
         <div class="flow-code-block" data-code-block="qpu">
-          <div class="flow-code-heading"><span data-code-title>QPU</span><small>用 GPU 角度构造电路并请求测试后端</small></div>
-          <pre><code><span class="flow-code-keyword">from</span> pivotq <span class="flow-code-keyword">import</span> QuantumCircuit
-
-gpu_value = framework.result(
-    gpu_handle
-).value
-angle = gpu_value[<span class="flow-code-data-gpu">"angle_radians"</span>]
-circuit = QuantumCircuit(3)
-circuit.rx(angle, 2)
-request = QuantumCircuitRequest(
-    <span class="flow-code-string">"gpu-derived-rx"</span>, circuit, <span class="flow-code-string">"Z"</span>
+          <div class="flow-code-heading"><span data-code-title>QPU</span><small>运行电路，提取分子特征</small></div>
+          <pre><code>qpu_api = FusionQPUCircuitFeatureExtractor(
+    QPUCircuitService(framework, context)
 )
-service = QPUCircuitService(
-    framework, context
+quantum = qpu_api.extract_features(
+    <span class="flow-code-data-cpu">quantum_request</span>
 )
-service.run_quantum_circuits(
-    step=0,
-    circuits=[request], shots=256
-)</code></pre>
-        </div>
-        <div class="flow-code-block flow-code-submit" data-code-block="submit">
-          <div class="flow-code-heading"><span data-code-title>提交</span><small>提交 CPU/GPU/QPU 验证作业</small><span class="flow-code-relations" aria-label="CPU、GPU、QPU"><span data-code-ref="cpu">CPU</span><span data-code-ref="gpu">GPU</span><span data-code-ref="qpu">QPU</span></span></div>
-          <pre><code>spec = build_job_spec(
-    submission_id=<span class="flow-code-string">"demo-001"</span>,
-    working_dir=<span class="flow-code-string">"."</span>,
-    output_dir=<span class="flow-code-string">"/tmp/pivotq"</span>,
-)
-client = RayJobClient(
-    <span class="flow-code-string">"http://127.0.0.1:8265"</span>
-)
-job = client.submit(spec)</code></pre>
+<span class="flow-code-data-qpu">features</span> = quantum.features</code></pre>
+          <p class="flow-code-explain"><code class="flow-code-data-cpu">quantum_request</code> 包含水分子坐标；程序为每组坐标分别运行 Z、X 两种电路，并将测量结果整理为 14 个数值特征。</p>
         </div>
       </aside>
+      <div class="flow-architecture-code-lower" role="group" aria-label="GPU 与作业提交程序片段">
+        <div class="flow-code-block" data-code-block="gpu">
+          <div class="flow-code-heading"><span data-code-title>GPU</span><small>根据量子结果预测能量</small></div>
+          <pre><code>energy_request = ClassicalPredictRequest(
+    request_id=request_id,
+    sample_ids=sample_ids,
+    <span class="flow-code-data-qpu">features</span>=<span class="flow-code-data-qpu">features</span>
+)
+<span class="flow-code-data-gpu">energies_eV</span> = classical_api.predict(
+    energy_request
+).energies_eV</code></pre>
+          <p class="flow-code-explain"><code class="flow-code-data-qpu">features</code> 是从 QPU 测量结果中提取的数值特征；<code class="flow-code-data-gpu">energies_eV</code> 是模型预测的能量。</p>
+        </div>
+        <div class="flow-code-block flow-code-submit" data-code-block="submit">
+          <div class="flow-code-heading"><span data-code-title>CPU 提交作业</span><small>一次提交，按步骤运行</small></div>
+          <pre><code>spec = build_job_spec(
+    submission_id=<span class="flow-code-string">"h2o-aimd-001"</span>,
+    working_dir=work_dir,
+    config_path=config_path,
+    checkpoint_path=model_path,
+    output_dir=output_dir,
+    quantum_target=<span class="flow-code-data-qpu">"qpu"</span>,
+    qos_helper_module=qpu_helper,
+    qos_data_tree_target=qpu_data_tree,
+)
+job = RayJobClient(address).submit(spec)</code></pre>
+          <p class="flow-code-explain">作业指定模型文件、运行配置和输出位置；提交后，由 CPU 协调 QPU 上的电路执行和 GPU 上的计算。</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -93,18 +87,13 @@ job = client.submit(spec)</code></pre>
     const labels = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-hardware]'));
     const widths: Record<Hardware, number> = { cpu: 78, qpu: 90, gpu: 78 };
     let measuredCanvasWidth = 0;
-    let scene: { setFocus: (kind: Hardware) => void; reset: () => void; dispose: () => void } | null = null;
+    let scene: { setFocus: (kind: Hardware) => void; dispose: () => void } | null = null;
     const select = (kind: Hardware) => {
       root.dataset.activeHardware = kind;
       labels.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.hardware === kind)));
       scene?.setFocus(kind);
     };
     labels.forEach(label => label.addEventListener('click', () => select(label.dataset.hardware as Hardware)));
-    root.querySelector<HTMLButtonElement>('[data-scene-reset]')?.addEventListener('click', () => {
-      scene?.reset();
-      root.dataset.activeHardware = 'qpu';
-      labels.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.hardware === 'qpu')));
-    });
     import('../lib/hardware-scene').then(({ mountHardwareScene }) => {
       scene = mountHardwareScene(canvas, {
         initialFocus: root.dataset.activeHardware as Hardware,

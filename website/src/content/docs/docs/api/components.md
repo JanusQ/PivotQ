@@ -7,7 +7,7 @@ description: CPU 组件声明、方法白名单、常驻 Actor 和组件句柄�
 from pivotq import ComponentSpec, ComponentHandle
 ```
 
-Task 组件每次调用构造业务实例，Actor 复用实例状态。完整示例见[组件与 Actor 教程](../../components-actors/)。
+Task 组件每次调用构造业务实例，Actor 复用实例状态。完整教程见[组件与 Actor 教程](../../components-actors/)。
 
 ## ComponentSpec
 
@@ -34,7 +34,7 @@ ComponentSpec(name, methods, execution="task", num_cpus=1,
 runtime.register(spec, factory) -> ComponentHandle
 ```
 
-`factory()` 返回实现白名单方法的普通业务对象，无需实现内部描述接口。注册时不构造业务实例；实例提供 `close()` 时由框架清理调用。
+`factory()` 返回实现白名单方法的普通业务对象，无需实现内部描述接口。注册时不构造业务实例；若实例提供 `close()`，框架会在清理时调用该方法。
 
 ## actor
 

@@ -56,7 +56,7 @@ def show_components(circuit: QuantumCircuit) -> None:
         if abs(amplitude) < 1e-10:
             continue
         if abs(amplitude.imag) > 1e-10:
-            raise ValueError("此教学示例预期只有实数振幅")
+            raise ValueError("本教程中的计算预期只有实数振幅")
         label = f"{basis:03b}"
         print(
             f"|{label[:2]}⟩|{label[2]}⟩  "

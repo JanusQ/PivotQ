@@ -7,12 +7,12 @@ import '../../styles/flow-docs.css';
 const base = import.meta.env.BASE_URL;
 const steps = getHeadings().filter(heading => heading.depth === 2);
 ---
-<PortalLayout title="AIMD 工作台教程" page="docs" description={frontmatter.description}>
+<PortalLayout title="水分子动力学模拟工作台教程" page="docs" description={frontmatter.description}>
   <section class="flow-guide flow-guide-tutorial" aria-labelledby="tutorial-title">
     <header class="flow-guide-hero">
       <div class="container flow-guide-hero-inner">
         <div class="flow-guide-hero-copy">
-          <h1 id="tutorial-title">水分子 AIMD 工作台教程</h1>
+          <h1 id="tutorial-title">水分子动力学模拟工作台教程</h1>
           <p class="flow-guide-intro">逐步了解工作台如何完成一次水分子计算，并分清目标硬件预测与 CPU 模拟结果。</p>
         </div>
         <div class="flow-guide-diagram" aria-hidden="true">
@@ -28,7 +28,7 @@ const steps = getHeadings().filter(heading => heading.depth === 2);
       <aside class="flow-guide-sidebar" aria-label="教程目录">
         <p class="flow-guide-sidebar-label">教程目录</p>
         <nav class="flow-guide-chapters" aria-label="教程章节">
-          <a href={`${base}docs/`}><span class="flow-guide-chapter-number"><ArrowLeft size={15} /></span><span>参考文档</span></a>
+          <a href={`${base}docs/`}><span class="flow-guide-chapter-number"><ArrowLeft size={15} /></span><span>文档</span></a>
           {steps.map((step, index) => (
             <a href={`#${step.slug}`}><span class="flow-guide-chapter-number">{String(index + 1).padStart(2, '0')}</span><span>{step.text.replace(/^\d+\.\s*/, '')}</span></a>
           ))}
@@ -36,12 +36,12 @@ const steps = getHeadings().filter(heading => heading.depth === 2);
       </aside>
 
       <div class="flow-guide-reading">
-        <article class="flow-guide-content" aria-label="水分子 AIMD 工作台教程正文" data-pagefind-body>
+        <article class="flow-guide-content" aria-label="水分子动力学模拟工作台教程正文" data-pagefind-body>
           <Content />
         </article>
         <nav class="flow-guide-pager" aria-label="继续浏览">
-          <a class="flow-guide-pager-link flow-guide-pager-link--prev" href={`${base}docs/`}><span class="flow-guide-pager-direction">返回文档</span><strong>参考文档</strong></a>
-          <a class="flow-guide-pager-link flow-guide-pager-link--next" href={`${base}examples/aimd/`}><span class="flow-guide-pager-direction">继续查看 <ArrowUpRight size={13} /></span><strong>水分子 AIMD 示例数据</strong></a>
+          <a class="flow-guide-pager-link flow-guide-pager-link--prev" href={`${base}docs/`}><span class="flow-guide-pager-direction">返回文档</span><strong>文档</strong></a>
+          <a class="flow-guide-pager-link flow-guide-pager-link--next" href={`${base}examples/aimd/`}><span class="flow-guide-pager-direction">继续查看 <ArrowUpRight size={13} /></span><strong>水分子动力学模拟教程数据</strong></a>
         </nav>
       </div>
     </div>

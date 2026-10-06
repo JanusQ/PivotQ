@@ -28,12 +28,12 @@ body[data-page="qram"] #main {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 6px 10px;
   padding: 31px 0 0;
   color: #7086a0;
-  font-size: 12px;
+  font-size: var(--font-small);
   font-weight: 550;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .flow-example-breadcrumbs a:hover,
@@ -62,7 +62,7 @@ body[data-page="qram"] #main {
 .flow-panel-overline {
   display: block;
   color: var(--flow-blue);
-  font-size: 10px;
+  font-size: var(--font-caption);
   font-weight: 750;
   line-height: 1.5;
   letter-spacing: 0.1em;
@@ -102,9 +102,10 @@ body[data-page="qram"] #main {
   border-left: 2px solid var(--flow-blue);
   padding-left: 11px;
   color: var(--flow-ink);
-  font-size: 12px;
+  font-size: var(--font-small);
   font-weight: 700;
-  white-space: nowrap;
+  white-space: normal;
+  line-height: 1.6;
 }
 
 .flow-example-spec span {
@@ -116,10 +117,11 @@ body[data-page="qram"] #main {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 22px;
+  gap: 12px 22px;
   color: #526b87;
-  font-size: 12px;
+  font-size: var(--font-ui);
   font-weight: 650;
+  line-height: 1.5;
 }
 
 .flow-example-jumps a {
@@ -139,14 +141,15 @@ body[data-page="qram"] #main {
   gap: 11px;
   padding: 27px 0 13px;
   color: var(--flow-ink);
-  font-size: 13px;
+  font-size: var(--font-ui);
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.6;
+  flex-wrap: wrap;
 }
 
 .flow-section-index {
   color: var(--flow-blue);
-  font-size: 11px;
+  font-size: var(--font-caption);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
@@ -159,9 +162,9 @@ body[data-page="qram"] #main {
 
 .flow-section-meta {
   color: #8093a9;
-  font-size: 10px;
+  font-size: var(--font-caption);
   font-weight: 650;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .flow-example-page .analysis-layout {
@@ -192,14 +195,15 @@ body[data-page="qram"] #main {
 .flow-example-page .analysis-card-heading h2 {
   margin-top: 2px;
   color: var(--flow-ink);
-  font-size: 15px;
+  font-size: var(--font-ui);
   font-weight: 700;
 }
 
 .flow-panel-meta {
   color: #7f94ab;
-  font: 11px/1.4 "SFMono-Regular", Consolas, monospace;
-  white-space: nowrap;
+  font: var(--font-caption)/1.4 "SFMono-Regular", Consolas, monospace;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .flow-example-page .analysis-source {
@@ -208,7 +212,7 @@ body[data-page="qram"] #main {
 }
 
 .flow-example-page .analysis-source pre {
-  font-size: 11px;
+  font-size: var(--font-caption);
   line-height: 1.85;
 }
 
@@ -351,7 +355,7 @@ body[data-page="qram"] #main {
   border-radius: 4px;
   background: #eef4fb;
   color: #3b628d;
-  font-size: 11px;
+  font-size: var(--font-caption);
   box-shadow: none;
 }
 
@@ -416,13 +420,13 @@ body[data-page="qram"] #main {
   padding: 9px 14px;
   background: #edf5ff;
   color: #365774;
-  font-size: 13px;
+  font-size: var(--font-small);
 }
 
 .flow-example-page .analysis-result-source {
   margin-bottom: 20px;
   color: var(--flow-muted);
-  font-size: 12px;
+  font-size: var(--font-small);
 }
 
 .flow-example-page .analysis-result-source summary {
@@ -448,7 +452,7 @@ body[data-page="qram"] #main {
 
 .flow-example-page .wb-chart-header h3 {
   color: var(--flow-ink);
-  font-size: 13px;
+  font-size: var(--font-ui);
 }
 
 .flow-example-page .wb-chart-header h3 small {
@@ -500,7 +504,7 @@ body[data-page="qram"] #main {
   padding: 7px 0;
   border-bottom: 1px solid var(--flow-line);
   color: #647d99;
-  font-size: 12px;
+  font-size: var(--font-caption);
   font-weight: 650;
   white-space: nowrap;
 }
@@ -538,14 +542,14 @@ body[data-page="qram"] #main {
 
 .flow-qram-visual-top > span {
   color: #7289a2;
-  font-size: 11px;
+  font-size: var(--font-caption);
   line-height: 1.5;
   text-align: right;
 }
 
 .flow-qram-visual-body {
   display: grid;
-  grid-template-columns: minmax(110px, 1fr) minmax(0, 3.8fr) minmax(110px, 1fr);
+  grid-template-columns: minmax(140px, 1fr) minmax(0, 3.8fr) minmax(140px, 1fr);
   align-items: center;
   gap: 20px;
   min-height: 440px;
@@ -567,7 +571,7 @@ body[data-page="qram"] #main {
   display: block;
   margin-bottom: 8px;
   color: var(--flow-blue);
-  font-size: 10px;
+  font-size: var(--font-caption);
   font-weight: 800;
 }
 
@@ -581,7 +585,7 @@ body[data-page="qram"] #main {
 .flow-qram-side p {
   margin-top: 8px;
   color: var(--flow-muted);
-  font-size: 12px;
+  font-size: var(--font-small);
   line-height: 1.6;
 }
 
@@ -599,7 +603,7 @@ body[data-page="qram"] #main {
 .flow-qram-figure figcaption {
   padding-top: 8px;
   color: #748ba4;
-  font-size: 11px;
+  font-size: var(--font-caption);
   line-height: 1.5;
   text-align: center;
 }
@@ -622,7 +626,7 @@ body[data-page="qram"] #main {
   max-width: 740px;
   margin-top: 14px;
   color: var(--flow-muted);
-  font-size: 14px;
+  font-size: var(--font-small);
   line-height: 1.8;
 }
 
@@ -639,8 +643,9 @@ body[data-page="qram"] #main {
   min-height: 53px;
   border-bottom: 1px solid var(--flow-line);
   color: var(--flow-ink);
-  font-size: 13px;
+  font-size: var(--font-small);
   font-weight: 700;
+  line-height: 1.6;
 }
 
 .flow-qram-links a:hover,
@@ -663,7 +668,7 @@ body[data-page="qram"] #main {
   }
 
   .flow-qram-visual-body {
-    grid-template-columns: minmax(90px, 1fr) minmax(0, 3.5fr) minmax(90px, 1fr);
+    grid-template-columns: minmax(140px, 1fr) minmax(0, 3.8fr) minmax(140px, 1fr);
     gap: 12px;
     padding-inline: 22px;
   }
@@ -699,7 +704,7 @@ body[data-page="qram"] #main {
 
   .flow-example-jumps {
     justify-content: flex-start;
-    gap: 16px;
+    gap: 12px 18px;
   }
 
   .flow-section-label {
@@ -707,7 +712,7 @@ body[data-page="qram"] #main {
   }
 
   .flow-section-meta {
-    font-size: 9px;
+    font-size: var(--font-caption);
   }
 
   .flow-example-page .analysis-layout {
@@ -758,11 +763,11 @@ body[data-page="qram"] #main {
 
   .flow-qram-visual-top > span {
     max-width: 135px;
-    font-size: 10px;
+    font-size: var(--font-caption);
   }
 
   .flow-qram-visual-body {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     min-height: 0;
     gap: 14px 18px;
     padding: 25px 17px;
@@ -801,7 +806,7 @@ body[data-page="qram"] #main {
   .flow-example-page .analysis-result-heading .analysis-button {
     padding: 8px 9px;
     min-height: 36px;
-    font-size: 11px;
+    font-size: var(--font-caption);
   }
 
   .flow-qram-visual-top {

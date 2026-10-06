@@ -37,16 +37,25 @@ export async function mountAimdWorkbench(root: HTMLElement) {
       const samples = frames.slice(first, Math.min(last, revealed) + 1);
       const [yMin, yMax] = chartRange(frames.slice(first, last + 1).flatMap(frame => visible.map(key => frame.values[key])));
       const tMin = frames[first].time, tMax = frames[last].time;
-      const x = (t: number) => 54 + (t - tMin) / (tMax - tMin || 1) * 410;
+      // Match SVG units to the rendered width so 13px tick labels remain legible
+      // on narrow cards. Reserve space for signed y values and the final x tick;
+      // selectFrame uses these same margins to map pointer positions to time.
+      const width = Math.max(200, Math.round(svg.clientWidth || 480));
+      const plotLeft = 64, plotRight = width - 28;
+      svg.setAttribute('viewBox', `0 0 ${width} 230`);
+      const x = (t: number) => plotLeft + (t - tMin) / (tMax - tMin || 1) * (plotRight - plotLeft);
       const y = (v: number) => 184 - (v - yMin) / (yMax - yMin) * 157;
       const children: Element[] = [];
       for (let i = 0; i <= 4; i++) {
         const value = yMin + (yMax - yMin) * i / 4, yy = y(value);
-        children.push(svgNode('line', { x1: 54, x2: 464, y1: yy, y2: yy, stroke: '#e5edf5', 'stroke-dasharray': '3 4' }));
-        children.push(svgNode('text', { x: 45, y: yy + 4, 'text-anchor': 'end', fill: '#7c8fa4', 'font-size': 11 }, Math.abs(value) >= 100 ? value.toFixed(0) : value.toFixed(3)));
+        children.push(svgNode('line', { x1: plotLeft, x2: plotRight, y1: yy, y2: yy, stroke: '#e5edf5', 'stroke-dasharray': '3 4' }));
+        children.push(svgNode('text', { x: plotLeft - 9, y: yy + 4, 'text-anchor': 'end', fill: '#7c8fa4', 'font-size': 13 }, Math.abs(value) >= 100 ? value.toFixed(0) : value.toFixed(3)));
       }
-      for (let i = 0; i <= 4; i++) { const t = tMin + (tMax - tMin) * i / 4; children.push(svgNode('text', { x: x(t), y: 206, 'text-anchor': 'middle', fill: '#7c8fa4', 'font-size': 11 }, t.toFixed(1))); }
-      children.push(svgNode('text', { x: 460, y: 224, 'text-anchor': 'end', fill: '#7c8fa4', 'font-size': 11 }, '时间 / fs'));
+      // Keep labels at the same readable size; show fewer time ticks when the
+      // plot is too narrow to separate five labels such as "75.0" and "100.0".
+      const timeTickCount = plotRight - plotLeft < 220 ? 2 : 4;
+      for (let i = 0; i <= timeTickCount; i++) { const t = tMin + (tMax - tMin) * i / timeTickCount; children.push(svgNode('text', { x: x(t), y: 206, 'text-anchor': 'middle', fill: '#7c8fa4', 'font-size': 13 }, t.toFixed(1))); }
+      children.push(svgNode('text', { x: width - 14, y: 224, 'text-anchor': 'end', fill: '#7c8fa4', 'font-size': 13 }, '时间 / fs'));
       for (const key of visible) {
         const d = samples.map((frame, i) => `${i ? 'L' : 'M'}${x(frame.time).toFixed(2)},${y(frame.values[key]).toFixed(2)}`).join(' ');
         children.push(svgNode('path', { d, fill: 'none', stroke: metrics[key].color, 'stroke-width': 1.6, 'stroke-linejoin': 'round', 'data-metric': key, 'data-sample-count': samples.length }));
@@ -88,7 +97,10 @@ export async function mountAimdWorkbench(root: HTMLElement) {
         button.addEventListener('click', () => { if (chart.disabled.has(key)) chart.disabled.delete(key); else if (chart.disabled.size < chart.keys.length - 1) chart.disabled.add(key); button.setAttribute('aria-pressed', String(!chart.disabled.has(key))); drawChart(chart); });
       });
       const selectFrame = (event: PointerEvent) => {
-        const rect = chart.svg.getBoundingClientRect(); const fraction = Math.max(0, Math.min(1, ((event.clientX - rect.left) / rect.width * 480 - 54) / 410));
+        // Invert the displayed plot scale, including its 64px/28px margins,
+        // before choosing the nearest saved frame in the current time window.
+        const rect = chart.svg.getBoundingClientRect(), width = chart.svg.viewBox.baseVal.width;
+        const fraction = Math.max(0, Math.min(1, ((event.clientX - rect.left) / rect.width * width - 64) / (width - 92)));
         const [first, last] = chart.domain; inspecting = true; pause(); update(nearestFrame(frames[first].time + fraction * (frames[last].time - frames[first].time)));
       };
       let dragging = false;
@@ -97,6 +109,16 @@ export async function mountAimdWorkbench(root: HTMLElement) {
       chart.svg.addEventListener('pointerup', () => { dragging = false; }); chart.svg.addEventListener('pointercancel', () => { dragging = false; });
       chart.svg.addEventListener('keydown', event => { if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) { event.preventDefault(); inspecting = true; pause(); update(event.key === 'Home' ? 0 : event.key === 'End' ? frames.length - 1 : current + (event.key === 'ArrowLeft' ? -1 : 1)); } });
     });
+    // Reflow paused charts as well as playing ones. Ignore height-only changes
+    // caused by the new viewBox to avoid an observer/redraw feedback loop.
+    const chartResizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const chart = charts.find(({ svg }) => svg === entry.target);
+        if (chart && Math.abs(chart.svg.viewBox.baseVal.width - Math.max(200, Math.round(chart.svg.clientWidth))) > 0.5) drawChart(chart);
+      }
+    });
+    charts.forEach(({ svg }) => chartResizeObserver.observe(svg));
+    window.addEventListener('pagehide', event => { if (!event.persisted) chartResizeObserver.disconnect(); }, { once: true });
     const observer = new IntersectionObserver(entries => {
       visible = entries[0].isIntersecting;
       if (visible) start(); else { pause(); inspecting = false; }

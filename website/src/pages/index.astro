@@ -10,26 +10,27 @@ import aimdPreview from '../assets/guides/aimd/06-molecule-evolution.png';
 import '../styles/flow-home.css';
 const base = import.meta.env.BASE_URL;
 ---
-<PortalLayout>
+<PortalLayout description="PivotQ 帮助编程者构建和管理跨 CPU、GPU 与 QPU 的量子经典混合计算任务。">
   <HomeOverview />
   <HardwareArchitecture />
 
   <section class="flow-home-system" id="workflow" aria-labelledby="system-title">
     <div class="container">
-      <div class="flow-section-heading"><div><p class="flow-section-kicker"><span>02</span> 工作流程</p><h2 id="system-title">指定每一步使用的设备，PivotQ 负责安排执行。</h2><p>按任务需要组合 CPU 预处理、GPU 模型计算与 QPU 电路执行。性能工具根据任务描述和设备模型估算耗时。</p></div><a class="flow-text-link" href={`${base}docs/`}>查看工作流程 <ArrowUpRight size={18} /></a></div>
+      <div class="flow-section-heading flow-analysis-heading">
+        <h2 id="system-title"><span class="flow-section-number">02</span> <span class="flow-section-label">任务编排和性能分析：</span>PivotQ 可利用真机运行或性能仿真引擎生成详细的性能报告，发现瓶颈。</h2>
+        <div class="flow-analysis-summary"><p>支持万量子比特、千卡规模的同步性能建模，可模拟百万条硬件指令类事件，并分析多作业并发时的资源竞争。</p><a class="flow-text-link" href={`${base}docs/#使用文档`}>查看编排和分析文档 <ArrowUpRight size={18} /></a></div>
+      </div>
       <FlowWorkbench />
     </div>
   </section>
 
   <section class="flow-home-applications" id="applications" aria-labelledby="applications-title">
     <div class="container">
-      <div class="flow-section-heading"><div><p class="flow-section-kicker"><span>03</span> 示例与原理</p><h2 id="applications-title">水分子 AIMD 与 QRAM 示例</h2><p>从水分子的能量、受力再到轨迹演示，再看量子地址怎样读取存储位。</p></div></div>
+      <div class="flow-section-heading"><div><h2 id="applications-title"><span class="flow-section-number">03</span> <span class="flow-section-label">教程：</span>跟着例子学习 PivotQ</h2><p>通过两个教程，了解水分子的能量、受力与运动轨迹，以及如何通过量子地址查询存储数据。</p></div></div>
       <div class="flow-application-grid">
-        <a class="flow-application" href={`${base}examples/aimd/`}><div class="flow-application-copy"><span class="flow-app-index">模型与轨迹</span><h3>水分子 AIMD</h3><p>先理解原子位置、势能、力与下一帧的关系，再查看量子电路和另一份已保存的轨迹。</p><span class="flow-application-link">查看电路与轨迹 <ArrowRight size={18} /></span></div><div class="flow-application-media flow-application-media-aimd"><Image src={aimdPreview} alt="水分子轨迹与总能量曲线的计算工作台截图" loading="lazy" /></div></a>
-        <a class="flow-application" href={`${base}examples/qram/`}><div class="flow-application-copy"><span class="flow-app-index">本地教学程序</span><h3>QRAM</h3><p>从两位地址找到四个存储位置中的一格，用 PivotQ 构造电路，演示固定地址与叠加地址的理想查询。</p><span class="flow-application-link">查看寻址原理 <ArrowRight size={18} /></span></div><div class="flow-application-media flow-application-media-qram"><QramDiagram compact /></div></a>
+        <a class="flow-application" href={`${base}examples/aimd/`} aria-label="查看水分子动力学模拟教程"><div class="flow-application-copy"><h3>水分子动力学模拟</h3><p>通过量子电路提取分子特征，结合经典模型预测势能与受力，逐步更新原子位置，研究水分子的振动与运动轨迹。</p><span class="flow-application-link">查看教程 <ArrowRight size={17} /></span></div><div class="flow-application-media flow-application-media-aimd"><Image src={aimdPreview} alt="水分子轨迹与总能量曲线的计算工作台截图" loading="lazy" /></div></a>
+        <a class="flow-application" href={`${base}examples/qram/`} aria-label="查看量子随机存储器教程"><div class="flow-application-copy"><h3>量子随机存储器</h3><p>量子随机存储器通过量子地址访问数据，使处于叠加态的地址与对应数据保持关联，为量子算法提供数据查询能力。本例演示理想条件下的查询过程。</p><span class="flow-application-link">查看教程 <ArrowRight size={17} /></span></div><div class="flow-application-media flow-application-media-qram"><QramDiagram compact /></div></a>
       </div>
     </div>
   </section>
-
-  <section class="flow-home-next" aria-labelledby="next-title"><div class="container flow-home-next-inner"><div><p class="flow-section-kicker"><span>04</span> 操作教程</p><h2 id="next-title">按步骤运行水分子示例</h2><p>教程介绍怎样编译电路、估算用时、提交 CPU 数值模拟，再查看分子轨迹。</p></div><a class="flow-button flow-button-primary" href={`${base}docs/aimd/`}>打开 AIMD 教程 <ArrowUpRight size={18} /></a></div></section>
 </PortalLayout>

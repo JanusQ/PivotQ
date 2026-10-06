@@ -9,7 +9,7 @@ from pivotq.providers import (
 )
 ```
 
-Provider 将设备编译、连接和结果读取封装为同步接口，供 PivotQ 调度。完整适配示例见[扩展量子后端](../../providers/)。
+Provider 将面向设备的电路编译、设备连接和结果读取封装为同步接口，供 PivotQ 调度。完整适配教程见[扩展量子后端](../../providers/)。
 
 ## register_quantum_backend
 
@@ -35,7 +35,7 @@ BackendCapabilities(max_qubits, is_simulated, min_qubits=1, supports_seed=False)
 | `is_simulated` | 是否为模拟 Provider |
 | `supports_seed` | 是否支持采样种子；真实设备必须为 `False` |
 
-该声明用于提交前校验，不构成设备在线状态。当前协议接收已绑定的幺正电路及末尾测量，SDK 统一处理测量映射。
+该声明用于提交前校验，并不表示设备当前在线。当前协议接收已绑定的幺正电路及末尾测量，SDK 统一处理测量映射。
 
 ## QuantumRequest
 
@@ -58,7 +58,7 @@ ProviderResult(shots, source, probabilities=None, counts=None, metadata={})
 
 分布键使用全部逻辑量子位的 `q[n-1]...q0` 顺序，不含寄存器分隔符。SDK 校验位宽、归一化及计数，再转换为用户请求的测量分布。
 
-`metadata` 为可序列化字典，每个实例默认独立空字典。可记录 `backend_job_id`、`device_id`，便于核实异常请求；不包含凭据。
+`metadata` 为可序列化字典，每个实例默认使用独立的空字典。可记录 `backend_job_id`、`device_id`，便于核实异常请求；不包含凭据。
 
 ## QuantumProvider
 
@@ -67,6 +67,6 @@ provider.run(request: QuantumRequest) -> ProviderResult
 provider.close() -> None
 ```
 
-工厂与方法均为同步调用。`close` 清理客户端资源，必须允许重复调用。已知失败使用 `pivotq.errors` 的结构化异常；设备可能已接受任务后发生的不确定失败，应抛出 `ResultUnknownError` 并保留设备作业标识。
+工厂与方法均为同步调用。`close` 清理客户端资源，必须允许重复调用。已知失败使用 `pivotq.errors` 中的结构化异常；如果设备可能已接受任务，但执行结果无法确定，应抛出 `ResultUnknownError` 并保留设备作业标识。
 
 SDK 不自动重试或替换后端。Provider 在执行进程中构造，用户类与所需依赖必须在 Ray Worker 环境中可用。

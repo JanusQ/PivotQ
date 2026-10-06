@@ -382,7 +382,7 @@ function buildInterconnects(parent: THREE.Object3D): THREE.Group[] {
   return sides;
 }
 
-/** Show the logical CPU -> GPU -> QPU request order independently of the equipment cabling. */
+/** Trace the AIMD handoff from CPU setup through QPU readout and GPU energy prediction back to CPU integration. */
 function buildFlowRoutes(parent: THREE.Object3D): { group: THREE.Group; routes: FlowRoute[] } {
   const group = new THREE.Group();
   parent.add(group);
@@ -390,15 +390,23 @@ function buildFlowRoutes(parent: THREE.Object3D): { group: THREE.Group; routes: 
   const segments: Array<{ points: Array<[number, number, number]>; color: number }> = [
     {
       points: [
-        [-2.38, 0.2, 1.03], [-1.88, 0.2, 1.73], [-0.78, 0.2, 2.15],
-        [0.72, 0.2, 2.15], [1.88, 0.2, 1.73], [2.38, 0.2, 1.03],
+        [-2.38, 0.2, 1.03], [-1.93, 0.2, 1.66], [-1.12, 0.2, 2.03],
+        [-0.42, 0.2, 1.91], [0, 0.2, 1.21],
       ],
       color: PALETTE.blue,
     },
     {
       points: [
-        [2.38, 0.31, 1.25], [2.11, 0.31, 2.28], [1.27, 0.31, 2.58],
-        [0.48, 0.31, 2.45], [0, 0.31, 1.21],
+        [0, 0.27, 1.21], [0.42, 0.27, 1.91], [1.12, 0.27, 2.03],
+        [1.93, 0.27, 1.66], [2.38, 0.27, 1.03],
+      ],
+      color: PALETTE.brass,
+    },
+    {
+      points: [
+        [2.38, 0.13, 1.3], [2.2, 0.13, 2.48], [1.14, 0.13, 2.86],
+        [0, 0.13, 2.98], [-1.14, 0.13, 2.86], [-2.2, 0.13, 2.48],
+        [-2.38, 0.13, 1.3],
       ],
       color: PALETTE.teal,
     },

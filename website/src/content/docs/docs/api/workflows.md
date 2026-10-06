@@ -15,7 +15,7 @@ from pivotq import Workflow, NodeRef, WorkflowRun, WorkflowSubmissionError
 workflow = Workflow(name="workflow")
 ```
 
-输入名与节点名在同一工作流内唯一。添加节点时保存普通字面参数的副本；节点只引用已声明输入和较早节点，从构建过程保证无环。首次通过校验的提交冻结图结构，后续仍可重复运行。
+输入名与节点名在同一工作流内唯一。添加节点时会保存普通字面参数的副本；节点只能引用已声明的输入和此前添加的节点，从而在构建过程中保证图无环。首次提交通过校验后，图结构即被冻结，但工作流仍可重复运行。
 
 ## input 与 NodeRef
 

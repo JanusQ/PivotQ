@@ -18,7 +18,7 @@ hardware = Hardware(
         qubits=8,
         shot_rate=10000,
         submit_latency_seconds=0.001,
-        source="示例假设参数，尚未经真机校准",
+        source="教程采用的假设参数，尚未经真机校准",
         calibrated=False,
     ),
 )
@@ -34,7 +34,7 @@ CPU 节点池和 QPU 池各自使用同一种规格。设备标识为 `cpu0`、`
 
 CPU 任务若提供已知的 `duration_seconds`，无需填写计算速率，且不能同时传入 `ops`。按运算量或内存量建模时，需要提供对应速率。正的耗时、提交延迟和链路延迟向上取整到整数微秒。QPU 的 shot_rate 合并采集、测量和复位阶段，不等于量子门时钟频率。
 
-`memory_bandwidth_gbps_per_node` 的 Gb/s 是十亿**比特**每秒；例如 1 GB 数据量在 1 Gb/s 下的理想传输项为 8 秒。按运算量/内存量计算的 CPU 模型还包含当前引擎固有的 20 微秒开销；显式 duration 使用用户给定的时间。
+`memory_bandwidth_gbps_per_node` 的 Gb/s 表示十亿**比特**每秒；例如，以 1 Gb/s 的带宽传输 1 GB 数据，理想传输耗时为 8 秒。按运算量/内存量计算的 CPU 模型还包含当前引擎固有的 20 微秒开销；显式指定 duration 时，使用用户给定的耗时。
 
 ## 通信链路
 
@@ -54,4 +54,4 @@ hardware = replace(hardware, links=(
 
 ## 保存与比较
 
-`hardware.to_dict()` 和 `Hardware.from_dict(...)` 用于保存、恢复参数。`Predictor.compare()` 比较用户提供的工作量与硬件组合，返回每种配置独立的预测。更快的预测不证明两个应用具有相同的科学精度，详见[性能预测](../performance/)。
+`hardware.to_dict()` 和 `Hardware.from_dict(...)` 用于保存、恢复参数。`Predictor.compare()` 比较用户提供的工作量与硬件组合，返回每种配置独立的预测。预测耗时更短，并不能证明两个应用具有相同的科学精度，详见[性能预测](../performance/)。

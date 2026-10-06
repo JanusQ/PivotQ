@@ -1,6 +1,6 @@
 ---
 title: 可复用工作流
-description: 先定义 CPU 与量子任务依赖，再为不同输入和后端执行同一个工作流。
+description: 先定义 CPU 与量子任务的依赖，再使用不同的输入和后端运行同一个工作流。
 ---
 
 import SDKExample from '../../../components/SDKExample.astro';
@@ -26,9 +26,11 @@ with pq.Runtime() as runtime:
     run.release()
 ```
 
-上面的 `build_circuit`、`update_parameter` 是用户函数；下面的完整示例提供可直接运行的实现。`NodeRef` 表示图中的值，执行后 `WorkflowRun.outputs` 才包含可供 `get()` 使用的 `ResultRef`。
+上面的 `build_circuit`、`update_parameter` 是用户函数；下面的完整教程提供可直接运行的实现。`NodeRef` 表示图中的值，执行后 `WorkflowRun.outputs` 才包含可供 `get()` 使用的 `ResultRef`。
 
-## 完整示例
+<span id="完整示例"></span>
+
+## 完整教程
 
 程序重复运行同一个工作流，用 Actor 累积量子结果，最后导出执行记录：
 
@@ -37,7 +39,7 @@ python packages/framework/examples/system_workflow.py --report-path execution.js
 python packages/framework/examples/system_workflow.py --executor ray --address local
 ```
 
-源码在构建时直接读取被测试的 Python 文件：
+完整教程代码如下：
 
 <SDKExample example="workflow" />
 
@@ -45,8 +47,8 @@ python packages/framework/examples/system_workflow.py --executor ray --address l
 
 第一次提交时工作流结构会冻结。之后可更换输入和绑定再次运行，每次得到独立的引用。绑定的 `ComponentHandle`、`QuantumBackend` 必须属于运行该图的 Runtime；输入和绑定名称必须与声明匹配。
 
-运行时会预检结构和接口。执行系统在实际提交过程中仍可能故障；如果部分节点已被接收，`WorkflowSubmissionError.partial_run` 保留这些引用，不能假定整图未执行后重新提交。
+运行时会预检结构和接口。执行系统在实际提交过程中仍可能发生故障；如果部分节点已被接收，`WorkflowSubmissionError.partial_run` 会保留这些节点的引用。此时不能假定整个工作流都未执行，并据此重新提交。
 
 `run.refs` 包含该次执行所有节点的引用。先用 `runtime.wait(run.refs, num_returns=len(run.refs))` 等待需要释放的节点完成，再调用 `run.release()`。只有一个分支的输出已完成，不表示其他分支也已完成。
 
-算法的 `for`、`while` 与结果相关分支继续写在普通 Python 中。工作流描述执行依赖；[性能工作量模型](../performance/)是另一个由用户编写的模型，不会自动从图中推断准确计算耗时。
+算法中的 `for`、`while` 循环，以及依赖结果的条件分支，仍用普通 Python 编写。工作流描述执行依赖；[性能工作量模型](../performance/)是另一个由用户编写的模型，不会自动从图中推断准确计算耗时。

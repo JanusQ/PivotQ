@@ -1,0 +1,32 @@
+---
+import { Badge } from '@astrojs/starlight/components';
+import type { StarlightRouteData } from '@astrojs/starlight/route-data';
+
+interface Props {
+  sublist: StarlightRouteData['sidebar'];
+  nested?: boolean;
+}
+
+const { sublist, nested = false } = Astro.props;
+---
+<!-- Render the resolved navigation as a static tree, including every group's links. -->
+<ul class:list={{ 'top-level': !nested }}>
+  {sublist.map(entry => (
+    <li>
+      {entry.type === 'link' ? (
+        <a href={entry.href} {...entry.attrs} aria-current={entry.isCurrent ? 'page' : undefined}>
+          <span>{entry.label}</span>
+          {entry.badge && <Badge {...entry.badge} />}
+        </a>
+      ) : (
+        <div class="docs-sidebar-group">
+          <div class="docs-sidebar-group-label">
+            <span class="large">{entry.label}</span>
+            {entry.badge && <Badge {...entry.badge} />}
+          </div>
+          <Astro.self sublist={entry.entries} nested />
+        </div>
+      )}
+    </li>
+  ))}
+</ul>

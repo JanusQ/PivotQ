@@ -22,7 +22,7 @@ with Runtime(executor="ray", address="local") as runtime:
 
 ## 连接任务
 
-将前一步引用作为后一步输入，运行时会解析依赖后再调用函数。引用应来自同一个运行时，不能跨 Runtime 混用。
+将前一步的结果引用作为后一步的输入，运行时会先解析依赖，再调用函数。引用应来自同一个运行时，不能跨 Runtime 混用。
 
 ```python
 with Runtime(executor="ray", address="local") as runtime:
@@ -44,7 +44,7 @@ with Runtime(executor="ray", address="auto") as runtime:
     print(runtime.get(ref))
 ```
 
-使用 Ray 时，driver 与 worker 需要相同的 `pivotq` 安装及应用依赖。可序列化函数与数据才能跨进程传递；推荐将可复用函数放入可导入的模块中。
+使用 Ray 时，driver 与 worker 需要安装相同版本的 `pivotq` 和应用依赖。可序列化函数与数据才能跨进程传递；推荐将可复用函数放入可导入的模块中。
 
 调试函数时可选择 `Runtime(executor="local", max_workers=4)`，通过本地线程池执行，不启动 Ray。`max_workers` 控制并发工作线程数；此模式的 `num_cpus` 只作配置校验，不保证为每个任务预留相应数量的 CPU。
 

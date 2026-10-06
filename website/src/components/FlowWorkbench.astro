@@ -1,49 +1,70 @@
 ---
-import { ChevronLeft, ChevronRight, Clock3, Cpu, ListChecks, Orbit, ScanLine } from '@lucide/astro';
+import { ChevronLeft, ChevronRight, Clock3, Cpu, ListChecks, Orbit, ScanLine, Server } from '@lucide/astro';
 import '../styles/flow-workbench.css';
+const reportFields = ['各任务运行时间', '运行节点', '运行指令顺序', '运行复杂度'];
 ---
-<div class="flow-workspace" data-flow-workspace data-flow-mode="compose">
-  <div class="flow-workspace-toolbar">
-    <div class="flow-workspace-headerline">
-      <div class="flow-workspace-title"><span class="flow-workspace-led"></span><strong>混合计算工作流</strong></div>
-      <div class="flow-workspace-rail-nav" aria-label="工作流节点导航">
-        <button type="button" data-flow-prev aria-controls="flow-workspace-panel" aria-label="上一个工作流节点" title="上一个工作流节点" disabled><ChevronLeft size={17} /></button>
-        <button type="button" data-flow-next aria-controls="flow-workspace-panel" aria-label="下一个工作流节点" title="下一个工作流节点"><ChevronRight size={17} /></button>
+<div class="flow-workspace" data-flow-workspace>
+  <p class="flow-workspace-description" id="flow-workspace-description">为量子-经典混合程序选择 CPU、GPU 或 QPU 并编排任务后，可在真机上运行，也可使用离散事件仿真器评估性能。两种方式均可生成性能报告，包含各任务的运行时间、运行节点、指令执行顺序和运行复杂度。图中已突出标示任务编排、性能分析与报告节点；小屏幕可横向滚动，或使用左右按钮查看。</p>
+  <div id="flow-workspace-panel" class="flow-workspace-canvas" tabindex="0" role="region" aria-label="编程仿真工作流" aria-describedby="flow-workspace-description">
+    <div class="flow-workspace-track">
+      <div class="flow-node flow-node-core flow-node-source">
+        <span class="flow-node-port flow-node-port-right" aria-hidden="true"></span>
+        <span class="flow-node-step">01 / 程序</span>
+        <div class="flow-node-name"><ScanLine size={20} aria-hidden="true" /><strong>量子-经典<br />混合程序</strong></div>
+        <p>用代码描述计算步骤与参数</p>
+      </div>
+      <div class="flow-edge flow-edge-program" aria-hidden="true"></div>
+      <div class="flow-node flow-node-core flow-node-resources">
+        <span class="flow-node-port flow-node-port-left" aria-hidden="true"></span><span class="flow-node-port flow-node-port-right" aria-hidden="true"></span>
+        <span class="flow-node-step">02 / 设备</span>
+        <div class="flow-node-name"><Cpu size={20} aria-hidden="true" /><strong>选择设备</strong></div>
+        <p>为计算步骤指定目标设备</p>
+        <div class="flow-resource-tags"><span data-resource="cpu">CPU</span><span data-resource="gpu">GPU</span><span data-resource="qpu">QPU</span></div>
+      </div>
+      <div class="flow-edge flow-edge-resources" aria-hidden="true"></div>
+      <div class="flow-node flow-node-core flow-node-emphasis flow-node-compose">
+        <span class="flow-node-port flow-node-port-left" aria-hidden="true"></span><span class="flow-node-port flow-node-port-right" aria-hidden="true"></span>
+        <span class="flow-node-step">03 / 编排</span>
+        <div class="flow-node-name"><Orbit size={20} aria-hidden="true" /><strong>任务编排</strong></div>
+        <p>编译量子电路，组织任务依赖</p>
+      </div>
+      <div class="flow-fork" aria-hidden="true"><span class="flow-fork-arm flow-fork-arm-top"></span><span class="flow-fork-arm flow-fork-arm-bottom"></span></div>
+      <div class="flow-node flow-node-emphasis flow-node-branch" data-flow-branch="hardware">
+        <span class="flow-node-port flow-node-port-left" aria-hidden="true"></span><span class="flow-node-port flow-node-port-right" aria-hidden="true"></span>
+        <span class="flow-node-step">04A / 实际执行</span>
+        <div class="flow-node-name"><Server size={20} aria-hidden="true" /><strong>真机运行</strong></div>
+        <p>在已连接的目标设备上执行任务</p>
+      </div>
+      <div class="flow-node flow-node-emphasis flow-node-branch" data-flow-branch="simulation">
+        <span class="flow-node-port flow-node-port-left" aria-hidden="true"></span><span class="flow-node-port flow-node-port-right" aria-hidden="true"></span>
+        <span class="flow-node-step">04B / 性能仿真</span>
+        <div class="flow-node-name"><Clock3 size={20} aria-hidden="true" /><strong>离散事件<br />仿真器</strong></div>
+        <p>按工作量与设备模型模拟任务执行</p>
+      </div>
+      <div class="flow-merge" aria-hidden="true"><span class="flow-merge-arm flow-merge-arm-top"></span><span class="flow-merge-arm flow-merge-arm-bottom"></span><span class="flow-merge-tip"></span></div>
+      <div class="flow-node flow-node-emphasis flow-node-report" data-flow-report="shared">
+        <span class="flow-node-port flow-node-port-left" aria-hidden="true"></span>
+        <span class="flow-node-step">05 / 报告</span>
+        <div class="flow-node-name"><ListChecks size={20} aria-hidden="true" /><strong>真机/仿真性能报告</strong></div>
+        <ul class="flow-report-fields" aria-label="真机/仿真性能报告内容">
+          {reportFields.map(field => <li>{field}</li>)}
+        </ul>
       </div>
     </div>
-    <div class="flow-mode-switch" role="tablist" aria-label="工作流阶段" aria-orientation="horizontal">
-      <button id="flow-tab-compose" type="button" role="tab" data-mode="compose" aria-controls="flow-workspace-panel" aria-selected="true" tabindex="0">任务编排</button>
-      <button id="flow-tab-predict" type="button" role="tab" data-mode="predict" aria-controls="flow-workspace-panel" aria-selected="false" tabindex="-1">性能模拟</button>
-      <button id="flow-tab-execute" type="button" role="tab" data-mode="execute" aria-controls="flow-workspace-panel" aria-selected="false" tabindex="-1">运行记录</button>
-    </div>
   </div>
-  <div id="flow-workspace-panel" class="flow-workspace-canvas" tabindex="0" role="tabpanel" aria-labelledby="flow-tab-compose" aria-description="量子-经典混合计算的五步流程，小屏幕可横向滚动查看">
-    <div class="flow-workspace-track" role="list" aria-label="混合计算的五个步骤">
-      <div class="flow-node flow-node-source" role="listitem"><span class="flow-node-port flow-node-port-right"></span><span class="flow-node-step">01 / 程序</span><div class="flow-node-name"><ScanLine size={20} /><strong>量子-经典<br />混合程序</strong></div><p>用代码描述计算步骤与参数</p></div>
-      <div class="flow-edge" aria-hidden="true"><span class="flow-edge-pulse"></span></div>
-      <div class="flow-node flow-node-resources" role="listitem"><span class="flow-node-port flow-node-port-left"></span><span class="flow-node-port flow-node-port-right"></span><span class="flow-node-step">02 / 设备</span><div class="flow-node-name"><Cpu size={20} /><strong>选择设备</strong></div><div class="flow-resource-tags"><span data-resource="cpu">CPU</span><span data-resource="gpu">GPU</span><span data-resource="qpu">QPU</span></div><p>为计算步骤指定目标设备</p></div>
-      <div class="flow-edge" aria-hidden="true"><span class="flow-edge-pulse"></span></div>
-      <div class="flow-node" role="listitem" data-flow-stage="compose" data-flow-active="true" aria-current="step"><span class="flow-node-port flow-node-port-left"></span><span class="flow-node-port flow-node-port-right"></span><span class="flow-node-step">03 / 编排</span><div class="flow-node-name"><Orbit size={20} /><strong>任务编排</strong></div><p>编译量子电路，组织任务依赖</p></div>
-      <div class="flow-edge" aria-hidden="true"><span class="flow-edge-pulse"></span></div>
-      <div class="flow-node" role="listitem" data-flow-stage="predict"><span class="flow-node-port flow-node-port-left"></span><span class="flow-node-port flow-node-port-right"></span><span class="flow-node-step">04 / 预测</span><div class="flow-node-name"><Clock3 size={20} /><strong>性能模拟</strong></div><p>按目标设备参数预测执行时间</p></div>
-      <div class="flow-edge" aria-hidden="true"><span class="flow-edge-pulse"></span></div>
-      <div class="flow-node" role="listitem" data-flow-stage="execute"><span class="flow-node-port flow-node-port-left"></span><span class="flow-node-step">05 / 结果</span><div class="flow-node-name"><ListChecks size={20} /><strong>运行记录</strong></div><p>运行后查看实际用时与结果</p></div>
-    </div>
+  <div class="flow-workspace-rail-nav" aria-label="工作流节点导航">
+    <button type="button" data-flow-prev aria-controls="flow-workspace-panel" aria-label="上一个工作流节点" title="上一个工作流节点" disabled><ChevronLeft size={17} /></button>
+    <button type="button" data-flow-next aria-controls="flow-workspace-panel" aria-label="下一个工作流节点" title="下一个工作流节点"><ChevronRight size={17} /></button>
   </div>
-  <span class="flow-workspace-announcement" data-flow-status role="status" aria-live="polite" aria-atomic="true">当前阶段：第3步，任务编排。</span>
 </div>
 <script>
-  const modes = {
-    compose: '当前阶段：第3步，任务编排。',
-    predict: '当前阶段：第4步，性能模拟。',
-    execute: '当前阶段：第5步，运行记录。',
-  } as const;
   document.querySelectorAll<HTMLElement>('[data-flow-workspace]').forEach(root => {
-    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-mode]'));
-    const panel = root.querySelector<HTMLElement>('[role="tabpanel"]');
+    const panel = root.querySelector<HTMLElement>('#flow-workspace-panel');
     const nodes = Array.from(panel?.querySelectorAll<HTMLElement>('.flow-node') ?? []);
     const previousNode = root.querySelector<HTMLButtonElement>('[data-flow-prev]');
     const nextNode = root.querySelector<HTMLButtonElement>('[data-flow-next]');
+    // Reflect the scroll region's actual limits after layout and scroll events;
+    // hide the arrows when all columns fit, without changing diagram content.
     const updateNodeButtons = () => {
       if (!panel || !previousNode || !nextNode) return;
       const lastScroll = Math.max(0, panel.scrollWidth - panel.clientWidth);
@@ -51,9 +72,12 @@ import '../styles/flow-workbench.css';
       previousNode.disabled = panel.scrollLeft <= 1;
       nextNode.disabled = panel.scrollLeft >= lastScroll - 1;
     };
+    // Advance by visual columns rather than DOM order: the two execution paths
+    // share x coordinates, and the last stop is clamped so the shared report fits.
     const moveToNode = (direction: -1 | 1) => {
       if (!panel || !nodes.length) return;
-      const starts = nodes.map(node => node.offsetLeft - nodes[0].offsetLeft);
+      const lastScroll = Math.max(0, panel.scrollWidth - panel.clientWidth);
+      const starts = [...new Set([0, ...nodes.map(node => Math.min(lastScroll, node.offsetLeft - nodes[0].offsetLeft)), lastScroll])].sort((a, b) => a - b);
       const target = direction === 1
         ? starts.find(start => start > panel.scrollLeft + 1)
         : starts.findLast(start => start < panel.scrollLeft - 1);
@@ -64,52 +88,7 @@ import '../styles/flow-workbench.css';
     nextNode?.addEventListener('click', () => moveToNode(1));
     panel?.addEventListener('scroll', updateNodeButtons, { passive: true });
     window.addEventListener('resize', updateNodeButtons);
+    if (panel) new ResizeObserver(updateNodeButtons).observe(panel);
     updateNodeButtons();
-    const show = (mode: keyof typeof modes) => {
-      root.dataset.flowMode = mode;
-      tabs.forEach(tab => {
-        const selected = tab.dataset.mode === mode;
-        tab.setAttribute('aria-selected', String(selected));
-        tab.tabIndex = selected ? 0 : -1;
-      });
-      panel?.setAttribute('aria-labelledby', `flow-tab-${mode}`);
-      nodes.forEach(node => {
-        const selected = node.dataset.flowStage === mode;
-        if (selected) {
-          node.dataset.flowActive = 'true';
-          node.setAttribute('aria-current', 'step');
-        } else {
-          delete node.dataset.flowActive;
-          node.removeAttribute('aria-current');
-        }
-      });
-      const status = root.querySelector<HTMLElement>('[data-flow-status]');
-      if (status) status.textContent = modes[mode];
-      const activeNode = nodes.find(node => node.dataset.flowStage === mode);
-      if (!panel || !activeNode || panel.scrollWidth <= panel.clientWidth + 1) return;
-      const viewport = panel.getBoundingClientRect();
-      const active = activeNode.getBoundingClientRect();
-      if (active.left >= viewport.left + 12 && active.right <= viewport.right - 12) return;
-      panel.scrollTo({
-        left: panel.scrollLeft + active.left - viewport.left - (panel.clientWidth - active.width) / 2,
-        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-      });
-    };
-    tabs.forEach((tab, index) => {
-      tab.addEventListener('click', () => show(tab.dataset.mode as keyof typeof modes));
-      tab.addEventListener('keydown', event => {
-        let targetIndex: number;
-        switch (event.key) {
-          case 'ArrowLeft': targetIndex = (index - 1 + tabs.length) % tabs.length; break;
-          case 'ArrowRight': targetIndex = (index + 1) % tabs.length; break;
-          case 'Home': targetIndex = 0; break;
-          case 'End': targetIndex = tabs.length - 1; break;
-          default: return;
-        }
-        event.preventDefault();
-        const target = tabs[targetIndex];
-        target.focus(); target.click();
-      });
-    });
   });
 </script>

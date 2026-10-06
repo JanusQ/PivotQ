@@ -9,7 +9,9 @@ import HybridExample from '../../../components/HybridExample.astro';
 
 本页使用 Ray 执行器组织任务依赖与跨进程执行。为了在未连接 QPU 时也能跑通程序，量子后端默认选择 `simulator`，在 CPU 上模拟量子电路并采样。接入 QPU 后，可通过同一套后端接口提交量子任务。
 
-## 运行完整示例
+<span id="运行完整示例"></span>
+
+## 运行完整教程程序
 
 在仓库根目录执行：
 
@@ -23,7 +25,7 @@ python packages/framework/examples/hybrid_program.py --executor ray --address lo
 2. **量子执行**：调用量子后端；本例默认在 CPU 上模拟电路，返回采样结果。
 3. **经典更新**：调用 `update_parameter`，使用量子结果更新参数。
 
-主程序取回更新后的参数，判断是否继续迭代；各步骤之间通过结果引用传递依赖。默认不连接 QPU，任务提交与依赖调度仍完整经过 Ray。
+主程序取回更新后的参数，判断是否继续迭代；各步骤之间通过结果引用传递依赖。本例默认不连接 QPU，但任务提交与依赖调度仍由 Ray 完成。
 
 ## 切换执行方式
 
@@ -41,11 +43,13 @@ python packages/framework/examples/hybrid_program.py --executor ray --address au
 python packages/framework/examples/hybrid_program.py --executor local
 ```
 
-示例脚本不带参数时同样使用本地执行器；本页主流程通过 `--executor ray` 显式启用 Ray。`--seed` 控制模拟器采样；可通过 `--steps 30`、`--shots 2048` 调整迭代上限与采样次数。
+教程中的脚本不带参数时同样使用本地执行器；本页主流程通过 `--executor ray` 显式启用 Ray。`--seed` 控制模拟器采样；可通过 `--steps 30`、`--shots 2048` 调整迭代上限与采样次数。
 
-## 示例源码
+<span id="示例源码"></span>
 
-下面内容在网站构建时直接读取 `packages/framework/examples/hybrid_program.py`，与仓库里的可执行示例保持一致。
+## 教程源码
+
+完整教程代码如下：
 
 <HybridExample />
 

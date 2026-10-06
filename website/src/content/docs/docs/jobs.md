@@ -1,13 +1,13 @@
 ---
 title: 集群作业
-description: 通过 Ray Jobs 提交完整 Python 程序，查看状态、日志和停止作业。
+description: 通过 Ray Jobs 提交完整 Python 程序，查看作业状态与日志，并停止作业。
 ---
 
 `Runtime` 组织一个程序内部的任务；`JobClient` 把完整 Python 程序提交给已部署的 Ray Jobs 服务。服务地址通常是 Dashboard 的 HTTP 地址，与 Runtime 连接的 Ray 集群地址用途不同。
 
 ## 提交程序
 
-下面示例假定 `my-program/` 包含自己的 `main.py`，且集群节点已安装相同版本的 PivotQ 与应用依赖：
+下面的教程假定 `my-program/` 包含自己的 `main.py`，且集群节点已安装相同版本的 PivotQ 与应用依赖：
 
 ```python
 from pivotq.jobs import JobClient, JobSpec
@@ -25,7 +25,7 @@ print(client.status(job))
 print(client.logs(job))
 ```
 
-创建 `JobClient` 不联网，也不启动 Ray；首次操作时才建立客户端。`entrypoint` 是参数列表，SDK 负责正确引用参数，不需要拼接 shell 字符串。默认自动生成 `submission_id`，也可以显式指定。
+创建 `JobClient` 不联网，也不启动 Ray；首次操作时才建立客户端。`entrypoint` 是参数列表，SDK 负责按 shell 规则为参数添加引号，无需手动拼接 shell 字符串。默认自动生成 `submission_id`，也可以显式指定。
 
 ## 部署环境
 
@@ -56,6 +56,6 @@ with Runtime(executor="ray", address="auto") as runtime:
 
 这些调用也接受 `submission_id` 字符串。停止软件作业不证明其已提交的物理 QPU 任务已取消。
 
-提交故障抛出 `JobSubmissionError`，其中 `framework_job_id` 保留提交标识。若结果是未知状态，先按该标识查询，SDK 不会自动重复提交。
+提交出错时会抛出 `JobSubmissionError`，其中 `framework_job_id` 保留提交标识。若无法确认提交结果，请先按该标识查询状态；SDK 不会自动重复提交。
 
 现有应用 Driver 的兼容启动入口仍为 `python -m pivotq.jobs.driver`；普通用户程序直接使用自己的入口文件。集群作业 API 不会将任意程序自动接入网页工作台。

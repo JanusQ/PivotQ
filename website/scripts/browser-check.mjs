@@ -38,6 +38,38 @@ page.on('request', request => {
 });
 
 try {
+  for (const [width, height] of [[1024, 768], [1336, 824], [1440, 900], [1920, 1080]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto(root.href, { waitUntil: 'networkidle' });
+    const edges = await page.evaluate(() => {
+      const bounds = selector => {
+        const { top, right, bottom, left } = document.querySelector(selector).getBoundingClientRect();
+        return { top, right, bottom, left };
+      };
+      return {
+        scene: bounds('.flow-architecture-scene'),
+        primary: bounds('.flow-architecture-code'),
+        gpu: bounds('[data-code-block="gpu"]'),
+        submit: bounds('[data-code-block="submit"]'),
+      };
+    });
+    const aligned = (first, second, edge) => Math.abs(first[edge] - second[edge]) < 1;
+    assert.ok(aligned(edges.scene, edges.primary, 'top') && aligned(edges.scene, edges.primary, 'bottom'), `Upper architecture boxes align at ${width}px`);
+    assert.ok(aligned(edges.gpu, edges.submit, 'top') && aligned(edges.gpu, edges.submit, 'bottom'), `Lower code boxes align at ${width}px`);
+    assert.ok(aligned(edges.scene, edges.gpu, 'left') && aligned(edges.scene, edges.gpu, 'right'), `Left column edges align at ${width}px`);
+    assert.ok(aligned(edges.primary, edges.submit, 'left') && aligned(edges.primary, edges.submit, 'right'), `Right column edges align at ${width}px`);
+    if (width === 1440) {
+      await page.evaluate(top => window.scrollTo(0, top + 80), edges.scene.top);
+      const scrollTopGap = await page.evaluate(() => {
+        const scene = document.querySelector('.flow-architecture-scene').getBoundingClientRect();
+        const primary = document.querySelector('.flow-architecture-code').getBoundingClientRect();
+        return Math.abs(scene.top - primary.top);
+      });
+      assert.ok(scrollTopGap < 1, `Architecture stays aligned while scrolling (${scrollTopGap}px)`);
+    }
+  }
+  checks.push('Architecture columns and rows remain aligned on desktop and during scroll');
+
   const lazyPage = await context.newPage();
   await lazyPage.setViewportSize({ width: 320, height: 640 });
   await lazyPage.goto(new URL('examples/aimd/', root).href, { waitUntil: 'networkidle' });
@@ -71,7 +103,7 @@ try {
     await page.goto(root.href, { waitUntil: 'networkidle' });
     const before = await headerGeometry();
     if (width <= 760) await page.locator('.flow-mobile-menu summary').click();
-    await page.locator('.flow-header-inner a:visible').filter({ hasText: /^参考文档$/ }).click();
+    await page.locator('.flow-header-inner a:visible').filter({ hasText: /^文档$/ }).click();
     await page.waitForURL(new URL('docs/', root).href);
     await page.waitForLoadState('networkidle');
     assertSameHeader(before, await headerGeometry(), width);
@@ -93,9 +125,12 @@ try {
       assert.equal(await page.locator('html').getAttribute('lang'), 'zh-CN');
       assert.ok(await page.locator('main h1').isVisible());
       const footer = page.getByRole('contentinfo');
-      for (const name of ['参考文档', '水分子 AIMD', 'QRAM']) {
+      for (const name of ['文档', '水分子动力学模拟', '量子随机存储器']) {
         assert.ok(await footer.getByRole('link', { name, exact: true }).isVisible(), `Footer ${name}: ${route || '/'}`);
       }
+      const universityLogo = footer.locator('img[alt="浙江大学"]');
+      assert.equal(await universityLogo.count(), 1, `Footer university logo: ${route || '/'}`);
+      assert.equal(await universityLogo.locator('xpath=..').getAttribute('href'), 'https://www.zju.edu.cn/');
       const dimensions = await page.evaluate(() => ({ content: document.documentElement.scrollWidth, viewport: innerWidth }));
       assert.ok(dimensions.content <= dimensions.viewport + 1, `Overflow at ${width}px: ${route || '/'} (${dimensions.content})`);
       for (const href of await page.locator('a[href]').evaluateAll(nodes => nodes.map(node => node.href))) {
@@ -130,16 +165,15 @@ try {
         await page.mouse.up();
         const collisions = await page.evaluate(() => {
           const labels = [...document.querySelectorAll('.flow-scene-label:not([hidden])')].map(node => node.getBoundingClientRect());
-          const reset = document.querySelector('[data-scene-reset]')?.getBoundingClientRect();
           const intersects = (a, b) => Math.min(a.right, b.right) > Math.max(a.left, b.left) && Math.min(a.bottom, b.bottom) > Math.max(a.top, b.top);
-          return labels.flatMap((label, index) => [...labels.slice(index + 1), ...(reset ? [reset] : [])].filter(other => intersects(label, other)).map(() => index));
+          return labels.flatMap((label, index) => labels.slice(index + 1).filter(other => intersects(label, other)).map(() => index));
         });
-        assert.deepEqual(collisions, [], `Rotated hardware labels do not overlap each other or reset at ${width}px`);
+        assert.deepEqual(collisions, [], `Rotated hardware labels do not overlap at ${width}px`);
         const smallestLabelFont = await page.locator('.flow-scene-label small:visible').evaluateAll(nodes => Math.min(...nodes.map(node => parseFloat(getComputedStyle(node).fontSize))));
         assert.ok(smallestLabelFont >= 12, `Hardware label descriptions remain readable at ${width}px`);
         const codeOverflow = await page.locator('[data-code-block] pre').evaluateAll(nodes => nodes.filter(node => node.scrollWidth > node.clientWidth + 1).length);
         assert.equal(codeOverflow, 0, `All four code blocks fit at ${width}px`);
-        checks.push(`${width}px hardware labels, reset and code fit after rotation`);
+        checks.push(`${width}px hardware labels and code fit after rotation`);
       }
       checks.push(`${width}px ${route || '/'}: page, footer, links and width`);
     }
@@ -155,9 +189,17 @@ try {
   assert.equal(await page.locator('main').getByRole('heading', { level: 1 }).innerText(), 'PivotQ');
   const photo = hero.locator('img.flow-hero-photo');
   assert.ok(await photo.evaluate(node => node.complete && node.naturalWidth > 0), 'User-provided hero photograph loads');
-  const heroContinuation = hero.locator('.flow-hero-description-line');
-  assert.match((await heroContinuation.innerText()).trim(), /^指定设备/);
-  assert.equal(await heroContinuation.evaluate(node => getComputedStyle(node).display), 'block', 'Device assignment starts on a new hero description line');
+  assert.equal((await hero.locator('.flow-hero-title').innerText()).replace(/\s+/g, ' ').trim(), '统一描述 QPU、CPU、GPU 的计算任务，由 PivotQ 自动调度并执行。');
+  assert.equal((await hero.locator('.flow-hero-description').innerText()).trim(), 'PivotQ 帮助编程者构建和管理跨 CPU、GPU 与 QPU 的量子经典混合计算任务。');
+  assert.deepEqual(await page.locator('.flow-section-heading h2 .flow-section-label').allTextContents(), ['编程模型：', '任务编排和性能分析：', '教程：'], 'Homepage headings combine each category with its title');
+  assert.deepEqual(await page.locator('.flow-section-heading h2 .flow-section-number').allTextContents(), ['01', '02', '03'], 'Homepage headings retain their ordered section numbers');
+  const exampleCards = page.locator('.flow-home-applications .flow-application');
+  assert.equal(await exampleCards.count(), 2, 'Homepage presents both tutorials');
+  for (const [index, route] of ['examples/aimd/', 'examples/qram/'].entries()) {
+    const card = exampleCards.nth(index);
+    assert.equal(await card.getAttribute('href'), new URL(route, root).pathname);
+    assert.match(await card.locator('.flow-application-link').innerText(), /查看教程/);
+  }
   const architecture = page.locator('[data-hardware-architecture]');
   const canvas = architecture.locator('canvas[data-hardware-canvas]');
   await canvas.waitFor();
@@ -171,10 +213,10 @@ try {
   assert.equal(await architecture.locator('[data-code-block]').count(), 4, 'CPU, QPU, GPU and submission each have a code block');
   const hardwareCode = Object.fromEntries(await architecture.locator('[data-code-block]').evaluateAll(nodes =>
     nodes.map(node => [node.getAttribute('data-code-block'), node.querySelector('code')?.textContent ?? ''])));
-  assert.match(hardwareCode.cpu, /acos_input[\s\S]*cpu_handle\s*=\s*framework\.submit/, 'CPU output is submitted as a dependency');
-  assert.match(hardwareCode.gpu, /prepared\["acos_input"\][\s\S]*torch\.acos[\s\S]*angle_radians[\s\S]*gpu_handle\s*=\s*framework\.submit[\s\S]*cpu_handle/, 'GPU consumes CPU input and publishes an angle');
-  assert.match(hardwareCode.qpu, /gpu_handle[\s\S]*angle_radians[\s\S]*circuit\.rx\(angle,\s*2\)[\s\S]*QuantumCircuitRequest[\s\S]*run_quantum_circuits/, 'QPU request uses the GPU angle in its circuit');
-  assert.match(hardwareCode.submit, /build_job_spec[\s\S]*RayJobClient[\s\S]*client\.submit\(spec\)/, 'Final block submits the example job spec');
+  assert.match(hardwareCode.cpu, /geometry_A[\s\S]*predict_geometry_energy_and_force[\s\S]*forces_eV_per_A[\s\S]*VelocityVerlet[\s\S]*dynamics\.run\(steps\)/, 'CPU code prepares geometry, computes forces and advances the trajectory');
+  assert.match(hardwareCode.qpu, /FusionQPUCircuitFeatureExtractor[\s\S]*QPUCircuitService[\s\S]*extract_features\([\s\S]*quantum_request[\s\S]*features/, 'QPU code extracts circuit features');
+  assert.match(hardwareCode.gpu, /ClassicalPredictRequest\([\s\S]*features=features[\s\S]*classical_api\.predict\([\s\S]*energies_eV/, 'GPU code predicts energy from quantum features');
+  assert.match(hardwareCode.submit, /build_job_spec\([\s\S]*quantum_target[\s\S]*RayJobClient\(address\)\.submit\(spec\)/, 'Final block submits the AIMD job spec');
   const cameraDistance = await canvas.getAttribute('data-camera-distance');
   for (const kind of ['cpu', 'qpu', 'gpu']) {
     const label = architecture.locator(`.flow-scene-label[data-hardware="${kind}"]`);
@@ -182,12 +224,8 @@ try {
     assert.ok(await label.isVisible(), `${kind} label is visible on the 3D scene`);
     assert.ok(await block.isVisible(), `${kind} code block is visible`);
     assert.equal(await label.evaluate(node => getComputedStyle(node).color), await block.locator('[data-code-title]').evaluate(node => getComputedStyle(node).color), `${kind} colors link model and code`);
-    const titleHardware = page.locator(`.flow-architecture [data-hardware-title="${kind}"]`);
-    assert.equal(await titleHardware.innerText(), kind.toUpperCase());
-    assert.equal(await titleHardware.evaluate(node => getComputedStyle(node).color), await block.locator('[data-code-title]').evaluate(node => getComputedStyle(node).color), `${kind} color also identifies the hardware in the heading`);
-    const reference = architecture.locator(`[data-code-ref="${kind}"]`);
-    assert.equal(await reference.count(), 1, `Submission refers to ${kind}`);
-    assert.equal(await label.evaluate(node => getComputedStyle(node).color), await reference.evaluate(node => getComputedStyle(node).color), `${kind} color also appears in submission`);
+    const dataHighlight = architecture.locator(`.flow-code-data-${kind}`).first();
+    assert.equal(await label.evaluate(node => getComputedStyle(node).color), await dataHighlight.evaluate(node => getComputedStyle(node).color), `${kind} color identifies shared data in the code`);
     await label.click();
     assert.equal(await architecture.getAttribute('data-active-hardware'), kind, `${kind} label selects its code`);
     assert.equal(await canvas.getAttribute('data-camera-distance'), cameraDistance, 'Label focus keeps camera distance');
@@ -206,7 +244,8 @@ try {
   await canvas.press('+');
   await canvas.press('-');
   assert.equal(await canvas.getAttribute('data-camera-distance'), startDistance, 'Wheel and keyboard cannot zoom the hardware scene');
-  await architecture.locator('[data-scene-reset]').click();
+  await canvas.press('Home');
+  await page.waitForFunction(() => document.querySelector('[data-hardware-canvas]')?.dataset.focus === 'qpu');
   checks.push('Hero photograph, 3D scene pixels, labels, four code blocks, rotation and fixed zoom');
 
   const touchContext = await browser.newContext({
@@ -265,55 +304,49 @@ try {
   checks.push('Static architecture fallback without WebGL');
 
   const workflow = page.locator('[data-flow-workspace]');
-  const stage = workflow.getByRole('tablist', { name: '工作流阶段' });
-  const panel = workflow.getByRole('tabpanel');
-  assert.equal(await panel.count(), 1, 'Workflow tabs control one panel');
-  assert.equal(await stage.locator('[role="tab"][tabindex="0"]').count(), 1, 'One workflow tab is in the tab order');
-  const workflowNodes = panel.locator('.flow-node');
-  assert.equal(await workflowNodes.count(), 5, 'Workflow has five persistent steps');
-  assert.match(await workflowNodes.first().innerText(), /量子-经典\s*混合程序/);
+  const panel = workflow.locator('#flow-workspace-panel');
+  assert.equal(await workflow.getByRole('tablist').count(), 0, 'The removed stage switch is absent');
+  assert.equal(await workflow.locator('.flow-workspace-toolbar, .flow-workspace-title, .flow-workspace-led').count(), 0, 'The removed workflow title bar is absent');
+  assert.equal(await workflow.getByRole('region', { name: '编程仿真工作流', exact: true }).getAttribute('id'), 'flow-workspace-panel', 'The diagram retains its accessible name');
+  assert.match(await panel.innerText(), /量子-经典\s*混合程序[\s\S]*任务编排/);
   assert.deepEqual(await workflow.locator('.flow-resource-tags span').allTextContents(), ['CPU', 'GPU', 'QPU']);
-  const initialWorkflowText = await workflowNodes.allTextContents();
-  const workflowNodeHandles = await panel.evaluateHandle(node => [...node.querySelectorAll('.flow-node')]);
-  assert.equal(await workflow.locator('.flow-workspace-status').count(), 0, 'Workflow has no extra visible status box');
-  for (const [mode, label, stepIndex] of [
-    ['predict', '性能模拟', 3],
-    ['execute', '运行记录', 4],
-    ['compose', '任务编排', 2],
-  ]) {
-    await stage.getByRole('tab', { name: label }).click();
-    assert.equal(await workflow.getAttribute('data-flow-mode'), mode);
-    assert.equal(await stage.getByRole('tab', { name: label }).getAttribute('aria-selected'), 'true');
-    assert.equal(await stage.getByRole('tab', { name: label }).getAttribute('tabindex'), '0');
-    assert.equal(await stage.getByRole('tab', { name: label }).getAttribute('aria-controls'), await panel.getAttribute('id'));
-    assert.equal(await panel.getAttribute('aria-labelledby'), await stage.getByRole('tab', { name: label }).getAttribute('id'));
-    assert.equal(await stage.locator('[role="tab"][tabindex="0"]').count(), 1);
-    assert.deepEqual(await workflowNodes.allTextContents(), initialWorkflowText, 'Changing stages keeps all five step descriptions');
-    assert.ok(await panel.evaluate((node, originals) => originals.every((original, index) => node.querySelectorAll('.flow-node')[index] === original), workflowNodeHandles), 'Changing stages preserves the same diagram nodes');
-    const activeNode = workflow.locator('.flow-node[data-flow-active="true"]');
-    assert.equal(await activeNode.count(), 1, 'Exactly one workflow step is highlighted');
-    assert.equal(await activeNode.getAttribute('data-flow-stage'), mode);
-    assert.equal(await activeNode.getAttribute('aria-current'), 'step');
-    assert.equal(await activeNode.textContent(), initialWorkflowText[stepIndex], `${label} highlights step ${stepIndex + 1}`);
-    assert.notEqual(await activeNode.evaluate(node => getComputedStyle(node).backgroundColor), await workflowNodes.first().evaluate(node => getComputedStyle(node).backgroundColor), 'The selected step has a visible background highlight');
+  // Both alternatives converge on one report, without implying either execution path precedes the other.
+  const sharedReport = panel.locator('[data-flow-report="shared"]');
+  assert.equal(await panel.locator('[data-flow-report]').count(), 1, 'Both branches share one report');
+  assert.equal(await sharedReport.count(), 1);
+  assert.equal((await sharedReport.locator('.flow-node-name').innerText()).replace(/\s/g, ''), '真机/仿真性能报告');
+  assert.deepEqual(await sharedReport.locator('.flow-report-fields li').allTextContents(), ['各任务运行时间', '运行节点', '运行指令顺序', '运行复杂度']);
+  assert.equal(await panel.locator('[data-flow-branch]').count(), 2);
+  assert.equal(await panel.locator('.flow-merge').count(), 1, 'The alternative paths have a merge connector');
+  const sharedBounds = await sharedReport.boundingBox();
+  assert.ok(sharedBounds);
+  const branchCenters = [];
+  for (const branch of ['hardware', 'simulation']) {
+    const source = panel.locator(`[data-flow-branch="${branch}"]`);
+    assert.equal(await source.count(), 1);
+    assert.ok(await source.evaluate(node => node.classList.contains('flow-node-emphasis')), `${branch} is highlighted`);
+    const bounds = await source.boundingBox();
+    assert.ok(bounds && sharedBounds.x > bounds.x + bounds.width, `${branch} leads to the shared report on the right`);
+    branchCenters.push(bounds.y + bounds.height / 2);
   }
-  await workflowNodeHandles.dispose();
-  await stage.getByRole('tab', { name: '任务编排' }).press('ArrowRight');
-  assert.equal(await stage.getByRole('tab', { name: '性能模拟' }).getAttribute('aria-selected'), 'true');
-  await stage.getByRole('tab', { name: '性能模拟' }).press('End');
-  assert.equal(await stage.getByRole('tab', { name: '运行记录' }).getAttribute('aria-selected'), 'true');
-  await stage.getByRole('tab', { name: '运行记录' }).press('ArrowLeft');
-  assert.equal(await stage.getByRole('tab', { name: '性能模拟' }).getAttribute('aria-selected'), 'true');
-  await stage.getByRole('tab', { name: '性能模拟' }).press('Home');
-  assert.equal(await stage.getByRole('tab', { name: '任务编排' }).getAttribute('aria-selected'), 'true');
-  const workflowStatus = workflow.getByRole('status');
-  assert.equal(await workflowStatus.getAttribute('aria-live'), 'polite');
-  assert.equal(await workflowStatus.getAttribute('aria-atomic'), 'true');
-  assert.ok(await workflowStatus.evaluate(node => node.getBoundingClientRect().height <= 1), 'Stage announcement does not add a visible status row');
-  checks.push('Fixed five-step workflow, CPU/GPU/QPU devices, selected-step highlight and keyboard tab semantics');
+  assert.ok(branchCenters[0] < branchCenters[1], 'Hardware and simulation occupy separate branch rows');
+  assert.ok(Math.abs(sharedBounds.y + sharedBounds.height / 2 - (branchCenters[0] + branchCenters[1]) / 2) < 1, 'Shared report is centered between both branches');
+  assert.equal(await panel.locator('.flow-node-emphasis').count(), 4, 'Composition, both branches and the shared report are highlighted');
+  assert.equal(await panel.locator('.flow-node-compose.flow-node-emphasis').count(), 1, 'Task composition is highlighted');
+  assert.ok(await sharedReport.evaluate(node => node.classList.contains('flow-node-emphasis')), 'Shared report is highlighted');
+  assert.deepEqual(await page.locator('.flow-primary-nav a').allTextContents(), ['首页', '教程', '文档']);
+  const analysisLink = page.getByRole('link', { name: '查看编排和分析文档' });
+  await analysisLink.click();
+  await page.waitForURL(new URL('docs/#使用文档', root).href);
+  assert.equal(await page.locator('[id="使用文档"]').count(), 1);
+  const usageTable = page.locator('[id="使用文档"]').locator('xpath=following::table[1]');
+  for (const name of ['工作流', '执行报告', '性能预测']) {
+    assert.ok(await usageTable.getByRole('link', { name, exact: true }).isVisible(), `Usage documentation includes ${name}`);
+  }
+  checks.push('Two workflow branches share a centered report, four highlighted nodes, report fields and analysis documentation link');
 
   await page.goto(new URL('examples/aimd/', root).href, { waitUntil: 'networkidle' });
-  assert.ok(await page.getByRole('heading', { level: 1, name: '水分子 AIMD' }).isVisible());
+  assert.ok(await page.getByRole('heading', { level: 1, name: '水分子动力学模拟' }).isVisible());
   const notebook = page.locator('.aimd-notebook');
   assert.equal(await notebook.locator('.aimd-notebook-chapter').count(), 4, 'AIMD notebook has four ordered chapters');
   assert.equal(await notebook.locator('#circuit').evaluate(node => node.classList.contains('aimd-notebook-chapter')), true, 'Circuit anchor opens the full chapter');
@@ -349,7 +382,7 @@ try {
   assert.match(await results.locator('.aimd-notebook-prose').innerText(), /另一份归档的 CSV[\s\S]*并非代码 3 的运行结果/, 'Archived trajectory remains distinct from the displayed CPU calculation');
   const source = results.locator('.analysis-result-source');
   await source.locator('summary').click();
-  assert.match(await source.innerText(), /示例轨迹.*1001 帧/);
+  assert.match(await source.innerText(), /教程(?:中的)?轨迹.*1001 帧/);
   assert.equal(await source.locator('a[download]').count(), 2, 'Imported trajectory CSV files are downloadable');
   const sourceLink = source.getByRole('link', { name: '查看数据来源说明' });
   assert.equal((await context.request.get(new URL(await sourceLink.getAttribute('href'), root).href)).status(), 200);
@@ -417,47 +450,59 @@ try {
 
   await page.goto(new URL('examples/qram/', root).href, { waitUntil: 'networkidle' });
   const qramNotebook = page.locator('.qram-notebook');
-  assert.ok(await qramNotebook.getByRole('heading', { level: 1, name: /地址 10 如何找到并读出数据/ }).isVisible());
+  assert.ok(await qramNotebook.getByRole('heading', { level: 1, name: /如何通过地址 10 找到并读出数据/ }).isVisible());
   assert.ok(await qramNotebook.getByRole('heading', { level: 2, name: '普通内存和量子地址' }).isVisible());
   assert.equal(await qramNotebook.locator('.qram-notebook-section').count(), 5, 'QRAM notebook has five ordered steps');
-  assert.match(await qramNotebook.locator('.qram-notebook-scope').innerText(), /没有可运行的 QRAM 任务或真机读写数据/);
+  assert.match(await qramNotebook.locator('.qram-notebook-scope').innerText(), /没有可运行的量子随机存储器任务或真机读写数据/);
   assert.ok(await qramNotebook.locator('.qram-code-cell').first().isVisible());
   assert.match(await qramNotebook.locator('.qram-output-cell').first().innerText(), /右 → 左\s+存储单元 10/);
-  assert.ok(await qramNotebook.getByRole('img', { name: /QRAM 概念示意/ }).isVisible());
+  assert.ok(await qramNotebook.getByRole('img', { name: /量子随机存储器概念示意/ }).isVisible());
   assert.equal(await qramNotebook.locator('.qram-notebook-figure text').first().textContent(), '|10⟩');
   assert.equal(await qramNotebook.locator('.qram-memory-table tbody tr').count(), 4, 'QRAM toy memory has four addresses');
   assert.match(await qramNotebook.locator('.qram-query-rule').innerText(), /b ⊕ mₐ/);
   assert.match(await qramNotebook.locator('.qram-superposition').innerText(), /\|01⟩\|0⟩ \+ \|10⟩\|1⟩/);
-  await qramNotebook.getByRole('navigation', { name: '继续阅读' }).getByRole('link', { name: /水分子 AIMD 示例/ }).click();
+  await qramNotebook.getByRole('navigation', { name: '继续阅读' }).getByRole('link', { name: /水分子动力学模拟教程/ }).click();
   await page.waitForURL(new URL('examples/aimd/', root).href);
   checks.push('QRAM notebook steps, path output, concept scope and onward navigation');
 
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto(new URL('docs/', root).href, { waitUntil: 'networkidle' });
   const sidebar = page.locator('#starlight__sidebar');
-  assert.deepEqual(await sidebar.locator('.top-level > li > details > summary .large').allTextContents(), ['系统介绍', '使用文档', '应用示例']);
-  assert.deepEqual(await sidebar.locator('.top-level > li > details > ul > li > details > summary .large').allTextContents(), [
+  assert.deepEqual(await sidebar.locator('.top-level > li > .docs-sidebar-group > .docs-sidebar-group-label > .large').allTextContents(), ['系统介绍', '使用文档', '应用教程']);
+  assert.deepEqual(await sidebar.locator('.top-level > li > .docs-sidebar-group > ul > li > .docs-sidebar-group > .docs-sidebar-group-label > .large').allTextContents(), [
     '入门', '混合编程', '运行与管理', '性能建模与预测', '后端扩展', 'API 参考',
   ]);
-  const tutorialLink = sidebar.locator('.docs-tutorial-link');
-  assert.equal(await tutorialLink.count(), 1, 'Workbench tutorial is one independent navigation link');
-  assert.equal(new URL(await tutorialLink.getAttribute('href'), root).href, new URL('docs/aimd/', root).href);
-  assert.ok(await tutorialLink.isVisible());
-  assert.equal(await page.locator('main .flow-guide-tutorial').count(), 0, 'Docs overview does not embed the complete AIMD tutorial');
+  async function assertDocsGroupsVisible() {
+    assert.equal(await sidebar.locator('details, summary, .caret').count(), 0, 'Documentation groups have no collapse controls or arrows');
+    const links = sidebar.locator('.top-level a');
+    assert.ok(await links.count() > 0, 'Documentation sidebar contains navigation links');
+    assert.equal(await sidebar.locator('.top-level a:visible').count(), await links.count(), 'Every documentation group keeps all its links visible');
+  }
+  await assertDocsGroupsVisible();
+  for (const label of await sidebar.locator('.docs-sidebar-group-label').all()) {
+    await label.click();
+    await assertDocsGroupsVisible();
+  }
+  assert.equal(await sidebar.locator('.docs-tutorial-link').count(), 0, 'Documentation sidebar has no tutorial promotion');
+  assert.equal(await page.locator('main a[href$="/docs/aimd/"], main a[href="./aimd/"]').count(), 0, 'Docs overview does not promote the example tutorial');
+  const exampleGroup = sidebar.locator('.top-level > li > .docs-sidebar-group').filter({ has: page.locator('.docs-sidebar-group-label > .large').filter({ hasText: /^应用教程$/ }) });
+  assert.deepEqual((await exampleGroup.locator('a').allTextContents()).map(text => text.trim()), ['介绍', '水分子动力学模拟', '量子随机存储器']);
+  for (const [name, route] of [['水分子动力学模拟', 'examples/aimd/'], ['量子随机存储器', 'examples/qram/']]) {
+    assert.equal(await exampleGroup.getByRole('link', { name, exact: true }).evaluate(link => link.href), new URL(route, root).href);
+  }
+  assert.equal(await page.locator('main .flow-guide-tutorial').count(), 0, 'Docs overview does not embed the complete example tutorial');
   const installationLink = page.getByRole('link', { name: 'Docker 安装与启动说明', exact: true });
   assert.equal(await installationLink.evaluate(link => link.href), new URL('docs/installation/#使用-docker-安装', root).href);
   assert.ok(await page.locator('.right-sidebar').isVisible());
-  async function expandDocsGroup(label) {
-    const summary = sidebar.locator('summary').filter({ hasText: new RegExp(`^${label}$`) });
-    if (!await summary.evaluate(node => node.parentElement.open)) await summary.click();
-  }
   async function assertDocsLocation(route, title, sidebarLabel = title) {
     await page.waitForURL(new URL(`docs/${route}`, root).href);
     assert.ok(await page.getByRole('heading', { level: 1, name: title, exact: true }).isVisible());
     assert.ok((await page.title()).includes(title));
     const activeLink = sidebar.locator('a[aria-current="page"]');
     assert.equal(await activeLink.count(), 1);
+    assert.ok(await activeLink.isVisible(), 'The current documentation page remains visible in its group');
     assert.equal((await activeLink.innerText()).trim(), sidebarLabel);
+    await assertDocsGroupsVisible();
   }
   await sidebar.getByRole('link', { name: 'PivotQ', exact: true }).click();
   await assertDocsLocation('architecture/', 'PivotQ');
@@ -486,30 +531,24 @@ try {
   await context.grantPermissions(['clipboard-read', 'clipboard-write']);
   await page.locator('.expressive-code .copy button').first().click();
   assert.match(await page.evaluate(() => navigator.clipboard.readText()), /python packages\/framework\/examples\/hybrid_program.py/);
-  await page.locator('[data-open-modal]').click();
-  await page.locator('.pagefind-ui__search-input').fill('quantum_backend');
-  const searchResult = page.locator('.pagefind-ui__result-link').first();
-  await searchResult.waitFor();
-  const searchTarget = new URL(await searchResult.getAttribute('href'), root);
-  assert.ok(searchTarget.pathname.startsWith(root.pathname + 'docs/'), 'Search result keeps the deployment base and docs route');
-  await searchResult.click();
-  await page.waitForURL(searchTarget.href);
-  assert.ok(await page.locator('main h1').isVisible(), 'Search opens its indexed document');
-  checks.push('SDK code copy and Pagefind search navigate to an indexed document within the deployment base');
+  assert.equal(await page.locator('starlight-search, [data-open-modal], .pagefind-ui__search-input').count(), 0, 'Documentation search is removed');
+  await page.keyboard.press('ControlOrMeta+k');
+  assert.equal(await page.getByRole('dialog').count(), 0, 'The former search shortcut does not open a dialog');
+  checks.push('SDK code copy works and documentation search is absent');
 
-  await expandDocsGroup('API 参考');
   await sidebar.getByRole('link', { name: 'API 索引', exact: true }).click();
   await assertDocsLocation('api/', 'API 参考', 'API 索引');
   await sidebar.getByRole('link', { name: '运行时与结果引用', exact: true }).click();
   await assertDocsLocation('api/runtime/', '运行时与结果引用');
   assert.deepEqual(await page.locator('.docs-breadcrumbs > span:not([aria-current])').allTextContents(), ['使用文档', 'API 参考']);
   assert.ok(await page.locator('.pagination-links').isVisible());
-  const apiSummary = sidebar.locator('summary').filter({ hasText: /^API 参考$/ });
-  await apiSummary.focus();
-  await page.keyboard.press('Enter');
-  assert.equal(await apiSummary.evaluate(node => node.parentElement.open), false);
+  const apiLabel = sidebar.locator('.docs-sidebar-group-label').filter({ hasText: /^API 参考$/ });
+  await apiLabel.click();
+  await assertDocsGroupsVisible();
+  assert.equal((await sidebar.locator('a[aria-current="page"]').innerText()).trim(), '运行时与结果引用', 'Clicking the API group title preserves the current page');
   await page.goto(new URL('docs/api/quantum/#quantumresult', root).href, { waitUntil: 'networkidle' });
-  assert.ok(await sidebar.getByRole('link', { name: '量子后端与结果', exact: true }).isVisible(), 'Direct API links expand their category');
+  await assertDocsGroupsVisible();
+  assert.ok(await sidebar.getByRole('link', { name: '量子后端与结果', exact: true }).isVisible(), 'Direct API links remain visible in the permanently expanded category');
   assert.equal(await sidebar.locator('a[aria-current="page"]').innerText(), '量子后端与结果');
   assert.equal(await page.locator('#quantumresult').count(), 1);
   await page.goBack();
@@ -522,7 +561,7 @@ try {
     'quantumresult', '集群作业', '性能模型与预测', '生命周期与错误']) {
     assert.equal(await page.locator(`[id="${id}"]`).count(), 1, `Legacy API anchor: ${id}`);
   }
-  checks.push('API index, category folding, active breadcrumbs, direct API links and legacy API anchors');
+  checks.push('API index, permanently expanded categories, active breadcrumbs, direct API links and legacy API anchors');
 
   for (const [route, examples] of [
     ['providers/', [/class CustomStatevectorProvider/, /register_quantum_backend/]],
@@ -540,6 +579,7 @@ try {
     ['guide-system-overview', 'architecture/'], ['system-overview', 'architecture/'],
     ['guide-使用指南', 'aimd/'], ['使用指南', 'aimd/'],
     ['guide-应用示例', 'examples/'], ['应用示例', 'examples/'],
+    ['guide-应用教程', 'examples/'], ['应用教程', 'examples/'],
     ['guide-启动工作台', '#启动工作台'],
     ...['1-选择应用并编译电路', '2-分配计算硬件并发起性能预测', '3-查看性能预测结果', '4-提交任务并查看运行状态', '5-查看水分子演化结果'].map(hash => [hash, `aimd/#${hash}`]),
   ];
@@ -548,14 +588,14 @@ try {
     await page.waitForURL(new URL('docs/' + route, root).href);
     if (route.includes('#')) assert.equal(await page.locator(`[id="${route.split('#')[1]}"]`).count(), 1);
   }
-  await page.goto(new URL('docs/', root).href, { waitUntil: 'networkidle' });
-  await tutorialLink.click();
+  await page.goto(new URL('examples/aimd/', root).href, { waitUntil: 'networkidle' });
+  await page.getByRole('link', { name: '水分子动力学模拟工作台教程', exact: true }).click();
   await page.waitForURL(new URL('docs/aimd/', root).href);
-  checks.push('Legacy docs URLs resolve and the workbench tutorial opens as a separate page');
+  checks.push('Legacy docs URLs resolve and the example links to its separate tutorial');
 
   await page.goto(new URL('docs/aimd/', root).href, { waitUntil: 'networkidle' });
   const tutorial = page.locator('.flow-guide-tutorial');
-  assert.ok(await tutorial.getByRole('heading', { level: 1, name: /水分子 AIMD 工作台教程/ }).isVisible());
+  assert.ok(await tutorial.getByRole('heading', { level: 1, name: /^水分子动力学模拟\s*工作台教程$/ }).isVisible());
   assert.equal(await tutorial.locator('.flow-guide-content h2').count(), 5, 'AIMD tutorial includes five source sections');
   assert.equal(await tutorial.locator('.flow-guide-content img').count(), 6, 'AIMD tutorial includes six source screenshots');
   assert.equal(await tutorial.locator('.flow-guide-image-link').count(), 6, 'Each tutorial screenshot opens its full image');
@@ -564,7 +604,7 @@ try {
     await screenshot.evaluate(image => image.decode());
     assert.ok(await screenshot.evaluate(image => image.naturalWidth > 0), 'Tutorial screenshot loads');
   }
-  assert.match(await tutorial.locator('.flow-guide-content').innerText(), /不能作为.*Python SDK[\s\S]*qhai\.tasks/, 'Workbench syntax remains distinct from the public SDK');
+  assert.match(await tutorial.locator('.flow-guide-content').innerText(), /不能直接作为.*Python SDK[\s\S]*qhai\.tasks/, 'Workbench syntax remains distinct from the public SDK');
   const tutorialAnchors = await tutorial.locator('.flow-guide-chapters a[href^="#"]').evaluateAll(nodes => nodes.map(node => node.getAttribute('href')));
   assert.equal(tutorialAnchors.length, 5, 'Tutorial navigation includes each section');
   assert.ok(await page.evaluate(anchors => anchors.every(anchor => document.getElementById(decodeURIComponent(anchor.slice(1)))), tutorialAnchors), 'Tutorial anchors resolve to headings');
@@ -585,48 +625,49 @@ try {
   assert.ok(await mobilePrevious.isEnabled(), 'Previous node becomes available after advancing');
   await mobilePrevious.click();
   await page.waitForFunction(() => (document.querySelector('#flow-workspace-panel')?.scrollLeft ?? 1) < 20);
-  const mobileStage = mobileWorkflow.getByRole('tablist', { name: '工作流阶段' });
-  await mobileStage.scrollIntoViewIfNeeded();
-  const beforeStageScroll = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
-  for (const [mode, label] of [['predict', '性能模拟'], ['execute', '运行记录'], ['compose', '任务编排']]) {
-    await mobileStage.getByRole('tab', { name: label }).click();
-    await page.waitForFunction(selectedMode => {
+  assert.equal(await mobileWorkflow.getByRole('tablist').count(), 0);
+  const scrollOrigin = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
+  for (let step = 0; step < 8 && !await mobileNext.isDisabled(); step += 1) {
+    const previousScroll = await mobileWorkflow.locator('#flow-workspace-panel').evaluate(node => node.scrollLeft);
+    await mobileNext.click();
+    await page.waitForFunction(previous => {
       const panel = document.querySelector('#flow-workspace-panel');
-      const active = panel?.querySelector(`[data-flow-stage="${selectedMode}"][data-flow-active="true"]`);
-      if (!panel || !active) return false;
-      const viewport = panel.getBoundingClientRect();
-      const bounds = active.getBoundingClientRect();
-      return bounds.left >= viewport.left && bounds.right <= viewport.right;
-    }, mode);
-    assert.deepEqual(await page.evaluate(() => ({ x: scrollX, y: scrollY })), beforeStageScroll, 'Selecting a mobile stage scrolls its diagram without moving the page');
-    assert.ok(await page.locator('html').evaluate(node => node.scrollWidth <= innerWidth), 'Stage selection does not create page overflow');
+      const next = document.querySelector('[data-flow-next]');
+      return panel.scrollLeft > previous && next.disabled === (panel.scrollLeft >= panel.scrollWidth - panel.clientWidth - 1);
+    }, previousScroll);
   }
-  checks.push('Mobile workflow arrows and tabs reveal nodes within the diagram without moving the page');
+  assert.ok(await mobileNext.isDisabled(), 'Mobile arrows reach the final column');
+  const reportBounds = await mobileWorkflow.locator('[data-flow-report="shared"]').boundingBox();
+  const viewportBounds = await mobileWorkflow.locator('#flow-workspace-panel').boundingBox();
+  assert.ok(reportBounds && viewportBounds && reportBounds.x >= viewportBounds.x && reportBounds.x + reportBounds.width <= viewportBounds.x + viewportBounds.width + 1, 'Mobile arrows reveal the complete shared performance report');
+  assert.deepEqual(await page.evaluate(() => ({ x: scrollX, y: scrollY })), scrollOrigin, 'Diagram navigation keeps the page in place');
+  assert.ok(await page.locator('html').evaluate(node => node.scrollWidth <= innerWidth), 'Workflow does not create page overflow');
+  checks.push('Mobile workflow arrows reach both execution branches and the shared report');
   const menu = page.locator('.flow-mobile-menu');
   await menu.locator('summary').click();
-  assert.ok(await menu.getByRole('link', { name: '参考文档' }).isVisible());
+  assert.ok(await menu.getByRole('link', { name: '文档' }).isVisible());
   await page.keyboard.press('Escape');
   assert.equal(await menu.getAttribute('open'), null);
   await menu.locator('summary').click();
-  await menu.getByRole('link', { name: '示例与原理' }).click();
+  await menu.getByRole('link', { name: '教程', exact: true }).click();
   await page.waitForURL(new URL('#applications', root).href);
   assert.equal(await menu.getAttribute('open'), null);
-  await page.locator('.flow-application').filter({ hasText: '水分子 AIMD' }).click();
+  await page.locator('.flow-application').filter({ hasText: '水分子动力学模拟' }).click();
   await page.waitForURL(new URL('examples/aimd/', root).href);
   await replay.scrollIntoViewIfNeeded();
   await replay.click();
   await page.waitForFunction(() => Number(document.querySelector('[data-aimd-workbench]')?.getAttribute('data-frame')) > 5);
   assert.ok(await page.locator('html').evaluate(node => node.scrollWidth <= innerWidth));
-  await page.getByRole('contentinfo').getByRole('link', { name: '参考文档' }).click();
+  await page.getByRole('contentinfo').getByRole('link', { name: '文档' }).click();
   await page.waitForURL(new URL('docs/', root).href);
   await page.locator('.docs-sidebar-toggle').click();
-  await expandDocsGroup('混合编程');
+  await assertDocsGroupsVisible();
   await sidebar.getByRole('link', { name: '量子后端', exact: true }).click();
   await page.waitForURL(new URL('docs/quantum-backends/', root).href);
   assert.ok(await page.getByRole('heading', { level: 1, name: '量子后端' }).isVisible());
   assert.ok(await page.locator('html').evaluate(node => node.scrollWidth <= innerWidth));
   await page.locator('.docs-sidebar-toggle').click();
-  await expandDocsGroup('API 参考');
+  await assertDocsGroupsVisible();
   await sidebar.getByRole('link', { name: '运行时与结果引用', exact: true }).click();
   await page.waitForURL(new URL('docs/api/runtime/', root).href);
   assert.ok(await page.locator('html').evaluate(node => node.scrollWidth <= innerWidth));

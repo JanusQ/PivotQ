@@ -7,7 +7,7 @@ description: Ray Jobs 作业规格、提交、状态、日志、停止和删除�
 from pivotq.jobs import JobClient, JobSpec, JobHandle, JobStatus
 ```
 
-作业管理提交整个 Python 程序，由程序内部的 Runtime 调度各项任务。操作教程见[集群作业](../../jobs/)。
+通过作业管理接口提交整个 Python 程序，再由程序内部的 Runtime 调度各项任务。操作教程见[集群作业](../../jobs/)。
 
 ## JobSpec
 

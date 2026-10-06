@@ -1,3 +1,5 @@
+@import './typography.css';
+
 /* Inter v4.1, https://github.com/rsms/inter — license: public/licenses/Inter-OFL.txt. */
 @font-face {
   font-family: 'Inter';
@@ -29,11 +31,11 @@
 .flow-brand-mark { display: grid; place-items: center; flex-shrink: 0; width: 34px; height: 34px; border: 1px solid #1468e8; border-radius: 7px; color: #1468e8; background: #eff6ff; }
 .flow-brand-q { color: #1468e8; }
 .flow-primary-nav { display: flex; align-items: center; gap: 31px; align-self: stretch; }
-.flow-primary-nav a { position: relative; display: flex; align-items: center; color: #536477; font-size: 14px; font-weight: 600; white-space: nowrap; }
+.flow-primary-nav a { position: relative; display: flex; align-items: center; color: #536477; font-size: var(--font-ui); font-weight: 600; white-space: nowrap; }
 .flow-primary-nav a:hover, .flow-primary-nav a[aria-current] { color: #135cce; }
 .flow-primary-nav a[aria-current]::after { content: ""; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: #1468e8; }
 .flow-header-actions { display: flex; justify-content: flex-end; align-items: center; gap: 8px; }
-.flow-github { display: inline-flex; align-items: center; height: 38px; padding: 7px 11px; border: 1px solid #dce5f0; border-radius: 6px; background: #fff; color: #26374b; font-size: 13px; font-weight: 680; line-height: 1; }
+.flow-github { display: inline-flex; align-items: center; min-height: 40px; padding: 8px 12px; border: 1px solid #dce5f0; border-radius: 6px; background: #fff; color: #26374b; font-size: var(--font-small); font-weight: 680; line-height: 1.2; }
 .flow-github a { color: inherit; font: inherit; }
 .flow-github:hover { color: #1468e8; border-color: #a9c8ed; }
 .flow-github svg:last-child { color: #8297ab; }
@@ -42,7 +44,6 @@
 @media (max-width: 900px) {
   .flow-header-inner { grid-template-columns: minmax(110px, 1fr) auto minmax(110px, 1fr); gap: 18px; }
   .flow-primary-nav { gap: 17px; }
-  .flow-primary-nav a { font-size: 13px; }
   .flow-github span { display: none; }
 }
 
@@ -55,6 +56,6 @@
   .flow-mobile-menu summary::-webkit-details-marker { display: none; }
   .flow-mobile-menu summary span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   .flow-mobile-menu nav { position: absolute; top: 45px; right: 0; display: flex; flex-direction: column; min-width: 198px; padding: 8px; border: 1px solid #dce5f0; border-radius: 6px; background: #fff; box-shadow: 0 16px 32px #10294921; }
-  .flow-mobile-menu nav a { display: flex; align-items: center; gap: 4px; padding: 10px 12px; border-radius: 4px; color: #14253d; font-size: 14px; font-weight: 600; }
+  .flow-mobile-menu nav a { display: flex; align-items: center; gap: 4px; padding: 10px 12px; border-radius: 4px; color: #14253d; font-size: var(--font-ui); font-weight: 600; }
   .flow-mobile-menu nav a[aria-current], .flow-mobile-menu nav a:hover { background: #eef6ff; color: #1468e8; }
 }

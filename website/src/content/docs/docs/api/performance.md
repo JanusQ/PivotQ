@@ -10,7 +10,7 @@ from pivotq.performance import (
 )
 ```
 
-性能模型由用户独立编写，不自动分析 Python 程序，也不要求正在运行的 Ray 集群或 QPU。建模方法见[硬件性能模型](../../hardware-profiles/)，运行示例见[性能预测](../../performance/)。
+性能模型由用户独立编写，不自动分析 Python 程序，也不要求正在运行的 Ray 集群或 QPU。建模方法见[硬件性能模型](../../hardware-profiles/)，运行教程见[性能预测](../../performance/)。
 
 本页记录公开 Python API 的 CPU/QPU 模型。目前没有 `GPUProfile`、`Hardware.gpu` 或 `Workload.gpu`；系统中的 GPU 性能预测使用 QPerfSim 场景与任务图接口，见 [GPU 性能预测](../../gpu-computing/#gpu-性能预测)。
 
@@ -30,7 +30,7 @@ workload.cpu(name, *, duration_seconds=None, ops=None,
              target=None, job_id="job0") -> str
 ```
 
-提供正的显式耗时，或提供操作量与访存字节数模型。`duration_seconds` 与 `ops` 不能同时指定。输入输出大小不自动生成通信节点。
+指定大于 0 的耗时，或根据操作量与访存字节数建模。`duration_seconds` 与 `ops` 不能同时指定。输入输出大小不自动生成通信节点。
 
 ### qpu
 
@@ -40,7 +40,7 @@ workload.qpu(name, *, qubits, shots, circuit_count=1,
              target=None, job_id="job0") -> str
 ```
 
-根据电路数、shots、有效 shot 吞吐与提交延迟预测量子阶段。`qubits`、`shots`、`circuit_count` 均为正整数。
+根据电路数、shots、有效 shot 吞吐与提交延迟预测量子阶段的耗时。`qubits`、`shots`、`circuit_count` 均为正整数。
 
 ### transfer
 

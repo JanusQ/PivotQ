@@ -1,0 +1,8 @@
+/* Shared by the portal and documentation through their common header.
+   Keep small labels legible at every breakpoint; adjust space and wrapping
+   in each component instead of reducing the type size on narrow screens. */
+:root {
+  --font-caption: 0.875rem;
+  --font-small: 0.9375rem;
+  --font-ui: 1rem;
+}

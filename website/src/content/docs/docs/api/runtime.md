@@ -21,7 +21,7 @@ Runtime(executor="local", *, address=None, max_workers=4,
 | `executor` | `"ray"` 使用 Ray；默认 `"local"` 使用本地线程池，适合调试 |
 | `address` | Ray 地址；`None` 启动或复用本机连接，`"auto"` 连接已有集群；仅 Ray 模式可指定 |
 | `max_workers` | 本地线程池最大工作线程数，默认 4；仅本地模式可调整 |
-| `trace` | 是否保留完成调用的执行记录，默认关闭 |
+| `trace` | 是否保留已完成调用的执行记录，默认关闭 |
 | `trace_max_records` | 启用追踪时最多保留的记录数，默认 10000 |
 
 构造 Runtime 不启动执行器；进入 `with` 或调用需要执行器的接口时启动。推荐使用 `with Runtime(executor="ray") as runtime:` 管理资源。只读属性 `executor`、`max_workers`、`closed` 返回配置及关闭状态。
@@ -56,7 +56,7 @@ runtime.get(ref) -> Any
 runtime.wait(refs, *, num_returns=1, timeout=None) -> (ready, pending)
 ```
 
-等待至少 `num_returns` 个调用完成；`ready` 与 `pending` 均为引用元组。失败结果也算 ready。`timeout` 单位为秒，`None` 表示持续等待，`0` 表示立即查询。超时可以返回不足目标数量的 ready，不取消任务，也不取回业务值。
+等待至少 `num_returns` 个调用完成；`ready` 与 `pending` 均为引用元组。失败结果也算 ready。`timeout` 单位为秒，`None` 表示持续等待，`0` 表示立即查询。超时后，`ready` 中的引用数可能少于 `num_returns`；此操作不会取消任务，也不会取回业务值。
 
 ## status
 

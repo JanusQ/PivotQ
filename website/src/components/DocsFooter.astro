@@ -5,11 +5,15 @@ const base = import.meta.env.BASE_URL;
 ---
 <div class="docs-pagination"><Pagination /></div>
 <footer class="docs-footer" role="contentinfo">
+  <div class="docs-footer-content">
   <div class="footer-links">
-    <nav aria-label="文档与教程"><h2>文档与教程</h2><a href={`${base}docs/`}>参考文档</a><a href={`${base}docs/aimd/`}>AIMD 工作台教程</a></nav>
-    <nav aria-label="示例与原理"><h2>示例与原理</h2><a href={`${base}examples/aimd/`}>水分子 AIMD</a><a href={`${base}examples/qram/`}>QRAM</a></nav>
+    <nav aria-label="编程模型"><h2>编程模型</h2><a href={`${base}#system`}>计算任务</a><a href={`${base}#workflow`}>任务编排与性能分析</a></nav>
+    <nav aria-label="文档"><h2><a href={`${base}docs/`}>文档</a></h2><a href={`${base}docs/examples/`}>应用教程介绍</a></nav>
+    <nav aria-label="教程"><h2>教程</h2><a href={`${base}examples/aimd/`}>水分子动力学模拟</a><a href={`${base}examples/qram/`}>量子随机存储器</a></nav>
   </div>
-  <p>© {new Date().getFullYear()} {site.name}</p>
+  <p class="docs-footer-copyright">© {new Date().getFullYear()} {site.name}</p>
+  </div>
+  <a class="docs-footer-zju" href="https://www.zju.edu.cn/" target="_blank" rel="noopener noreferrer" aria-label="浙江大学官网（新窗口）"><img src={`${base}images/zju-logo-white.svg`} width="151" height="42" alt="浙江大学" loading="lazy" /></a>
 </footer>
 <script>
   document.querySelectorAll<HTMLImageElement>('.sl-markdown-content img').forEach(image => {
@@ -26,10 +30,14 @@ const base = import.meta.env.BASE_URL;
 </script>
 <style>
   .docs-pagination{margin-top:3rem}
-  .docs-footer{border-top:1px solid var(--sl-color-gray-5);margin-top:2rem;padding:2rem 0 1rem;color:var(--sl-color-gray-3);font-size:.875rem}
-  .footer-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem}
+  .docs-footer{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:1.5rem;border-top:1px solid var(--sl-color-gray-5);margin-top:2rem;padding:2rem 0 1rem;color:var(--sl-color-gray-3);font-size:var(--font-small);line-height:1.6}
+  .footer-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem}
   nav{display:flex;flex-direction:column;gap:.6rem}
   h2{font-size:1rem;font-weight:600;color:var(--sl-color-gray-1);margin:0}
   a{color:var(--sl-color-gray-2);text-decoration:none}a:hover{color:var(--sl-color-accent);text-decoration:underline}
-  p{font-size:.8rem;margin-top:1.5rem}
+  h2 a{color:inherit;font:inherit}
+  .docs-footer-copyright{margin-top:1.75rem;font-size:var(--font-caption)}
+  .docs-footer-zju{display:inline-flex;justify-self:end;width:167px;padding:8px;border-radius:4px;background:#142232}
+  .docs-footer-zju img{display:block;width:100%;height:auto}
+  @media(max-width:49.99rem){.footer-links{grid-template-columns:1fr;gap:1.5rem}.docs-footer{grid-template-columns:1fr;gap:1.5rem}.docs-footer-zju{justify-self:start;width:128px}}
 </style>
