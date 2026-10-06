@@ -7,13 +7,13 @@ import '../../styles/flow-docs.css';
 const base = import.meta.env.BASE_URL;
 const steps = getHeadings().filter(heading => heading.depth === 2);
 ---
-<PortalLayout title="水分子动力学模拟工作台教程" page="docs" description={frontmatter.description}>
+<PortalLayout title="水分子动力学模拟：Linux 可视化操作教程" page="docs" description={frontmatter.description}>
   <section class="flow-guide flow-guide-tutorial" aria-labelledby="tutorial-title">
     <header class="flow-guide-hero">
       <div class="container flow-guide-hero-inner">
         <div class="flow-guide-hero-copy">
-          <h1 id="tutorial-title">水分子动力学模拟工作台教程</h1>
-          <p class="flow-guide-intro">逐步了解工作台如何完成一次水分子计算，并分清目标硬件预测与 CPU 模拟结果。</p>
+          <h1 id="tutorial-title">水分子动力学模拟：Linux 可视化操作教程</h1>
+          <p class="flow-guide-intro">先在 Linux 启动 PivotQ 服务，再通过浏览器配置水分子应用、预测耗时、提交任务并查看结果。“工作台”是操作界面中的配置页；当前门户提供教程与已保存的演示内容。</p>
         </div>
         <div class="flow-guide-diagram" aria-hidden="true">
           <span class="flow-guide-diagram-line"></span>
@@ -36,7 +36,7 @@ const steps = getHeadings().filter(heading => heading.depth === 2);
       </aside>
 
       <div class="flow-guide-reading">
-        <article class="flow-guide-content" aria-label="水分子动力学模拟工作台教程正文" data-pagefind-body>
+        <article class="flow-guide-content" aria-label="水分子动力学模拟：Linux 可视化操作教程正文" data-pagefind-body>
           <Content />
         </article>
         <nav class="flow-guide-pager" aria-label="继续浏览">

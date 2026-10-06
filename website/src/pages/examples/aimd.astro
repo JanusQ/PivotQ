@@ -55,7 +55,7 @@ const chapters = [
   <div class="container aimd-page analysis-page flow-example-page aimd-notebook" data-aimd-analysis data-line-map={JSON.stringify(lineMap)}>
     <nav class="flow-example-breadcrumbs" aria-label="面包屑"><a href={base}>首页</a><span aria-hidden="true">/</span><a href={`${base}#applications`}>教程</a><span aria-hidden="true">/</span><span aria-current="page">水分子动力学模拟</span></nav>
     <header class="aimd-notebook-hero">
-      <div class="aimd-notebook-hero-copy"><span class="aimd-notebook-kicker">计算教程 / 01</span><h1>水分子动力学模拟</h1><p>知道水分子此刻的样子，怎样计算它下一刻的位置？这篇教程从三个原子的坐标出发，沿着能量、受力与位置更新逐步展开：先看量子电路如何参与计算，再看 CPU 与 QPU 如何分工，最后借一份已保存的轨迹观察分子的运动。</p></div>
+      <div class="aimd-notebook-hero-copy"><span class="aimd-notebook-kicker">计算教程 / 01</span><h1>水分子动力学模拟</h1><p>本教程从一个水分子的原子坐标出发，介绍量子电路提取特征、经典模型预测势能、能量差分求力和位置更新的过程。后半部分使用独立归档的轨迹，演示如何读取分子结构与能量曲线。</p></div>
       <dl class="aimd-notebook-facts"><div><dt>分子</dt><dd>H₂O</dd></div><div><dt>电路</dt><dd>3 个量子比特</dd></div><div><dt>轨迹</dt><dd>1001 帧 / 100 fs</dd></div></dl>
     </header>
 
@@ -64,7 +64,7 @@ const chapters = [
       <article class="aimd-notebook-article" data-pagefind-body>
         <section class="aimd-notebook-chapter" id="question" aria-labelledby="question-heading">
           <div class="aimd-notebook-chapter-heading"><span>01</span><div><p>从分子到电路</p><h2 id="question-heading">问题与输入</h2></div></div>
-          <div class="aimd-notebook-prose"><p>先从一个水分子看起：一个氧原子、两个氢原子，各自占据一个位置。如果把三个原子的位置连续记录下来，就得到一条分子轨迹。不过，要从当前的位置算出下一步，还需要知道它们受到怎样的力。</p><p>这里的计算从能量入手：用训练好的量子-经典代理势能模型预测能量，再由能量的变化求力，最后更新原子位置。理解这一点，也就能区分本教程与严格的“从头算分子动力学”（AIMD）：后者通常在每一步用电子结构方法计算能量和力，本教程则使用代理模型，并不在每一步重新求解电子结构。</p></div>
+          <div class="aimd-notebook-prose"><p>水分子由一个氧原子和两个氢原子组成。连续记录三个原子的坐标，就得到分子运动轨迹。模拟下一步运动时，还需要结合原子受力、质量和当前速度。</p><p>本教程使用训练好的量子—经典代理势能模型预测能量，再由能量随坐标的变化求力并更新位置。严格的从头算分子动力学（AIMD）通常在每一步进行电子结构计算；本教程使用代理模型，不逐步重新求解电子结构。</p></div>
           <dl class="aimd-notebook-concepts" aria-label="理解本例的三个概念">
             <div><dt>分子构型</dt><dd>用每个原子的 x、y、z 坐标，就能描述此刻的构型。要看形状怎样变化，可以先看两条 O–H 键长和 H–O–H 夹角：它们反映伸缩与弯曲，也不会因分子的整体平移或转动而改变。</dd></div>
             <div><dt>势能与力</dt><dd>每组原子位置都对应一个能量值 E，这种对应关系构成势能面。沿位置的变化观察能量，便能由负梯度得到力（F = −∇E）；积分器再结合力与原子的运动状态，计算下一时间步的位置。</dd></div>
@@ -72,18 +72,18 @@ const chapters = [
           </dl>
           <AimdModelEquations />
           <div class="aimd-notebook-parameter-line" aria-label="从分子构型到能量预测"><span>分子构型</span><span aria-hidden="true">→</span><strong>3 个编码角</strong><span aria-hidden="true">→</span><strong>3 比特电路</strong><span aria-hidden="true">→</span><strong>经典能量模型</strong><span class="aimd-notebook-parameter-tail">电路另有 11 个模型参数</span></div>
-          <div class="aimd-notebook-prose aimd-notebook-materials"><p>带着这条计算路径往下读，代码 1、2 会先搭好可复用的三比特电路。到代码 3，再用当前仓库的默认模型，在 CPU 上算出一个构型的能量与力，把上面的公式落实为数值。</p><p>最后的代码 4 会转向另一份归档的轨迹 CSV。它没有附上配套的模型权重、编码配置或执行后端记录，所以目前无法确认它是否由当前模型生成，也无法用前三段代码重现后面的能量曲线。阅读时，需要把这份轨迹与前面的模型计算分开理解。</p></div>
+          <div class="aimd-notebook-prose aimd-notebook-materials"><p>代码 1、2 构造三比特电路；代码 3 使用当前默认模型，在 CPU 上计算一个构型的能量与力。代码 4 读取另一份归档轨迹 CSV。该轨迹缺少配套模型权重、编码配置和执行后端记录，尚不能确认由当前模型生成，也不能用代码 1–3 重现后面的曲线。</p></div>
         </section>
 
         <section class="aimd-notebook-chapter" id="circuit" aria-labelledby="circuit-heading">
           <div class="aimd-notebook-chapter-heading"><span>02</span><div><p>PivotQ / Python</p><h2 id="circuit-heading">构造量子电路</h2></div></div>
-          <div class="aimd-notebook-prose"><p>几何已经可以写成三个编码角，接下来要把它们放进怎样的电路？先准备 Python 3.12，在 PivotQ 仓库根目录运行 <code>python -m pip install ./packages/framework</code>，也可以使用仓库已配置的统一环境。PivotQ 的电路接口直接复用 Qiskit 对象。</p><p>按代码 1、代码 2 的顺序运行，就会先定义辅助函数，再构造三比特电路并打印结构摘要。下方的“代码 2 输出”来自这两段源码的实际运行；浏览器只展示源码和输出，不执行 Python。</p><p>此时搭好的是电路结构。它保留了 <code>enc</code> 和 <code>theta</code> 共 14 个未赋值参数，其中 <code>enc</code> 随分子构型改变，<code>theta</code> 是模型训练后使用的参数。摘要中的基础门总数 70、电路深度 39，描述的也都是电路结构，不能表示某一帧构型的能量。</p><p>看电路图时，可以从左边沿着 q0、q1、q2 三条水平线往右读。单比特旋转先改变各量子比特的状态，CZ 门再对相邻的两个比特施加受控相位变换；随后，一组 Pauli 旋转在指定比特上沿指定轴继续变换量子态。</p><p>两张图展示了同一电路的不同层次：“模型门结构”保留 Rx 与 Pauli 旋转，便于理解；“基础门分解”把它们展开为 Ry、Rz、CZ 门。要让这套结构给出能量，还需要代入参数、读出量子态，再将读出特征交给经典模型。</p></div>
+          <div class="aimd-notebook-prose"><p>使用 Python 3.12，在 PivotQ 仓库根目录运行 <code>python -m pip install ./packages/framework</code>，或使用仓库已配置的统一环境。PivotQ 的电路接口直接复用 Qiskit 对象。</p><p>依次运行代码 1、2，定义辅助函数、构造三比特电路并打印摘要。下方输出来自这两段代码的实际运行；浏览器仅展示代码和结果，不执行 Python。</p><p>这段代码只构造电路，尚未代入参数。14 个参数包括随构型变化的 3 个 <code>enc</code> 和训练得到的 11 个<code>theta</code>。基础门总数为 70，电路深度为 39；这些是结构信息，不是能量计算结果。</p><p>电路图从左向右读取，q0、q1、q2 三条线分别代表三个量子比特。单比特旋转改变量子态，CZ门作用于相邻比特，随后执行指定的 Pauli 旋转。“模型门结构”保留 Rx 与 Pauli 旋转；“基础门分解”将其展开为 Ry、Rz、CZ 门。计算势能时还需代入参数、提取量子特征，并运行经典模型。</p></div>
           <details class="aimd-notebook-setup"><summary><span class="aimd-notebook-cell-number">代码 1</span><strong>导入与辅助函数</strong><span class="aimd-notebook-disclosure">展开代码</span></summary><div class="aimd-notebook-setup-code"><Code code={setupSource} lang="python" theme="github-light" /></div></details>
     <div class="analysis-layout aimd-notebook-circuit-layout">
       <section class="analysis-code aimd-notebook-code-cell" aria-labelledby="source-heading">
         <div class="analysis-card-heading"><div><span class="aimd-notebook-cell-number">代码 2</span><h3 id="source-heading">构建三比特电路</h3></div><span class="flow-panel-meta">Python</span></div>
         <div class="analysis-source" data-source data-model-source={source}><div data-code-fallback><Code code={source} lang="python" theme="github-light" /></div><div class="analysis-monaco" data-code-editor hidden></div></div>
-        <div class="aimd-notebook-circuit-run-output"><span>代码 2 输出 / PivotQ 电路</span><pre>{circuitOutput}</pre><p>读到深度 39 时，可以把它理解为量子门按依赖关系排成的层数。它描述电路，而分子动力学的时间步描述分子演化，因此这 39 层不能换算成后文的 fs。</p></div>
+        <div class="aimd-notebook-circuit-run-output"><span>代码 2 输出 / PivotQ 电路</span><pre>{circuitOutput}</pre><p>电路深度 39 表示量子门按依赖关系排列后的层数。它不同于分子动力学的时间步，不能直接换算成飞秒（fs）。</p></div>
       </section>
       <div class="analysis-right aimd-notebook-circuit-output">
         {['logical','physical'].map((kind,i)=><section class="analysis-circuit-card" data-circuit-card={kind} aria-labelledby={`${kind}-heading`}>
@@ -106,53 +106,52 @@ const chapters = [
 
         <section class="aimd-notebook-chapter aimd-notebook-flow" id="flow" aria-labelledby="flow-heading">
           <div class="aimd-notebook-chapter-heading"><span>03</span><div><p>CPU + QPU</p><h2 id="flow-heading">计算步骤</h2></div></div>
-          <div class="aimd-notebook-prose"><p>电路准备好以后，它怎样参与一次位置更新？先代入编码角和模型参数，量子阶段就可以根据 Z 基、X 基的读出结果，各提取 7 个统计特征。这里得到的还只是特征，并不是原子坐标或受力。</p><p>这些特征随后进入原应用的经典能量模型。模型有两层、每层 32 个单元，负责预测势能。有了能量计算方法，就能对坐标做中心有限差分，求力并移除刚体数值残差；VelocityVerlet 积分器再结合所得的力，更新原子位置和速度。新构型由此成为下一时间步的输入，同一条计算链便可以继续。</p><p>沿着下面的流程图看，QPU 是量子特征阶段选择的目标设备，CPU 则承担经典能量推理、求力与位置更新。</p></div>
+          <div class="aimd-notebook-prose"><p>一次位置更新包含四步：将编码角和模型参数代入电路，在 Z、X 基各提取 7 个特征；由两层、每层 32 个单元的经典模型预测势能；用中心差分求力并去除刚体数值残差；由 VelocityVerlet 更新位置和速度。下一时间步重复此过程。</p><p>流程图将量子特征计算标为 QPU 任务，将经典能量预测、求力和位置更新标为 CPU 任务。下方代码 3 展示 CPU 运行示例。此处没有对应的 QPU 真机运行记录。</p></div>
           <div class="aimd-notebook-time-step">
             <h3>一个时间步内的计算如何衔接</h3>
             <ol>
-              <li><span>01</span><div><strong>原子位置 → 编码角</strong><p>从当前氧、氢原子的坐标提取分子几何，再沿用模型训练时的编码规则，得到三个 Ry 门角度。后面回放的归档轨迹没有附上每帧的编码角。</p></div></li>
+              <li><span>01</span><div><strong>原子位置 → 编码角</strong><p>从当前原子坐标计算分子几何特征，再按训练时的编码规则转换为三个 Ry 门的输入角。</p></div></li>
               <li><span>02</span><div><strong>电路 → 量子特征</strong><p>把这些编码角连同模型参数代入电路，分别在 Z、X 基读出，就能各取得 7 个供经典模型使用的特征。</p></div></li>
               <li><span>03</span><div><strong>特征 → 能量与力</strong><p>经典模型先预测当前构型的势能。再对原子坐标做小幅扰动、比较能量变化，便能通过差分近似求出各原子的力。</p></div></li>
               <li><span>04</span><div><strong>力 → 下一步位置</strong><p>力算出之后，VelocityVerlet 积分器结合原子质量及当前速度更新位置。对这个新构型重复计算，就进入下一步。</p></div></li>
             </ol>
-            <p>回头看代码 2，它打印的比特数、参数数和门数，描述的是第 2 步将用到的电路。那段代码还没有代入一帧的参数，也没有进行读出、能量预测或轨迹积分。</p>
+            <p>代码 2 仅输出电路结构摘要，尚未完成参数赋值、量子读出、能量预测或轨迹积分。</p>
           </div>
-          <div class="aimd-notebook-prose"><p>读到这里，还可以停下来分清“测量结果”和“读出特征”。一次测量只给出一组比特结果；这里需要的特征，则是根据电路在 Z 基、X 基下的读出结果计算的统计量。在采样设备上，要通过多次测量估计这些统计量；理想模拟器也可以直接计算期望值。</p><p>因此，一次测量的结果还不能直接作为分子的势能。要等经典能量模型接收这些特征，才会得到当前构型的能量预测。</p></div>
+          <div class="aimd-notebook-prose"><p>一次测量得到一组比特结果；模型需要的量子特征则是由读出结果计算的统计量。采样设备通过多次测量估计这些统计量，理想模拟器也可直接计算期望值。经典模型以这些特征为输入，预测势能。</p></div>
           <AimdExecutionFlow />
           <section class="aimd-notebook-data-cell" aria-labelledby="cpu-code-heading">
             <div class="aimd-notebook-data-heading"><span class="aimd-notebook-cell-number">代码 3</span><h3 id="cpu-code-heading">在 CPU 上计算能量与受力</h3></div>
-            <p>现在把这条计算链落实到一个构型上。使用仓库已配置的 Python 环境，在 <code>applications/h2o-hybrid-aimd/</code> 目录运行下面这段代码：它会读取默认配置与已训练模型，算出初始水分子构型的势能和三个原子的受力。下方保留了实际运行输出，浏览器不执行 Python。</p>
+            <p>在仓库已配置的 Python 环境中，进入 <code>applications/h2o-hybrid-aimd/</code> 目录并运行以下代码。它读取默认配置和已训练模型，计算初始构型的势能及三个原子的受力。下方展示实际运行输出，浏览器不执行 Python。</p>
             <div class="aimd-notebook-data-code"><div class="aimd-notebook-data-code-heading"><span>Python · CPU</span><button type="button" data-aimd-copy data-code-source={cpuSource} title="复制 CPU 能量与受力代码" aria-label="复制 CPU 能量与受力代码" hidden><Copy size={15} aria-hidden="true" /><span data-copy-feedback aria-live="polite">复制代码</span></button></div><Code code={cpuSource.trim()} lang="python" theme="github-light" /></div>
             <div class="aimd-notebook-data-output"><span>运行输出 / CPU · 单个构型</span><pre>{cpuOutput}</pre></div>
-            <p>这次计算中，CPU 负责 MLP 能量推理、中心差分求力和刚体残差投影。为了求出力，程序以 0.001 Å 为差分步长，对 9 个坐标分别施加正、负扰动。这样，连同中心构型，一共需要计算 19 个构型的势能。</p><p>到这里，已经得到了一次能量与力的结果。原子的位置尚未在这段代码中推进，后续的位置更新由积分器完成。</p>
+            <p>本次由 CPU 完成多层感知机（MLP）的能量预测、中心差分求力和刚体残差处理。三个原子共有9 个坐标分量；每个分量各作一次正、负扰动，步长为 0.001 Å。18 个扰动构型加上中心构型，共需计算19 个构型的势能。</p><p>代码 3 只计算能量和力，尚未更新原子位置；位置更新由后续积分步骤完成。</p>
           </section>
         </section>
 
         <section class="analysis-results aimd-notebook-chapter" id="results" aria-labelledby="results-heading">
           <div class="aimd-notebook-chapter-heading"><span>04</span><div><p>已保存的数据</p><h2 id="results-heading">轨迹与能量曲线</h2></div></div>
-          <div class="aimd-notebook-prose"><p>如果把每一步的位置连起来，会看到怎样的运动？为了练习读轨迹，这里换用另一份归档的 CSV，它记录了每一帧的原子坐标、能量和时间。这份数据并非代码 3 的运行结果；下方的分子视图和曲线只是读取归档，并同步显示同一帧。</p><p>先看时间轴：它记录了 0–100 fs 的演化过程。fs 是飞秒，1 fs 等于 10⁻¹⁵ 秒。数据每隔 0.1 fs 保存一帧，因此 1000 个时间步连同初始构型，共有 1001 帧。</p><p>再把目光移到分子形状。两条 O–H 键长的增减对应伸缩，H–O–H 夹角的变化对应弯曲。键长用 Å（埃，1 Å = 0.1 nm）表示，夹角用度表示。沿着时间轴看这三个量，就能跟上水分子内部几何的变化。</p><p>与结构相对应，能量图用 eV（电子伏特）记录势能、动能和总能量：势能对应当前原子排布，动能对应原子的运动，总能量是两者之和；温度曲线也反映运动强弱。把同一时刻的分子构型与曲线对齐，就可以观察结构变化怎样与能量、温度变化相伴出现。</p></div>
-          <div class="aimd-notebook-frame-example"><h3>读一帧：先对齐结构与曲线</h3><p>先停在第 0 帧：两条 O–H 键都是 0.9572 Å，H–O–H 夹角为 104.52°，温度为 300 K，总能量为 0.5912 eV。这些数值共同描述了轨迹的起点。</p><p>把曲线光标拖到 100 fs，两条键长变为 1.2024 Å 和 1.1422 Å，夹角为 95.27°。与起点相比，两条键分别长了 0.2452 Å、0.1850 Å，夹角小了 9.25°。此时，分子图显示当前形状，曲线光标也指向同一帧。</p><p>这次对比只告诉了首末两帧的差异。要知道两条键在中间是否一直伸长或收缩，还需要沿时间轴查看完整过程。</p></div>
+          <div class="aimd-notebook-prose"><p>下方视图读取另一份归档 CSV，显示每一帧的原子坐标、能量和时间。分子视图与曲线同步到同一帧。这份轨迹不是代码 3 的运行结果。</p><p>轨迹覆盖 0–100 fs，每隔 0.1 fs 保存一帧；1000 个时间步加上初始构型，共 1001 帧。1 fs（飞秒）= 10⁻¹⁵ 秒。</p><p>两条 O–H 键长的变化表示伸缩，H–O–H 夹角的变化表示弯曲。键长单位为 Å（埃，1 Å = 0.1 nm），夹角单位为度。沿时间轴查看这三个量，可观察水分子形状的变化。</p><p>能量图显示势能、动能和总能量，单位为 eV（电子伏特）。势能与原子构型有关，动能与原子运动有关，总能量为二者之和。结合温度曲线和同一时刻的分子构型，可查看这些量如何随时间变化。</p></div>
+          <div class="aimd-notebook-frame-example"><h3>读一帧：先对齐结构与曲线</h3><p>第 0 帧：两条 O–H 键长均为 0.9572 Å，键角 104.52°，温度 300 K，总能量 0.5912 eV。100 fs 时：两条键长分别为 1.2024 Å、1.1422 Å，键角 95.27°。相较起点，两条键分别增加 0.2452 Å、0.1850 Å，键角减小 9.25°。这只说明首末两帧的差异；中间的变化过程需查看完整轨迹。</p></div>
           <div class="aimd-notebook-background aimd-notebook-results-background" aria-label="如何理解结构与能量曲线">
-            <div><h3>怎样看分子形变？</h3><p>观察时，可以先分开看伸缩与弯曲：两条 O–H 键可能一起伸缩，也可能一长一短；H–O–H 夹角的改变则对应弯曲。实际轨迹会把这些变化叠在一起，所以只看首末两帧，还不能判断中途的振动模式或频率。</p></div>
-            <div><h3>总能量应当保持不变吗？</h3><p>要回答这个问题，需要先知道模拟条件。在理想的封闭、无恒温器模拟中，总能量应大体保持不变；恒温控制与数值积分都可能改变曲线。这份归档缺少原始系综和积分器设置，因此目前还不能凭这条曲线判断能量守恒或计算精度。</p></div>
+            <div><h3>怎样看分子形变？</h3><p>两条 O–H 键可能同时伸缩，也可能一长一短；键角变化对应弯曲。这些运动在实际轨迹中叠加，不能只凭首末两帧判断振动模式或频率。</p></div>
+            <div><h3>总能量应当保持不变吗？</h3><p>在封闭、无恒温器的理想模拟中，总能量应大体保持不变。恒温控制可能交换能量，数值积分也会引入误差。归档缺少原始系综和积分器设置，因此不能仅凭这条曲线判断能量守恒或计算精度。</p></div>
           </div>
           <section class="aimd-notebook-data-cell" aria-labelledby="trajectory-code-heading">
             <div class="aimd-notebook-data-heading"><span class="aimd-notebook-cell-number">代码 4</span><h3 id="trajectory-code-heading">根据坐标复算首末两帧的键长和键角</h3></div>
-            <p>图中的键长和键角，也可以直接从原子坐标复算。先在下方的“数据来源与运行条件”下载两个 CSV，放到同一个 <code>imported/</code> 目录；再把这段代码保存为 <code>analyze_imported.py</code>，在 Python 3.9+ 中运行 <code>python3 analyze_imported.py imported</code>。它会从坐标算出键长和键角，并读取相同时间步的总能量，便于与图中数据对照。</p>
+            <ol><li>下载“数据来源与运行条件”中的两个 CSV，放入同一个 <code>imported/</code> 目录。</li><li>将下方代码保存为 <code>analyze_imported.py</code>。</li><li>使用 Python 3.9+ 运行 <code>python3 analyze_imported.py imported</code>。程序会根据坐标复算键长和键角，并读取对应时间步的总能量。</li></ol>
             <div class="aimd-notebook-data-code"><div class="aimd-notebook-data-code-heading"><span>Python · 标准库</span><button type="button" data-aimd-copy data-code-source={trajectorySource} title="复制轨迹分析代码" aria-label="复制轨迹分析代码" hidden><Copy size={15} aria-hidden="true" /><span data-copy-feedback aria-live="polite">复制代码</span></button></div><Code code={trajectorySource} lang="python" theme="github-light" /></div>
             <div class="aimd-notebook-data-output"><span>运行输出 / 导入轨迹</span><pre>{trajectoryOutput}</pre></div>
-            <p>从输出可以读到，首末帧的总能量相差 −0.1056 eV。这个差值是一个观察结果；要进一步判断能量是否守恒，还需要查看整条时间序列和模拟条件。现有归档也没有原始运行后端记录，因此无法据此判断变化来自物理过程、数值方法还是硬件。</p>
+            <p>首末帧总能量之差为 −0.1056 eV。判断能量是否守恒仍需完整时间序列和模拟条件。归档缺少原始后端记录，无法确定这一变化来自物理过程、数值方法还是硬件。</p>
           </section>
           <div class="analysis-result-heading"><h3>查看水分子的运动</h3><button class="analysis-button primary" type="button" data-restart disabled title="从第 0 步重新播放已有轨迹"><span aria-hidden="true">↻</span> 重新播放</button></div>
           <details class="analysis-result-source">
             <summary>数据来源与运行条件</summary>
-            <p>回放所用的是已导入的教程轨迹：1000 步、100 fs，共 1001 帧，初始温度为 300 K。导入文件没有附上原始运行编号与计算后端，因而这些轨迹可以用于学习如何读数据，但不能用于比较硬件性能。</p>
-            <p>追溯数据时，还需要留意：这组轨迹、工作台教程中的 CPU 操作教程以及另行保留的历史运行记录，分别存档。具体来源可以继续<a href={`${base}aimd/README.md`}>查看数据来源说明</a>。</p>
+            <p>回放数据包含 1000 步、100 fs，共 1001 帧，初始温度 300 K。归档未附原始运行编号和计算后端，因此可用于学习轨迹分析，不能据此比较硬件性能。本页轨迹、工作台 CPU 操作教程和历史运行记录来自不同资料，不应混用其运行条件。详细来源见<a href={`${base}aimd/README.md`}>数据来源说明</a>。</p>
             <p class="aimd-notebook-downloads"><a href={`${base}aimd/imported/md_log.csv`} download>下载能量与时间数据 CSV</a><a href={`${base}aimd/imported/positions.csv`} download>下载原子坐标 CSV</a></p>
           </details>
           <AimdWorkbench lazy />
         </section>
-        <nav class="aimd-notebook-next" aria-label="继续阅读"><span>继续阅读</span><a href={`${base}docs/aimd/`}>水分子动力学模拟工作台教程 <ArrowUpRight size={17} /></a></nav>
+        <nav class="aimd-notebook-next" aria-label="继续阅读"><span>继续阅读</span><a href={`${base}docs/aimd/`}>水分子动力学模拟：Linux 可视化操作教程 <ArrowUpRight size={17} /></a></nav>
       </article>
     </div>
   </div>

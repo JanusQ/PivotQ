@@ -61,9 +61,9 @@ TASK = TaskDefinition(
         "type": "object",
         "required": ["steps", "temperature_K", "time_step_fs"],
         "properties": {
-            "steps": {"type": "integer", "title": "时间步数", "minimum": 1, "maximum": 100000, "default": 10},
-            "temperature_K": {"type": "number", "title": "温度 (K)", "minimum": 0.0, "default": 300.0},
-            "time_step_fs": {"type": "number", "title": "时间步长 (fs)", "exclusiveMinimum": 0.0, "default": 0.1},
+            "steps": {"type": "integer", "title": "模拟步数", "minimum": 1, "maximum": 100000, "default": 10},
+            "temperature_K": {"type": "number", "title": "初始温度 (K)", "minimum": 0.0, "default": 300.0},
+            "time_step_fs": {"type": "number", "title": "每步时长 (fs)", "exclusiveMinimum": 0.0, "default": 0.1},
             "checkpoint_id": {"type": "string", "title": "模型 checkpoint", "default": "hybrid_model.pt"},
             "seed": {"type": "integer", "title": "随机种子", "default": 20260919, "minimum": 0, "maximum": 4294967295},
         },

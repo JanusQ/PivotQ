@@ -21,19 +21,19 @@ const queryOutput = `固定地址 |10⟩|0⟩：
 |01⟩|0⟩  振幅 +0.707107  概率 50%
 |10⟩|1⟩  振幅 +0.707107  概率 50%`;
 ---
-<PortalLayout title="量子随机存储器寻址笔记" page="qram" description="从地址 10 的树形路径出发，用假设的一位数据推导单地址和叠加地址的理想量子随机存储器查询。">
+<PortalLayout title="量子随机存取存储器寻址笔记" page="qram" description="从地址 10 的树形路径出发，用假设的一位数据推导单地址和叠加地址的理想量子随机存取存储器查询。">
   <div class="container qram-notebook">
     <nav class="qram-breadcrumbs" aria-label="面包屑">
       <a href={base}>首页</a><span aria-hidden="true">/</span>
       <a href={`${base}#applications`}>教程</a><span aria-hidden="true">/</span>
-      <span aria-current="page">量子随机存储器</span>
+      <span aria-current="page">量子随机存取存储器</span>
     </nav>
 
     <header class="qram-notebook-header">
-      <p class="qram-notebook-kicker">概念笔记 <span aria-hidden="true">/</span> 量子随机存储器</p>
-      <h1>如何通过地址 10 找到并读出数据</h1>
-      <p class="qram-notebook-lead">假设面前有四个存储位置，每个位置都放着一个 0 或 1。现在，我们想知道地址 <strong>10</strong> 里存了什么。就从这个小问题出发：先找到位置，再把数据读出来，最后试着让地址处于叠加态，看看查询会有什么变化。沿着同一个例子往下走，就能逐步理解量子随机存储器的查询过程。</p>
-      <p class="qram-notebook-scope">这四个存储位是我们为讲解准备的教学假设。走到代码部分时，会用 PivotQ 构造电路，再用 Qiskit 在本地 CPU 上进行理想态矢量模拟。PivotQ 目前没有可运行的量子随机存储器任务或真机读写数据，因此本页先陪你理解理想查询的规则。</p>
+      <p class="qram-notebook-kicker">量子随机存取存储器（QRAM）原理</p>
+      <h1>从二进制地址 10 开始，理解量子查询</h1>
+      <p class="qram-notebook-lead">本例用四个存储位置说明量子查询，每个位置保存一位数据。先读取二进制地址 10，再让地址 01和 10 处于叠加态，观察查询结果。</p>
+      <p class="qram-notebook-scope">代码用 PivotQ 构造电路，由 Qiskit 在本地 CPU 上进行理想态矢量模拟。四个存储位是教学示例；PivotQ 目前没有可运行的 QRAM 任务或真机读写数据。</p>
       <nav class="qram-notebook-toc" aria-label="本页章节">
         <a href="#background">背景</a><a href="#address">地址</a><a href="#route">路径演算</a><a href="#diagram">树形寻址</a><a href="#query">读取数据</a><a href="#result">测量结果</a>
       </nav>
@@ -41,11 +41,11 @@ const queryOutput = `固定地址 |10⟩|0⟩：
 
     <section class="qram-notebook-background" id="background" aria-labelledby="qram-background-title">
       <h2 id="qram-background-title">普通内存和量子地址</h2>
-      <p>先从熟悉的查表说起。程序给出一个地址，内存就返回那个位置保存的数据。比如读取数组里的 <code>memory[2]</code>，我们要找的是从 0 开始编号的第三个位置。这个位置用二进制写出来，就是后面一直会遇到的 10。</p>
-      <p>“随机访问”这个名字容易让人以为地址是随机挑的。这里的意思其实是：你可以指定任意一个地址来访问。至于地址 10 里存了什么，还得查看内容；地址负责告诉我们去哪一格，内容才是我们要取回的值。为了把这两件事看清楚，这次每格只放一位数据。</p>
-      <p>接着，把同样的问题带到量子电路里。我们用两个量子位保存地址，再用第三个量子位接收查询结果，这两部分分别叫地址寄存器和数据寄存器。看到 <strong>|10⟩</strong> 时，可以先读作“两个地址位分别处于 1 和 0 的状态”；写在它后面的 <strong>|0⟩</strong>，则表示数据位从 0 开始。</p>
-      <p>有了量子位，地址还可以处于多个地址态的叠加。我们希望查询后，每个地址分支都与它对应的数据关联起来，并保留分支之间的相对相位。这就是这里所说的相干查询。保留这些关系，后续电路才能继续改变振幅和相位，让不同分支发生干涉，也就是概率幅相加或抵消。</p>
-      <p>如果先测量地址再去查表，我们就只会沿着测到的那个分支继续，原来叠加态中的相位关系也无法保留。经典程序依次查询 01 和 10、把两个结果列在一起，同样不会形成这样的量子叠加态。先记住这个区别就好：查询要保留量子态里的关系，而最后一次测量能读出多少信息，我们会在文末回到同一个例子来看。</p>
+      <p>普通内存按地址返回对应数据。例如，<code>memory[2]</code> 读取从 0 开始编号的第三个位置；十进制地址2 的二进制表示是 10。</p>
+      <p>“随机访问”指可指定任意地址读取数据，不表示随机选择地址。地址决定访问哪个位置，数据是该位置保存的内容。本例每个位置保存一位数据，即 0 或 1。</p>
+      <p>电路用两个量子比特组成地址寄存器，用第三个量子比特组成数据寄存器。|10⟩ 表示地址寄存器处于二进制地址 10 对应的状态；后面的 |0⟩ 表示数据位初始为 0。</p>
+      <p>地址寄存器可以处于多个地址态的叠加。相干查询让每个地址分支与对应数据关联，同时保留分支间的相对相位。后续电路可继续处理振幅和相位，使概率幅相加或抵消。</p>
+      <p>先测量地址再查表，只会查询测得的地址，并破坏原有地址叠加的相位关系。经典程序依次查询01 和 10，也不会得到相同的量子叠加态。一次测量可读出的结果，见后文“单次测量能读出什么”。</p>
     </section>
 
     <article class="qram-notebook-article">
@@ -53,8 +53,8 @@ const queryOutput = `固定地址 |10⟩|0⟩：
         <span class="qram-notebook-index" aria-hidden="true">01</span>
         <div class="qram-notebook-content">
           <h2 id="qram-address-title">从两位地址开始</h2>
-          <p>先把四个位置排好，依次标上 00、01、10、11。两位地址恰好能区分它们，因为每一位都有 0、1 两种取值，合起来就是 2² = 4 种；推广到 n 位，就能为 2ⁿ 个位置编号。</p>
-          <p>这次选中的是 <strong>10</strong>。读的时候，先看左边的 1，再看右边的 0。它表示二进制的 10，也就是十进制的 2。于是，我们已经知道要找哪一个位置，接下来只差一条到达它的路线。</p>
+          <p>四个存储位置编号为 00、01、10、11。两位二进制地址可表示 2² = 4 个位置；n 位地址可表示2ⁿ 个位置。</p>
+          <p>本例访问二进制地址 10，即十进制地址 2。下图用树形路径表示如何定位这个存储位置。</p>
           <ul class="qram-addresses" aria-label="两位地址可选择的四个存储位置">
             <li>00</li><li>01</li><li class="is-selected" aria-current="true"><span>本例</span>10</li><li>11</li>
           </ul>
@@ -65,7 +65,7 @@ const queryOutput = `固定地址 |10⟩|0⟩：
         <span class="qram-notebook-index" aria-hidden="true">02</span>
         <div class="qram-notebook-content">
           <h2 id="qram-route-title">按顺序读出路径</h2>
-          <p>把这些位置画成一棵两层分叉的树，地址就可以变成行走路线。我们先约定：遇到 <strong>0 向左</strong>，遇到 <strong>1 向右</strong>。从根节点出发，按顺序读完 10，便会先向右，再向左。下面这小段 Python 把刚才的过程写了下来，可以先对照输出读一遍。</p>
+          <p>用一棵两层二叉树表示四个存储位置，约定 0 向左、1 向右。地址 10 对应“先右、后左”。以下Python 代码演示这一路径选择。</p>
           <div class="qram-code-cell" aria-label="Python 地址路径演算">
             <div class="qram-cell-heading"><span>路径演算</span><span>Python</span></div>
             <div class="qram-code-content"><Code code={routeCode} lang="python" theme="github-light" /></div>
@@ -75,7 +75,7 @@ const queryOutput = `固定地址 |10⟩|0⟩：
             <pre>右 → 左
 存储单元 10</pre>
           </div>
-          <p>看到“存储单元 10”，说明我们已经找对位置了。现在还没有读取内容，也没有改变数据量子位；这个位置究竟保存 0 还是 1，等拿到后面的存储表，就能继续往下算。</p>
+          <p>输出“存储单元 10”只表示定位成功。这段代码尚未读取数据，也没有改变量子数据位。</p>
         </div>
       </section>
 
@@ -91,8 +91,8 @@ const queryOutput = `固定地址 |10⟩|0⟩：
             <QramDiagram addressLabel="|10⟩" />
             <figcaption>顺着蓝线走：先右后左，最后停在编号 10 的存储单元。</figcaption>
           </figure>
-          <p>回头看这张图，第一位决定第一层怎么走，第二位决定第二层怎么走，两层分叉就能到达四个存储单元。蓝线画出了确定地址 <strong>|10⟩</strong> 的路线。</p>
-          <p>稍后遇到叠加地址时，这幅图仍能帮我们辨认每个地址对应的位置。不过，那时要同时考虑各个量子分支，并保留它们之间的相位关系；随机挑一条蓝线走，无法表达这样的查询。</p>
+          <p>蓝线仅表示确定地址 |10⟩ 对应的路径。</p>
+          <p>对于叠加地址，需要同时描述各地址分支及其相位关系。随机选择一条路径不能表示相干查询。</p>
         </div>
       </section>
 
@@ -100,7 +100,7 @@ const queryOutput = `固定地址 |10⟩|0⟩：
         <span class="qram-notebook-index" aria-hidden="true">04</span>
         <div class="qram-notebook-content">
           <h2 id="qram-query-title">在四个位置各存入一位数据</h2>
-          <p>位置找到了，现在给这四格放上具体的内容。我们约定它们分别保存下面这些 0 或 1，作为这次讲解的存储表。先留意两格就够了：刚刚找到的地址 10 保存 1，稍后会一起用到的地址 01 保存 0。</p>
+          <p>本例存储表如下：00、01、10、11 对应的数据分别为 1、0、1、1。其中，固定地址查询使用 10，叠加地址查询使用 01 和 10。</p>
           <table class="qram-memory-table">
             <caption>教学假设：四个地址各保存一位数据</caption>
             <thead><tr><th scope="col">地址</th><th scope="col">存储位</th></tr></thead>
@@ -114,23 +114,23 @@ const queryOutput = `固定地址 |10⟩|0⟩：
 
           <div class="qram-query-step">
             <h3>先读固定地址 10</h3>
-            <p>先做一次最容易跟上的查询：把地址准备为 <strong>|10⟩</strong>，把接收结果的数据位准备为 <strong>|0⟩</strong>。表里告诉我们，地址 10 存的是 1。查询结束后，左边的地址保留下来，右边的数据位变成 1，整个过程可以这样读：</p>
+            <p>将地址准备为 |10⟩，数据位初始化为 |0⟩。因为地址 10 存储的是 1，查询后地址不变，数据位变为|1⟩：</p>
             <div class="qram-query-formula" aria-label="固定地址 10 的理想读取"><span class="qram-formula-label">输入</span><span>|10⟩|0⟩</span><span class="qram-formula-arrow" aria-hidden="true">→</span><span class="qram-formula-label">输出</span><span>|10⟩|1⟩</span></div>
-            <p>如果想把这一步写成适用于任意地址的规则，我们用 <code>a</code> 表示地址，<code>b</code> 表示数据位原来的值，<code>mₐ</code> 表示该地址存储的位。下面的 <code>⊕</code> 是异或：存储位为 0 时保持数据位，存储位为 1 时把数据位翻转。</p>
-            <div class="qram-query-rule" aria-label="理想量子随机存储器查询的异或规则">Uₘ: |a⟩|b⟩ → |a⟩|b ⊕ mₐ⟩</div>
-            <p>这里多写一个异或，是为了让查询可以撤销。量子电路中的相干查询必须可逆，而直接用存储值覆盖数据位，会丢掉它原来的值。仍以地址 10 为例：数据位从 0 开始，就翻成 1；从 1 开始，就翻回 0。因此 <strong>|10⟩|1⟩</strong> 会变成 <strong>|10⟩|0⟩</strong>。对同一地址再查一次，数据位便回到原值，你可以用这个办法检查自己是否读懂了规则。</p>
+            <p>设 a 为地址，b 为数据位原值，mₐ 为该地址的存储位。查询将数据位变为 b ⊕ mₐ，其中 ⊕ 表示异或：mₐ = 0 时保持原值，mₐ = 1 时翻转数据位。</p>
+            <div class="qram-query-rule" aria-label="理想量子随机存取存储器查询的异或规则">Uₘ: |a⟩|b⟩ → |a⟩|b ⊕ mₐ⟩</div>
+            <p>异或使查询可逆；直接覆盖数据位会丢失其原值。以地址 10 为例，数据位 0 变为 1，数据位 1 变为 0，即 |10⟩|1⟩ → |10⟩|0⟩。连续查询两次，数据位恢复原值。</p>
           </div>
 
           <div class="qram-query-step">
             <h3>再读两个地址的叠加</h3>
-            <p>固定地址的过程清楚了，就可以再向前走一步。让 01 和 10 组成等振幅叠加态，数据位仍从 0 开始。存储表没有变，查询规则也没有变：01 这一支查得 0，10 这一支查得 1。量子变换具有线性性质，因此对叠加态做同一次理想查询，就得到这两个分支各自变换后的叠加。</p>
-            <p>读下面的式子时，可以先只看两个分支各自发生了什么。<code>√2</code> 用来归一化，让两个分支的测量概率各为 50%；<code>⊗</code> 则表示把地址和数据位组合在一起。有了这些记号，就能把刚才的叙述完整写下来：</p>
+            <p>将地址 01 和 10 准备为等振幅叠加态，数据位初始化为 0。查询把 01 分支的数据位保持为 0，把10 分支的数据位变为 1。由量子变换的线性性，输出是这两个变换后分支的叠加。</p>
+            <p>叠加态中的系数 1/√2 用于归一化，使两个分支的测量概率各为 50%。符号 ⊗ 表示地址寄存器与数据寄存器的张量积。</p>
             <div class="qram-superposition" aria-label="地址 01 与 10 叠加时的理想查询">
               <div><span class="qram-formula-label">输入</span><span>(|01⟩ + |10⟩) / √2 ⊗ |0⟩</span></div>
               <div><span class="qram-formula-label">输出</span><span>(|01⟩|0⟩ + |10⟩|1⟩) / √2</span></div>
             </div>
-            <p>再看一遍输出：地址 01 和数据 0 在同一支，地址 10 和数据 1 在另一支。加号把两个量子分支写成叠加，地址和数据的数值本身没有相加。</p>
-            <p>现在，地址与数据位形成了纠缠：它们的状态需要一起描述，无法拆成两个彼此独立的状态。查询把这种对应关系留在了量子态中，后续电路可以在测量前继续处理它。这个小例子就先走到这里，接下来用程序看看刚刚推导出的关联态。</p>
+            <p>输出的两个分支分别为“地址 01、数据 0”和“地址 10、数据 1”。加号表示量子态叠加，不是将地址或数据的数值相加。</p>
+            <p>在这个例子中，地址与数据形成纠缠，不能分别用两个独立的纯态描述。查询结果保留在联合量子态中，后续电路可在测量前继续处理。</p>
           </div>
         </div>
       </section>
@@ -138,17 +138,16 @@ const queryOutput = `固定地址 |10⟩|0⟩：
       <section class="qram-notebook-section qram-notebook-final" id="result" aria-labelledby="qram-result-title">
         <span class="qram-notebook-index" aria-hidden="true">05</span>
         <div class="qram-notebook-content">
-          <h2 id="qram-result-title">一次测量会得到什么</h2>
-          <p>手上的存储表和查询规则已经足够写出一个小程序了。我们用 PivotQ 构造可逆查询电路；它的电路接口直接复用 Qiskit 对象，因此接着就能交给 Qiskit <code>Statevector</code>，计算查询后的理想量子态。</p>
-          <p>对照代码前，先认清三个量子位：q2、q1 负责地址，q0 负责数据。Qiskit 按 q2q1q0 写出的三位标签，会被程序拆成 <strong>|地址⟩|数据⟩</strong> 的样子，这样就能和前面的公式一一对应。四个函数也沿着同一条思路展开：准备输入、执行查询，再查看状态。</p>
+          <h2 id="qram-result-title">用代码计算查询结果</h2>
+          <p>以下代码用 PivotQ 构造可逆查询电路，再用 Qiskit <code>Statevector</code> 计算查询后的理想量子态。PivotQ 的电路接口直接复用 Qiskit 对象。</p>
+          <p>q2、q1 是地址比特，q0 是数据比特。Qiskit 按 q2q1q0 输出三位标签；程序将其显示为 |地址⟩|数据⟩，与上面的公式一致。</p>
           <ol class="qram-code-map">
-            <li>先看 <code>fixed_case()</code>：它用 <code>X(2)</code> 把地址准备为 <strong>|10⟩</strong>，数据位保持 <strong>|0⟩</strong>，正好对应第一种输入。</li>
-            <li>再看 <code>superposition_case()</code>：从地址 <strong>|01⟩</strong> 出发，<code>H(2)</code> 产生 01 和 11 两个等振幅分支，随后 <code>CX(2, 1)</code> 把其中的 11 变成 10。这样就准备好了第二种输入。</li>
+            <li><code>fixed_case()</code>：用 X(2) 将地址准备为 |10⟩，数据位保持 |0⟩。</li><li><code>superposition_case()</code>：从地址 |01⟩ 出发，用 H(2) 得到 01 与 11 的等振幅叠加，再用 CX(2, 1) 将 11 分支变为 10。</li>
             <li>两种输入都交给 <code>append_query()</code>。它照着存储表，只在值为 1 的地址上用 <code>CCX</code> 翻转数据位。遇到地址中的 0，会临时对相应地址位加 <code>X</code> 来匹配控制条件，查询后再撤销这些 <code>X</code>。</li>
-            <li>最后，<code>show_components()</code> 用 <code>Statevector</code> 算出非零基态的振幅，并把振幅模的平方打印为理想测量概率。到这里，我们看到的是计算出的状态与概率，程序没有进行随机抽样。</li>
+            <li><code>show_components()</code> 用 <code>Statevector</code> 计算振幅非零的计算基分量，并输出振幅模平方，即理想测量概率。程序不进行随机采样。</li>
           </ol>
-          <p>为了把例子完整跑通，我们把四个存储位直接编进了门电路。这样可以演示可逆查询规则；可动态读写的量子随机存储器器件还需要更多实现，这段代码没有创建这样的器件。</p>
-          <p>如果想亲手试一遍，可以使用 Python 3.12，在 PivotQ 仓库根目录运行 <code>python -m pip install ./packages/framework</code>，也可以直接使用仓库已配置的统一环境。接着把下方代码复制并保存为 <code>qram_query.py</code>，在同一环境中运行 <code>python qram_query.py</code>，然后对照下面的输出，看看它是否和刚才的推导一致。</p>
+          <p>四个存储位已固定写入电路，用于演示可逆查询规则。这段代码没有实现可动态读写的 QRAM 器件。</p>
+          <ol><li>使用 Python 3.12，在仓库根目录运行 <code>python -m pip install ./packages/framework</code>，或使用已配置的统一环境。</li><li>将下方代码保存为 <code>qram_query.py</code>。</li><li>在同一环境中运行 <code>python qram_query.py</code>，并与下方输出对照。</li></ol>
           <div class="qram-code-cell qram-simulation-code" aria-label="PivotQ 本地理想查询代码">
             <div class="qram-cell-heading"><span>代码 2 · 理想查询</span><button type="button" class="qram-copy-button" data-qram-copy data-code-source={queryCode} title="复制 PivotQ 理想查询代码" aria-label="复制 PivotQ 理想查询代码" hidden><Copy size={15} aria-hidden="true" /><span data-copy-feedback aria-live="polite">复制代码</span></button></div>
             <div class="qram-code-content"><Code code={queryCode} lang="python" theme="github-light" /></div>
@@ -157,9 +156,9 @@ const queryOutput = `固定地址 |10⟩|0⟩：
             <div class="qram-cell-heading"><span>运行输出</span><span>CPU 理想态矢量</span></div>
             <pre>{queryOutput}</pre>
           </div>
-          <p>先读固定地址那一行：<strong>|10⟩|1⟩</strong> 的概率是 100%，正好对应地址 10 保存的 1。再读叠加地址的两行：<strong>|01⟩|0⟩</strong> 与 <strong>|10⟩|1⟩</strong> 各自的振幅约为 0.707107。取振幅模的平方，就得到各 50% 的概率。</p>
-          <p>这时很自然会想到开头留下的问题：既然屏幕上有两行，一次测量能把两行都读出来吗？<code>Statevector</code> 能列出理想态的所有非零分支，是因为我们正在查看模拟器计算出的量子态；这里没有执行随机测量。若直接测量地址位和数据位，单次只会得到其中一组。每次重新准备同样的输入、完成查询再测量，重复多次后，两组结果的出现频率才会趋近各 50%。</p>
-          <p>于是，从寻找地址 10 到查看叠加查询，我们走完了这个例子的全过程：定位、可逆地读取，再理解测量结果。若继续走向真实设备，还要准备存储数据、实现相干寻址，并处理噪声与读写成本。这些都超出了这张四格存储表的演示范围，因此这里的输入与输出还不能用来判断实际硬件性能或算法加速效果。</p>
+          <p>固定地址输入得到 |10⟩|1⟩，概率为 100%。叠加地址输入得到 |01⟩|0⟩ 和 |10⟩|1⟩，振幅各约0.707107；振幅模平方对应的概率各为 50%。</p>
+          <h3 id="single-measurement">单次测量能读出什么</h3><p><code>Statevector</code> 列出的是模拟器计算出的量子态，不是一次测量的结果。若测量地址和数据比特，单次只能得到 |01⟩|0⟩ 或 |10⟩|1⟩ 中的一组。每次重新准备相同输入、查询并测量，重复多次后，两组结果的频率才会趋近各 50%。</p>
+          <p>这个例子只演示理想查询规则。真实设备还需实现数据存储、相干寻址，并处理噪声与读写成本；不能用本例结果判断实际硬件性能或算法加速效果。</p>
           <div class="qram-next">
             <h3>继续阅读</h3>
             <nav aria-label="继续阅读">

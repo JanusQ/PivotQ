@@ -167,6 +167,7 @@ export interface RunResult {
   summary?: Record<string, unknown>;
   metrics?: Record<string, unknown>;
   scientific_status?: string;
+  calculation_checks?: { id: string; label: string; passed: boolean; criterion: string; observed?: string | null }[];
   artifacts?: Artifact[];
   logs?: string[];
   probabilities?: Record<string, number>;

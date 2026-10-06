@@ -191,7 +191,7 @@ test("selects the virtual chip, shows its topology and shares targets across run
   await page.getByRole("button", { name: "提交任务", exact: true }).click();
   await expect(page).toHaveURL(/results\.html\?run=fake-run/);
   await expect(
-    page.getByLabel("运行结果").getByText("已完成", { exact: true }),
+    page.getByLabel("所选运行的详情").getByText("已完成", { exact: true }),
   ).toBeVisible();
   await expect(page.getByText("CPU 实测用时", { exact: true })).toBeVisible();
   const assignments = page.getByLabel("保存的目标硬件配置");
@@ -199,11 +199,11 @@ test("selects the virtual chip, shows its topology and shares targets across run
     assignments.getByText("实际执行：CPU 数值模拟", { exact: true }),
   ).toBeVisible();
   await expect(
-    assignments.getByText("实际电路：2 逻辑比特 / 芯片容量：36 比特", {
+    assignments.getByText("电路使用：2 个逻辑量子比特 / 目标芯片模型容量：36 个量子比特", {
       exact: true,
     }),
   ).toBeVisible();
-  await assignments.getByText("已保存的芯片参数", { exact: true }).click();
+  await assignments.getByText("本次采用的设备参数", { exact: true }).click();
   const topology = assignments.getByRole("img", {
     name: /拓扑：36 个比特，60 条无向边/,
   });
@@ -213,15 +213,15 @@ test("selects the virtual chip, shows its topology and shares targets across run
     assignments.getByText("10,000 shots/s", { exact: true }),
   ).toBeVisible();
   await expect(assignments.getByText("1 ms", { exact: true })).toBeVisible();
-  await page.getByRole("link", { name: "工作台", exact: true }).click();
+  await page.getByRole("link", { name: "工作台 编写与配置", exact: true }).click();
   await expect(
     page.getByRole("img", { name: "编译后的量子电路" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "性能预测", exact: true }).click();
   await expect(page).toHaveURL(/performance\.html\?prediction=fake-prediction/);
   await expect(page.getByText("预计总耗时", { exact: true })).toBeVisible();
-  await expect(page.getByText("QPU 采样", { exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "预测范围" })).toBeVisible();
+  await expect(page.getByText("QPU 运行与测量", { exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "估算条件与适用范围" })).toBeVisible();
   await expect(page.getByText("吞吐模型示例参数", { exact: true })).toHaveCount(
     2,
   );
@@ -239,6 +239,7 @@ test("selects the virtual chip, shows its topology and shares targets across run
   }
   await page.reload();
   await expect(page.getByText("预计总耗时", { exact: true })).toBeVisible();
+  await page.getByText("本次采用的设备参数", { exact: true }).click();
   await expect(page.getByText(/参数版本 fake-sc-36-v1/)).toBeVisible();
 });
 
@@ -306,9 +307,9 @@ test("restores historical prediction parameters independently of current discove
   await page.goto("/performance.html?prediction=fake-prediction");
   const saved = page.getByLabel("保存的目标硬件配置");
   await expect(
-    saved.getByText(`目标：${profile.title}`, { exact: true }),
+    saved.getByText("预测配置：SC-36 虚拟超导芯片（6×6，36 比特）", { exact: true }),
   ).toBeVisible();
-  await saved.getByText("已保存的芯片参数", { exact: true }).click();
+  await saved.getByText("本次采用的设备参数", { exact: true }).click();
   await expect(
     saved.getByText("10,000 shots/s", { exact: true }),
   ).toBeVisible();

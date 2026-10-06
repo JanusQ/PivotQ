@@ -1,3 +1,4 @@
+import { stageLabel, targetLabel } from "../api/labels";
 import { actualDevice } from "../api/hardware";
 import type { Plan, RunResult } from "../api/types";
 import TargetDetails from "./TargetDetails";
@@ -29,36 +30,27 @@ export default function TargetAssignments({
               : actual.toUpperCase();
         return (
           <div key={stage.id} className={s.targetAssignment}>
-            <strong>{stage.title}</strong>
+            <strong>{stageLabel(stage.id, stage.title)}</strong>
             <div>
               <span>
-                目标：
-                {snapshot?.title ||
-                  stage.target_id ||
-                  stage.device.toUpperCase()}
+                预测配置：
+                {targetLabel(snapshot, stage.target_id || stage.device.toUpperCase())}
               </span>
               {result && <span>实际执行：{label || "未记录"}</span>}
               {snapshot?.logical_qubits !== undefined && (
                 <span>
-                  实际电路：{snapshot.logical_qubits} 逻辑比特
+                  电路使用：{snapshot.logical_qubits} 个逻辑量子比特
                   {snapshot.parameters.qubits
-                    ? ` / 芯片容量：${snapshot.parameters.qubits} 比特`
+                    ? ` / 目标芯片模型容量：${snapshot.parameters.qubits} 个量子比特`
                     : ""}
-                </span>
-              )}
-              {snapshot && (
-                <span className={s.snapshotVersion}>
-                  参数版本 {snapshot.profile_version} ·{" "}
-                  {snapshot.profile_sha256.slice(0, 12)}
                 </span>
               )}
               {snapshot && (
                 <details>
                   <summary>
-                    {snapshot.parameters.topology
-                      ? "已保存的芯片参数"
-                      : "已保存的目标参数"}
+本次采用的设备参数
                   </summary>
+                  <p className={s.snapshotVersion}>参数版本 {snapshot.profile_version} · {snapshot.profile_sha256.slice(0, 12)}</p>
                   <TargetDetails snapshot={snapshot} />
                 </details>
               )}

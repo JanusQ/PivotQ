@@ -48,12 +48,12 @@ export default function ResultsPage({
     <div className={s.page}>
       <header className={s.hero}>
         <p className={s.eyebrow}>RESULTS · RUN HISTORY</p>
-        <h1>结果中心</h1>
-        <p>按任务记录查看执行状态、时间步、硬件回执和科学输出。</p>
+        <h1>运行记录与结果</h1>
+        <p>选择一次运行，查看执行状态、实际设备、完成步数、计算结果和输出文件。</p>
       </header>
       <div className={s.resultsLayout}>
         <aside className={`${s.card} ${s.history}`}>
-          <h2>任务记录</h2>
+          <h2>运行记录</h2>
           <p className={s.historyHint}>按最近提交时间排列，运行中的任务会自动更新。</p>
           <div className={s.runs}>
             {runs.length ? runs.map((item) => {
@@ -61,7 +61,7 @@ export default function ResultsPage({
               return (
                 <div key={item.id} className={`${s.run} ${runId === item.id ? s.runSelected : ""}`}>
                   <button className={s.runSelect} onClick={() => onSelect(item.id)}>
-                    <span className={s.runTop}><strong>{item.task_id === "quantum-circuit" ? "量子电路" : "H₂O AIMD"}</strong><span>{statusLabel(item.status)}</span></span>
+                    <span className={s.runTop}><strong>{item.task_id === "quantum-circuit" ? "量子电路" : "水分子动力学模拟（H₂O AIMD）"}</strong><span>{statusLabel(item.status)}</span></span>
                     <code>{item.id}</code>
                     <progress max={100} value={item.progress || 0} />
                   </button>
@@ -86,7 +86,7 @@ export default function ResultsPage({
           </div>
         </aside>
         <section className={`${s.card} ${s.result}`}>
-          <div className={s.resultHeader}><div><h2>计算结果</h2><p>{run ? `运行 ${run.id}` : "选择左侧任务查看详情"}</p></div>{run && <span className={s.muted}>{statusLabel(run.status)}</span>}</div>
+          <div className={s.resultHeader}><div><h2>所选运行的详情</h2><p>{run ? `运行 ${run.id}` : "选择左侧任务查看详情"}</p></div>{run && <span className={s.muted}>{statusLabel(run.status)}</span>}</div>
           <div className={s.resultBody}>
             <Results run={run} series={series} syncError={syncError} prediction={prediction} tab={tab} onTab={setTab} onCancel={onCancel} cancelling={cancelling} />
           </div>
@@ -108,7 +108,7 @@ export default function ResultsPage({
             </div>
             <div className={s.deleteDialogCopy}>
               <h2 id="delete-run-title">删除任务记录？</h2>
-              <p>将删除这条 {pendingDelete.task_id === "quantum-circuit" ? "量子电路" : "H₂O AIMD"} 记录及其结果入口。此操作不可恢复。</p>
+              <p>将删除这条 {pendingDelete.task_id === "quantum-circuit" ? "量子电路" : "水分子动力学模拟（H₂O AIMD）"} 记录及其结果入口。此操作不可恢复。</p>
               <code>{pendingDelete.id}</code>
               {deleteError && <div className={s.deleteError}>{deleteError}</div>}
             </div>

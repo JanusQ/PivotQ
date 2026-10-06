@@ -29,7 +29,7 @@ export default function CircuitDiagram({
     <>
       <div className={s.circuitMeta}>
         <span>
-          {displayed.qubits} 比特 / {displayed.gate_count} 条指令
+          {displayed.qubits} 个逻辑比特 / {displayed.gate_count} 条电路指令
           {stale ? " · 待重新编译" : ""}
         </span>
         {circuit?.variants && (
@@ -43,6 +43,7 @@ export default function CircuitDiagram({
           </select>
         )}
       </div>
+      <p className={s.copyHint}>按电路列表逐条计数，包含测量及列表中已有的屏障、分解指令。水分子 Z 基预览为 70 个基础门加 1 条测量；X 基另加 6 个换基旋转门。这里不增加设备映射指令。</p>
       <div className={s.circuitScroll} style={{ opacity: stale ? 0.45 : 1 }}>
         <svg
           width={width}

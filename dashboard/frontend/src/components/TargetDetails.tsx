@@ -41,7 +41,7 @@ export default function TargetDetails({
   return (
     <div className={s.targetDetails}>
       <div className={s.targetMetadata}>
-        <span>虚拟示例 · 未经实机标定</span>
+        <span>虚拟芯片模型 · 未经实机标定</span>
         <span>参数只读 · {snapshot.profile_version}</span>
       </div>
       <svg
@@ -64,7 +64,7 @@ export default function TargetDetails({
       </svg>
       <dl className={s.chipParameters}>
         <div>
-          <dt>芯片容量</dt>
+          <dt>目标芯片模型容量</dt>
           <dd>{params.qubits} 比特</dd>
         </div>
         <div>
@@ -77,13 +77,13 @@ export default function TargetDetails({
         </div>
         {snapshot.logical_qubits !== undefined && (
           <div>
-            <dt>本任务逻辑比特</dt>
+            <dt>电路使用的逻辑量子比特</dt>
             <dd>{snapshot.logical_qubits}</dd>
           </div>
         )}
       </dl>
       <p>
-        按行编号，连接上下左右最近邻。拓扑仅展示；预测采用吞吐模型，不计布线、门深度与噪声。
+        这是模型容量，不表示使用了相同比特数的真机。按行编号，连接上下左右最近邻。拓扑仅展示；预测采用吞吐模型，不计布线、门深度与噪声。
       </p>
       <p>
         CPU 数值模拟仅使用实际电路宽度：自编电路 1–

@@ -73,7 +73,7 @@ export default defineConfig({
       { label: '应用教程', items: [
         { label: '介绍', slug: 'docs/examples' },
         { label: '水分子动力学模拟', link: '/examples/aimd/' },
-        { label: '量子随机存储器', link: '/examples/qram/' },
+        { label: '量子随机存取存储器', link: '/examples/qram/' },
       ] },
     ],
     head: [{ tag: 'meta', attrs: { name: 'theme-color', content: '#ffffff' } }],

@@ -261,12 +261,13 @@ export default function Molecule({
         </div>
       )}
       <div className={s.frameInfo}>
-        <span>步 {frame?.step ?? "—"}</span>
-        <span>{frame?.time_fs.toFixed(3) ?? "—"} fs</span>
+        <span>第 {frame?.step ?? "—"} 步 / {frame?.time_fs.toFixed(3) ?? "—"} fs</span>
+
         <button onClick={() => stage.current?.reset()} disabled={fallback}>
           复位视角
         </button>
       </div>
+      <p className={s.copyHint}>拖动时间滑块或点击播放，查看同一时间步的分子构型与总能量。</p>
       <div className={s.player}>
         <button
           aria-label={playing ? "暂停轨迹" : "播放轨迹"}

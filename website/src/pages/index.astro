@@ -17,8 +17,8 @@ const base = import.meta.env.BASE_URL;
   <section class="flow-home-system" id="workflow" aria-labelledby="system-title">
     <div class="container">
       <div class="flow-section-heading flow-analysis-heading">
-        <h2 id="system-title"><span class="flow-section-number">02</span> <span class="flow-section-label">任务编排和性能分析：</span>PivotQ 可利用真机运行或性能仿真引擎生成详细的性能报告，发现瓶颈。</h2>
-        <div class="flow-analysis-summary"><p>支持万量子比特、千卡规模的同步性能建模，可模拟百万条硬件指令类事件，并分析多作业并发时的资源竞争。</p><a class="flow-text-link" href={`${base}docs/#使用文档`}>查看编排和分析文档 <ArrowUpRight size={18} /></a></div>
+        <h2 id="system-title"><span class="flow-section-number">02</span> 查看运行时间，定位耗时步骤</h2>
+        <div class="flow-analysis-summary"><p>PivotQ 可根据真机运行记录或性能仿真结果生成报告，帮助定位性能瓶颈。性能仿真可用于估算大规模混合任务的运行时间，并分析多个作业同时运行时的资源竞争。</p><a class="flow-text-link" href={`${base}docs/#使用文档`}>查看编排和分析文档 <ArrowUpRight size={18} /></a></div>
       </div>
       <FlowWorkbench />
     </div>
@@ -26,10 +26,10 @@ const base = import.meta.env.BASE_URL;
 
   <section class="flow-home-applications" id="applications" aria-labelledby="applications-title">
     <div class="container">
-      <div class="flow-section-heading"><div><h2 id="applications-title"><span class="flow-section-number">03</span> <span class="flow-section-label">教程：</span>跟着例子学习 PivotQ</h2><p>通过两个教程，了解水分子的能量、受力与运动轨迹，以及如何通过量子地址查询存储数据。</p></div></div>
+      <div class="flow-section-heading"><div><h2 id="applications-title"><span class="flow-section-number">03</span> 应用教程</h2><p>学习如何计算水分子的能量和受力，以及如何用量子电路查询四个地址中的数据。</p></div></div>
       <div class="flow-application-grid">
-        <a class="flow-application" href={`${base}examples/aimd/`} aria-label="查看水分子动力学模拟教程"><div class="flow-application-copy"><h3>水分子动力学模拟</h3><p>通过量子电路提取分子特征，结合经典模型预测势能与受力，逐步更新原子位置，研究水分子的振动与运动轨迹。</p><span class="flow-application-link">查看教程 <ArrowRight size={17} /></span></div><div class="flow-application-media flow-application-media-aimd"><Image src={aimdPreview} alt="水分子轨迹与总能量曲线的计算工作台截图" loading="lazy" /></div></a>
-        <a class="flow-application" href={`${base}examples/qram/`} aria-label="查看量子随机存储器教程"><div class="flow-application-copy"><h3>量子随机存储器</h3><p>量子随机存储器通过量子地址访问数据，使处于叠加态的地址与对应数据保持关联，为量子算法提供数据查询能力。本例演示理想条件下的查询过程。</p><span class="flow-application-link">查看教程 <ArrowRight size={17} /></span></div><div class="flow-application-media flow-application-media-qram"><QramDiagram compact /></div></a>
+        <a class="flow-application" href={`${base}examples/aimd/`} aria-label="查看水分子动力学模拟教程"><div class="flow-application-copy"><h3>水分子动力学模拟</h3><p>用量子电路提取分子特征，由经典模型预测势能，再通过能量差分求力。教程说明如何更新原子位置，并使用另存的轨迹数据演示水分子的运动。</p><span class="flow-application-link">查看教程 <ArrowRight size={17} /></span></div><div class="flow-application-media flow-application-media-aimd"><Image src={aimdPreview} alt="水分子轨迹与总能量曲线的计算工作台截图" loading="lazy" /></div></a>
+        <a class="flow-application" href={`${base}examples/qram/`} aria-label="查看量子随机存取存储器（QRAM）原理教程"><div class="flow-application-copy"><h3>量子随机存取存储器（QRAM）原理</h3><p>用四个存储位置演示量子查询：先读取地址 10，再查询两个地址的叠加态。代码在本地 CPU 上进行理想模拟，展示地址与数据如何在量子态中保持对应关系。</p><span class="flow-application-link">查看教程 <ArrowRight size={17} /></span></div><div class="flow-application-media flow-application-media-qram"><QramDiagram compact /></div></a>
       </div>
     </div>
   </section>

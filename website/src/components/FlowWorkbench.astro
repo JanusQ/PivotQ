@@ -1,10 +1,10 @@
 ---
 import { ChevronLeft, ChevronRight, Clock3, Cpu, ListChecks, Orbit, ScanLine, Server } from '@lucide/astro';
 import '../styles/flow-workbench.css';
-const reportFields = ['各任务运行时间', '运行节点', '运行指令顺序', '运行复杂度'];
+const reportFields = ['各任务运行时间', '执行设备/计算节点', '指令执行顺序'];
 ---
 <div class="flow-workspace" data-flow-workspace>
-  <p class="flow-workspace-description" id="flow-workspace-description">为量子-经典混合程序选择 CPU、GPU 或 QPU 并编排任务后，可在真机上运行，也可使用离散事件仿真器评估性能。两种方式均可生成性能报告，包含各任务的运行时间、运行节点、指令执行顺序和运行复杂度。图中已突出标示任务编排、性能分析与报告节点；小屏幕可横向滚动，或使用左右按钮查看。</p>
+  <p class="flow-workspace-description" id="flow-workspace-description">为各计算步骤选择 CPU、GPU 或 QPU，并设置任务依赖。随后可在已连接的设备上运行，或使用离散事件仿真器估算性能。报告列出各任务的耗时、执行设备和指令顺序。性能模型的工作量按所用模型注明单位，例如浮点运算次数（FLOP）或采样次数（shots），不表示算法复杂度。</p>
   <div id="flow-workspace-panel" class="flow-workspace-canvas" tabindex="0" role="region" aria-label="编程仿真工作流" aria-describedby="flow-workspace-description">
     <div class="flow-workspace-track">
       <div class="flow-node flow-node-core flow-node-source">
@@ -26,7 +26,7 @@ const reportFields = ['各任务运行时间', '运行节点', '运行指令顺�
         <span class="flow-node-port flow-node-port-left" aria-hidden="true"></span><span class="flow-node-port flow-node-port-right" aria-hidden="true"></span>
         <span class="flow-node-step">03 / 编排</span>
         <div class="flow-node-name"><Orbit size={20} aria-hidden="true" /><strong>任务编排</strong></div>
-        <p>编译量子电路，组织任务依赖</p>
+        <p>编译量子电路，确定各任务的先后关系。</p>
       </div>
       <div class="flow-fork" aria-hidden="true"><span class="flow-fork-arm flow-fork-arm-top"></span><span class="flow-fork-arm flow-fork-arm-bottom"></span></div>
       <div class="flow-node flow-node-emphasis flow-node-branch" data-flow-branch="hardware">
@@ -39,7 +39,7 @@ const reportFields = ['各任务运行时间', '运行节点', '运行指令顺�
         <span class="flow-node-port flow-node-port-left" aria-hidden="true"></span><span class="flow-node-port flow-node-port-right" aria-hidden="true"></span>
         <span class="flow-node-step">04B / 性能仿真</span>
         <div class="flow-node-name"><Clock3 size={20} aria-hidden="true" /><strong>离散事件<br />仿真器</strong></div>
-        <p>按工作量与设备模型模拟任务执行</p>
+        <p>根据任务工作量和设备模型，估算任务的执行时间与顺序。</p>
       </div>
       <div class="flow-merge" aria-hidden="true"><span class="flow-merge-arm flow-merge-arm-top"></span><span class="flow-merge-arm flow-merge-arm-bottom"></span><span class="flow-merge-tip"></span></div>
       <div class="flow-node flow-node-emphasis flow-node-report" data-flow-report="shared">
@@ -52,6 +52,7 @@ const reportFields = ['各任务运行时间', '运行节点', '运行指令顺�
       </div>
     </div>
   </div>
+  <p class="flow-workspace-hint">左右滑动或点击箭头，查看完整流程。</p>
   <div class="flow-workspace-rail-nav" aria-label="工作流节点导航">
     <button type="button" data-flow-prev aria-controls="flow-workspace-panel" aria-label="上一个工作流节点" title="上一个工作流节点" disabled><ChevronLeft size={17} /></button>
     <button type="button" data-flow-next aria-controls="flow-workspace-panel" aria-label="下一个工作流节点" title="下一个工作流节点"><ChevronRight size={17} /></button>

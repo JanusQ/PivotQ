@@ -24,6 +24,7 @@ import type {
   Task,
   Values,
 } from "./api/types";
+import { stageLabel, targetLabel } from "./api/labels";
 import Editor from "./components/Editor";
 import {
   hardwareChoices,
@@ -41,7 +42,7 @@ const draftKey = (id: string) => `qhai-dashboard-draft-${id}`;
 // adapters remain available through the backend API for later rollout.
 const VISIBLE_TASK_ID = "h2o-hybrid-aimd";
 const taskTitle = (id: string) =>
-  id === "quantum-circuit" ? "量子电路" : "H₂O AIMD";
+  id === "quantum-circuit" ? "量子电路" : "水分子动力学模拟（H₂O AIMD）";
 const deviceColor = (kind: string) =>
   kind.startsWith("qpu")
     ? "var(--qpu)"
@@ -699,7 +700,7 @@ export default function App() {
   return (
     <div className={s.app}>
       <header className={s.topbar}>
-        <a className={s.brand} href="/" aria-label="QHAI 工作台">
+        <a className={s.brand} href="/" aria-label="PivotQ 可视化操作界面">
           <svg viewBox="0 0 40 40" aria-hidden="true">
             <rect
               x="8"
@@ -719,12 +720,12 @@ export default function App() {
             />
             <circle cx="8" cy="7" r="3" fill="currentColor" />
           </svg>
-          <span>QHAI</span>
+          <span>PivotQ</span>
         </a>
         <nav className={s.nav}>
-          <a href="/" className={page === "workspace" ? s.activeNav : ""}>工作台</a>
-          <a href="/performance.html" className={page === "performance" ? s.activeNav : ""}>性能预测</a>
-          <a href="/results.html" className={page === "results" ? s.activeNav : ""}>结果中心</a>
+          <a href="/" className={page === "workspace" ? s.activeNav : ""}><span>工作台</span><small>编写与配置</small></a>
+          <a href="/performance.html" className={page === "performance" ? s.activeNav : ""}><span>性能预测</span><small>预计耗时</small></a>
+          <a href="/results.html" className={page === "results" ? s.activeNav : ""}><span>结果中心</span><small>运行记录与结果</small></a>
         </nav>
       </header>
       <main className={s.main}>
@@ -752,7 +753,7 @@ export default function App() {
         <div className={s.workspaceHeading}>
           <div>
             <span className={s.workspaceMark} />
-            <h1>计算工作台</h1>
+            <h1>编写与配置</h1>
           </div>
           <div className={s.workspaceTools}>
             <div className={s.workspaceActions} aria-label="工作台操作">
@@ -804,10 +805,10 @@ export default function App() {
               <section className={s.editorPanel}>
                 <div className={s.panelHeader}>
                   <div className={s.fileTitle}>
-                    <span className={s.taskLabel}>当前任务</span>
+                    <span className={s.taskLabel}>当前应用</span>
                     <select
                       className={s.taskSelect}
-                      aria-label="选择任务示例"
+                      aria-label="选择应用"
                       value={taskId}
                       disabled={!tasks.length}
                       onChange={(e) => selectTask(e.target.value)}
@@ -918,8 +919,10 @@ export default function App() {
               <aside className={s.executionPanel}>
                 <section className={s.workflow}>
                   <div className={s.panelHeader}>
-                    <h2>执行流程</h2>
+                    <h2>计算步骤与目标设备</h2>
                   </div>
+                  <p className={s.copyHint}>目标配置用于描述计算分工与性能预测；实际执行设备在运行结果中单独显示。</p>
+                  {taskId === "h2o-hybrid-aimd" && <p className={s.copyHint}>第 2–4 步随时间步重复；求力时还会多次调用量子电路与经典模型，计算扰动构型的势能。</p>}
                   <div className={s.stages}>
                     {task?.stages.map((stage, index) => {
                           const selected = targets.find(
@@ -945,14 +948,14 @@ export default function App() {
                               </div>
                               <div className={s.stageMain}>
                                 <div className={s.stageSelection}>
-                                  <strong>{stage.title}</strong>
+                                  <strong>{stageLabel(stage.id, stage.title)}</strong>
                                   {stage.fixed_device ? (
                                     <span className={s.fixedDevice}>
-                                      {selected?.title || "未连接计算资源"}
+                                      {targetLabel(selected, "未连接计算资源")}
                                     </span>
                                   ) : (
                                     <select
-                                      aria-label={`${stage.title}硬件`}
+                                      aria-label={`${stageLabel(stage.id, stage.title)}硬件`}
                                       value={selected?.id || ""}
                                       onChange={(e) =>
                                         setHardware((old) => ({
@@ -970,7 +973,7 @@ export default function App() {
                                           value={target.id}
                                           disabled={!target.available}
                                         >
-                                          {target.title}
+                                          {targetLabel(target)}
                                           {target.available
                                             ? ""
                                             : ` · ${target.status === "busy" ? "忙碌" : "不可用"}`}
@@ -987,8 +990,9 @@ export default function App() {
                 </section>
                 <section className={s.circuit}>
                   <div className={s.subHeader}>
-                    <h3>编译结果</h3>
+                    <h3>参数与电路预览</h3>
                   </div>
+                  <p className={s.copyHint}>编译后显示解析出的应用参数和量子电路，供提交前检查；修改后需重新编译。</p>
                   <section className={s.compileParameters}>
                     {taskId === "quantum-circuit" && (
                       <div className={s.subHeader}>

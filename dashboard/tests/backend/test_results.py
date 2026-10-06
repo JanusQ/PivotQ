@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
-from backend.results import artifact_path, list_artifacts, read_series, read_trajectory, run_directory
+from backend.results import artifact_path, list_artifacts, read_series, read_trajectory, run_directory, read_calculation_checks
 
 
 class ResultDataTests(unittest.TestCase):
@@ -27,6 +27,35 @@ class ResultDataTests(unittest.TestCase):
             for step, time_fs in frames:
                 writer.writerow([step, time_fs, 0.1, 0.2, 0.3, 1.1, 1.2, 1.3, 2.1, 2.2, 2.3])
         return path
+
+    def test_checks_use_saved_limits_and_mark_short_run_gate_inapplicable(self):
+        (self.directory / "aimd" / "metrics.json").write_text(json.dumps({
+            "simulation": {"total_energy_drift_eV": -0.02, "linear_total_energy_drift_eV_per_ps": 9.0},
+            "acceptance": {"checks": {"total_energy_drift_within_limit": True, "linear_energy_drift_within_limit": True},
+                           "metric_applicability": {"linear_energy_drift": {"applicable_as_hard_gate": False, "hard_gate_minimum_steps": 100}}}
+        }), encoding="utf-8")
+        (self.directory / "aimd" / "resolved_config.yaml").write_text("aimd:\n  max_total_energy_drift_eV: 0.03\n", encoding="utf-8")
+        checks = read_calculation_checks(self.run)
+        self.assertEqual(checks[0]["criterion"], "绝对值 ≤ 0.03 eV")
+        self.assertEqual(checks[0]["observed"], "0.02 eV")
+        self.assertIn("仅供参考", checks[1]["criterion"])
+        self.assertIn("100", checks[1]["criterion"])
+
+    def test_checks_do_not_invent_missing_historical_thresholds(self):
+        (self.directory / "aimd" / "run_summary.json").write_text(json.dumps({
+            "acceptance": {"checks": {"total_energy_drift_within_limit": False}},
+            "simulation": {"total_energy_drift_eV": float("nan")}
+        }), encoding="utf-8")
+        checks = read_calculation_checks(self.run)
+        self.assertFalse(checks[0]["passed"])
+        self.assertIn("未保存阈值", checks[0]["criterion"])
+        self.assertIsNone(checks[0]["observed"])
+        json.dumps(checks, allow_nan=False)
+
+    def test_missing_or_malformed_check_records_are_unavailable(self):
+        self.assertEqual(read_calculation_checks(self.run), [])
+        (self.directory / "aimd" / "metrics.json").write_text('{"acceptance": "invalid"}', encoding="utf-8")
+        self.assertEqual(read_calculation_checks(self.run), [])
 
     def test_trajectory_preserves_actual_steps_times_and_atom_order(self):
         self.positions([(0, 0.0), (5, 0.75), (10, 1.5)])

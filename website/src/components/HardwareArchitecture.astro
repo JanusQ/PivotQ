@@ -5,8 +5,8 @@ const base = import.meta.env.BASE_URL;
   <div class="container">
     <div class="flow-section-heading">
       <div>
-        <h2 id="architecture-title"><span class="flow-section-number">01</span> <span class="flow-section-label">编程模型：</span>用 Python 写清 CPU、QPU、GPU 各自的任务和先后关系，提交后由 PivotQ 统一安排运行。</h2>
-        <p class="flow-architecture-intro">以水分子动力学计算为例：CPU 读取 H-O-H 三个原子的坐标并准备输入；QPU 运行量子电路，CPU 将测量结果整理为量子特征；GPU 根据这些特征预测能量；CPU 再计算受力并更新原子位置。</p>
+        <h2 id="architecture-title"><span class="flow-section-number">01</span> 用 Python 组织混合计算</h2><p>写明各步骤使用的设备和执行顺序，提交后由 PivotQ 安排运行。</p>
+        <p class="flow-architecture-intro">在这一分工示例中，CPU 读取水分子三个原子的坐标，QPU 运行量子电路。CPU 将测量结果整理成特征，交给 GPU 上的模型预测势能，再根据能量变化求力并更新原子位置。</p><p class="flow-architecture-intro">这里展示 CPU、GPU、QPU 的任务分工。教程另有 CPU 运行示例，页面回放轨迹的原始执行后端尚未确认。</p>
       </div>
     </div>
     <div class="flow-architecture-view" data-hardware-architecture data-active-hardware="qpu">
@@ -43,7 +43,7 @@ quantum = qpu_api.extract_features(
     <span class="flow-code-data-cpu">quantum_request</span>
 )
 <span class="flow-code-data-qpu">features</span> = quantum.features</code></pre>
-          <p class="flow-code-explain"><code class="flow-code-data-cpu">quantum_request</code> 包含水分子坐标；程序为每组坐标分别运行 Z、X 两种电路，并将测量结果整理为 14 个数值特征。</p>
+          <p class="flow-code-explain"><code>quantum_request</code> 包含水分子坐标。程序为每组坐标构造电路，分别在 Z 基和 X 基读出结果，再计算共 14 个数值特征。</p>
         </div>
       </aside>
       <div class="flow-architecture-code-lower" role="group" aria-label="GPU 与作业提交程序片段">
@@ -57,7 +57,7 @@ quantum = qpu_api.extract_features(
 <span class="flow-code-data-gpu">energies_eV</span> = classical_api.predict(
     energy_request
 ).energies_eV</code></pre>
-          <p class="flow-code-explain"><code class="flow-code-data-qpu">features</code> 是从 QPU 测量结果中提取的数值特征；<code class="flow-code-data-gpu">energies_eV</code> 是模型预测的能量。</p>
+          <p class="flow-code-explain">GPU 上的模型以 <code>features</code> 为输入，输出能量预测 <code>energies_eV</code>，单位为 eV。<code>features</code> 由量子电路的读出结果计算得到。</p>
         </div>
         <div class="flow-code-block flow-code-submit" data-code-block="submit">
           <div class="flow-code-heading"><span data-code-title>CPU 提交作业</span><small>一次提交，按步骤运行</small></div>
@@ -72,7 +72,7 @@ quantum = qpu_api.extract_features(
     qos_data_tree_target=qpu_data_tree,
 )
 job = RayJobClient(address).submit(spec)</code></pre>
-          <p class="flow-code-explain">作业指定模型文件、运行配置和输出位置；提交后，由 CPU 协调 QPU 上的电路执行和 GPU 上的计算。</p>
+          <p class="flow-code-explain">提交作业时，指定模型文件、运行配置和输出目录。CPU 按任务依赖调用 QPU 执行电路，并调用 GPU 完成经典计算。</p>
         </div>
       </div>
     </div>

@@ -125,7 +125,7 @@ try {
       assert.equal(await page.locator('html').getAttribute('lang'), 'zh-CN');
       assert.ok(await page.locator('main h1').isVisible());
       const footer = page.getByRole('contentinfo');
-      for (const name of ['文档', '水分子动力学模拟', '量子随机存储器']) {
+      for (const name of ['文档', '水分子动力学模拟', '量子随机存取存储器']) {
         assert.ok(await footer.getByRole('link', { name, exact: true }).isVisible(), `Footer ${name}: ${route || '/'}`);
       }
       const universityLogo = footer.locator('img[alt="浙江大学"]');
@@ -189,9 +189,9 @@ try {
   assert.equal(await page.locator('main').getByRole('heading', { level: 1 }).innerText(), 'PivotQ');
   const photo = hero.locator('img.flow-hero-photo');
   assert.ok(await photo.evaluate(node => node.complete && node.naturalWidth > 0), 'User-provided hero photograph loads');
-  assert.equal((await hero.locator('.flow-hero-title').innerText()).replace(/\s+/g, ' ').trim(), '统一描述 QPU、CPU、GPU 的计算任务，由 PivotQ 自动调度并执行。');
-  assert.equal((await hero.locator('.flow-hero-description').innerText()).trim(), 'PivotQ 帮助编程者构建和管理跨 CPU、GPU 与 QPU 的量子经典混合计算任务。');
-  assert.deepEqual(await page.locator('.flow-section-heading h2 .flow-section-label').allTextContents(), ['编程模型：', '任务编排和性能分析：', '教程：'], 'Homepage headings combine each category with its title');
+  assert.equal((await hero.locator('.flow-hero-title').innerText()).replace(/\s+/g, ' ').trim(), '用 Python 编写 CPU、GPU 和 QPU 任务，由 PivotQ 调度执行。');
+  assert.equal((await hero.locator('.flow-hero-description').innerText()).trim(), '指定每一步使用的设备和输入输出关系，组织量子电路与经典计算。');
+  assert.deepEqual((await page.locator('.flow-section-heading h2').allTextContents()).map(text => text.replace(/^\s*0[123]\s*/, '').trim()), ['用 Python 组织混合计算', '查看运行时间，定位耗时步骤', '应用教程'], 'Homepage headings explain each section');
   assert.deepEqual(await page.locator('.flow-section-heading h2 .flow-section-number').allTextContents(), ['01', '02', '03'], 'Homepage headings retain their ordered section numbers');
   const exampleCards = page.locator('.flow-home-applications .flow-application');
   assert.equal(await exampleCards.count(), 2, 'Homepage presents both tutorials');
@@ -315,7 +315,7 @@ try {
   assert.equal(await panel.locator('[data-flow-report]').count(), 1, 'Both branches share one report');
   assert.equal(await sharedReport.count(), 1);
   assert.equal((await sharedReport.locator('.flow-node-name').innerText()).replace(/\s/g, ''), '真机/仿真性能报告');
-  assert.deepEqual(await sharedReport.locator('.flow-report-fields li').allTextContents(), ['各任务运行时间', '运行节点', '运行指令顺序', '运行复杂度']);
+  assert.deepEqual(await sharedReport.locator('.flow-report-fields li').allTextContents(), ['各任务运行时间', '执行设备/计算节点', '指令执行顺序']);
   assert.equal(await panel.locator('[data-flow-branch]').count(), 2);
   assert.equal(await panel.locator('.flow-merge').count(), 1, 'The alternative paths have a merge connector');
   const sharedBounds = await sharedReport.boundingBox();
@@ -350,7 +350,7 @@ try {
   const notebook = page.locator('.aimd-notebook');
   assert.equal(await notebook.locator('.aimd-notebook-chapter').count(), 4, 'AIMD notebook has four ordered chapters');
   assert.equal(await notebook.locator('#circuit').evaluate(node => node.classList.contains('aimd-notebook-chapter')), true, 'Circuit anchor opens the full chapter');
-  assert.match(await notebook.locator('#question').innerText(), /能量和力[\s\S]*量子电路[\s\S]*经典模型/);
+  assert.match(await notebook.locator('#question').innerText(), /代理势能模型[\s\S]*量子电路[\s\S]*经典模型/);
   const modelEquations = notebook.locator('.aimd-model-equations');
   assert.ok(await modelEquations.getByRole('heading', { name: '比较相邻构型的能量，求出原子受力' }).isVisible());
   const fractionsRender = await modelEquations.locator('mfrac').evaluateAll(fractions =>
@@ -401,12 +401,12 @@ try {
   await circuitNavigation.locator('[data-circuit-previous]').click();
   await expectCircuitNavigationAt(0);
   const results = page.locator('.analysis-results');
-  assert.match(await results.locator('.aimd-notebook-prose').innerText(), /另一份归档的 CSV[\s\S]*并非代码 3 的运行结果/, 'Archived trajectory remains distinct from the displayed CPU calculation');
+  assert.match(await results.locator('.aimd-notebook-prose').innerText(), /另一份归档 CSV[\s\S]*不是代码 3 的运行结果/, 'Archived trajectory remains distinct from the displayed CPU calculation');
   const source = results.locator('.analysis-result-source');
   await source.locator('summary').click();
-  assert.match(await source.innerText(), /教程(?:中的)?轨迹.*1001 帧/);
+  assert.match(await source.innerText(), /回放数据包含.*1001 帧/);
   assert.equal(await source.locator('a[download]').count(), 2, 'Imported trajectory CSV files are downloadable');
-  const sourceLink = source.getByRole('link', { name: '查看数据来源说明' });
+  const sourceLink = source.getByRole('link', { name: '数据来源说明' });
   assert.equal((await context.request.get(new URL(await sourceLink.getAttribute('href'), root).href)).status(), 200);
   await source.locator('summary').click();
   const replay = results.getByRole('button', { name: '重新播放' });
@@ -472,13 +472,13 @@ try {
 
   await page.goto(new URL('examples/qram/', root).href, { waitUntil: 'networkidle' });
   const qramNotebook = page.locator('.qram-notebook');
-  assert.ok(await qramNotebook.getByRole('heading', { level: 1, name: /如何通过地址 10 找到并读出数据/ }).isVisible());
+  assert.ok(await qramNotebook.getByRole('heading', { level: 1, name: /从二进制地址 10 开始，理解量子查询/ }).isVisible());
   assert.ok(await qramNotebook.getByRole('heading', { level: 2, name: '普通内存和量子地址' }).isVisible());
   assert.equal(await qramNotebook.locator('.qram-notebook-section').count(), 5, 'QRAM notebook has five ordered steps');
-  assert.match(await qramNotebook.locator('.qram-notebook-scope').innerText(), /没有可运行的量子随机存储器任务或真机读写数据/);
+  assert.match(await qramNotebook.locator('.qram-notebook-scope').innerText(), /没有可运行的 QRAM 任务或真机读写数据/);
   assert.ok(await qramNotebook.locator('.qram-code-cell').first().isVisible());
   assert.match(await qramNotebook.locator('.qram-output-cell').first().innerText(), /右 → 左\s+存储单元 10/);
-  assert.ok(await qramNotebook.getByRole('img', { name: /量子随机存储器概念示意/ }).isVisible());
+  assert.ok(await qramNotebook.getByRole('img', { name: /量子随机存取存储器概念示意/ }).isVisible());
   assert.equal(await qramNotebook.locator('.qram-notebook-figure text').first().textContent(), '|10⟩');
   assert.equal(await qramNotebook.locator('.qram-memory-table tbody tr').count(), 4, 'QRAM toy memory has four addresses');
   assert.match(await qramNotebook.locator('.qram-query-rule').innerText(), /b ⊕ mₐ/);
@@ -508,8 +508,8 @@ try {
   assert.equal(await sidebar.locator('.docs-tutorial-link').count(), 0, 'Documentation sidebar has no tutorial promotion');
   assert.equal(await page.locator('main a[href$="/docs/aimd/"], main a[href="./aimd/"]').count(), 0, 'Docs overview does not promote the example tutorial');
   const exampleGroup = sidebar.locator('.top-level > li > .docs-sidebar-group').filter({ has: page.locator('.docs-sidebar-group-label > .large').filter({ hasText: /^应用教程$/ }) });
-  assert.deepEqual((await exampleGroup.locator('a').allTextContents()).map(text => text.trim()), ['介绍', '水分子动力学模拟', '量子随机存储器']);
-  for (const [name, route] of [['水分子动力学模拟', 'examples/aimd/'], ['量子随机存储器', 'examples/qram/']]) {
+  assert.deepEqual((await exampleGroup.locator('a').allTextContents()).map(text => text.trim()), ['介绍', '水分子动力学模拟', '量子随机存取存储器']);
+  for (const [name, route] of [['水分子动力学模拟', 'examples/aimd/'], ['量子随机存取存储器', 'examples/qram/']]) {
     assert.equal(await exampleGroup.getByRole('link', { name, exact: true }).evaluate(link => link.href), new URL(route, root).href);
   }
   assert.equal(await page.locator('main .flow-guide-tutorial').count(), 0, 'Docs overview does not embed the complete example tutorial');
@@ -530,7 +530,7 @@ try {
   await assertDocsLocation('architecture/', 'PivotQ');
   await sidebar.getByRole('link', { name: '安装', exact: true }).click();
   await assertDocsLocation('installation/', '安装 PivotQ', '安装');
-  assert.match(await page.locator('.sl-markdown-content').innerText(), /docker pull janusq\/pivotq:latest[\s\S]*localhost:8787/);
+  assert.match(await page.locator('.sl-markdown-content').innerText(), /docker pull janusq\/pivotq:latest[\s\S]*127\.0\.0\.1:8787/);
   assert.ok(await page.locator('.pagination-links').isVisible());
   await sidebar.getByRole('link', { name: '快速上手', exact: true }).click();
   await assertDocsLocation('quickstart/', '快速上手');
@@ -611,14 +611,14 @@ try {
     if (route.includes('#')) assert.equal(await page.locator(`[id="${route.split('#')[1]}"]`).count(), 1);
   }
   await page.goto(new URL('examples/aimd/', root).href, { waitUntil: 'networkidle' });
-  await page.getByRole('link', { name: '水分子动力学模拟工作台教程', exact: true }).click();
+  await page.getByRole('link', { name: '水分子动力学模拟：Linux 可视化操作教程', exact: true }).click();
   await page.waitForURL(new URL('docs/aimd/', root).href);
   checks.push('Legacy docs URLs resolve and the example links to its separate tutorial');
 
   await page.goto(new URL('docs/aimd/', root).href, { waitUntil: 'networkidle' });
   const tutorial = page.locator('.flow-guide-tutorial');
-  assert.ok(await tutorial.getByRole('heading', { level: 1, name: /^水分子动力学模拟\s*工作台教程$/ }).isVisible());
-  assert.equal(await tutorial.locator('.flow-guide-content h2').count(), 5, 'AIMD tutorial includes five source sections');
+  assert.ok(await tutorial.getByRole('heading', { level: 1, name: /^水分子动力学模拟：Linux 可视化操作教程$/ }).isVisible());
+  assert.equal(await tutorial.locator('.flow-guide-content h2').count(), 6, 'AIMD tutorial includes the relationship overview and five steps');
   assert.equal(await tutorial.locator('.flow-guide-content img').count(), 6, 'AIMD tutorial includes six source screenshots');
   assert.equal(await tutorial.locator('.flow-guide-image-link').count(), 6, 'Each tutorial screenshot opens its full image');
   for (const screenshot of await tutorial.locator('.flow-guide-content img').all()) {
@@ -626,9 +626,9 @@ try {
     await screenshot.evaluate(image => image.decode());
     assert.ok(await screenshot.evaluate(image => image.naturalWidth > 0), 'Tutorial screenshot loads');
   }
-  assert.match(await tutorial.locator('.flow-guide-content').innerText(), /不能直接作为.*Python SDK[\s\S]*qhai\.tasks/, 'Workbench syntax remains distinct from the public SDK');
+  assert.match(await tutorial.locator('.flow-guide-content').innerText(), /qhai\.tasks[\s\S]*不是可直接在独立 Python 环境中运行的 PivotQ SDK 示例/, 'Workbench syntax remains distinct from the public SDK');
   const tutorialAnchors = await tutorial.locator('.flow-guide-chapters a[href^="#"]').evaluateAll(nodes => nodes.map(node => node.getAttribute('href')));
-  assert.equal(tutorialAnchors.length, 5, 'Tutorial navigation includes each section');
+  assert.equal(tutorialAnchors.length, 6, 'Tutorial navigation includes each section');
   assert.ok(await page.evaluate(anchors => anchors.every(anchor => document.getElementById(decodeURIComponent(anchor.slice(1)))), tutorialAnchors), 'Tutorial anchors resolve to headings');
   checks.push('AIMD tutorial, screenshots and section navigation');
 

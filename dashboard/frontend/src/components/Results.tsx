@@ -1,3 +1,4 @@
+import { phaseNames } from "../api/labels";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { api, duration, terminal, statusLabel } from "../api/client";
 import { actualDevice } from "../api/hardware";
@@ -9,26 +10,11 @@ const Molecule = lazy(() => import("./Molecule"));
 const scientific = (value: unknown) =>
   value === "passed"
     ? "通过"
-    : value === "failed"
+    : value === "failed" || value === "failed_validation"
       ? "未通过"
       : value === "not_available" || !value
         ? "未提供"
         : String(value);
-const phaseNames: Record<string, string> = {
-  actor_setup: "计算服务初始化",
-  dataset_and_ood_setup: "数据初始化",
-  statevector: "量子模拟",
-  classical_actor: "经典推理",
-  bookkeeping: "积分与记录",
-  force_host: "求力",
-  plot_artifacts: "结果图表",
-  actor_teardown: "计算服务释放",
-  framework_outer: "框架耗时",
-  worker_setup_teardown: "计算进程初始化与收尾",
-  feature_readout: "特征读出",
-  http_submit: "QPU 提交",
-  acquisition: "QPU 采样",
-};
 export default function Results({
   run,
   series,
@@ -116,10 +102,10 @@ export default function Results({
     demo = mode === "dry_run" || mode === "demo";
   const predictionData = prediction?.result?.prediction;
   return (
-    <section className={s.resultPanel} aria-label="运行结果">
+    <section className={s.resultPanel} aria-label="所选运行的详情">
       <div className={s.resultHeader}>
         <div className={s.resultIdentity}>
-          <h2>运行结果</h2>
+          <h3>运行状态</h3>
           {run ? (
             <>
               <span
@@ -160,10 +146,10 @@ export default function Results({
       )}
       <div className={s.tabs} role="tablist" aria-label="结果视图">
         {[
-          ["result", "结果"],
-          ["performance", "性能预测"],
-          ["logs", "日志"],
-          ["files", "文件"],
+          ["result", "计算输出"],
+          ["performance", "耗时预测"],
+          ["logs", "执行日志"],
+          ["files", "输出文件"],
         ].map(([key, label]) => (
           <button
             key={key}
@@ -224,7 +210,7 @@ export default function Results({
                   </strong>
                 </div>
                 <div>
-                  <span>科学验收</span>
+                  <span>计算检查</span>
                   <strong>
                     {scientific(
                       result?.scientific_status ??
@@ -235,6 +221,14 @@ export default function Results({
                 </div>
               </div>
             )}
+            {run && <details className={s.snapshot}>
+              <summary>计算检查项目与判定标准</summary>
+              <p>检查针对本次轨迹与数值稳定性；通过不等于已经验证科学精度。阈值按本次保存的配置或实现中的固定检查标准展示；缺失的历史阈值不会补写。</p>
+              {result?.calculation_checks?.length ? <ul>{result.calculation_checks.map(check => <li key={check.id}>
+                <strong>{check.label}：{check.passed ? "通过" : "未通过"}</strong> — {check.criterion}
+                {check.observed && <span>；记录值：{check.observed}</span>}
+              </li>)}</ul> : <p>此记录未提供检查明细，不能单凭摘要中的状态判断精度。请在输出文件中核对 metrics.json、run_summary.json 及原始运行配置。</p>}
+            </details>}
             {run && <TargetAssignments plan={run.plan} result={result} />}
             {result?.probabilities ? (
               <Probabilities
@@ -402,7 +396,7 @@ export default function Results({
                 </div>
               ))}
               <details>
-                <summary>预测范围</summary>
+                <summary>估算条件与适用范围</summary>
                 {[
                   ...new Set([
                     ...(prediction?.model_scope?.notes || []),

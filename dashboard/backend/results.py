@@ -258,3 +258,78 @@ def artifact_path(run: Any, artifact_id: str, output_root: str | Path | None = N
             if path.is_file():
                 return path
     raise FileNotFoundError("artifact not found")
+
+
+def read_calculation_checks(run: Any, output_root: str | Path | None = None) -> list[dict[str, Any]]:
+    """Explain recorded checks using that run's saved limits, never current defaults."""
+    import yaml
+
+    root = run_directory(run, output_root)
+    def read_record(name: str, *, config: bool = False) -> dict[str, Any]:
+        try:
+            path = _data_file(root, name)
+            if path is None or path.stat().st_size > 2_000_000:
+                return {}
+            text = path.read_text(encoding="utf-8-sig")
+            value = yaml.safe_load(text) if config else json.loads(text)
+            return value if isinstance(value, dict) else {}
+        except (OSError, ValueError, TypeError, RuntimeError, yaml.YAMLError):
+            return {}
+
+    metrics = read_record("metrics.json")
+    summary = read_record("run_summary.json")
+    acceptance = metrics.get("acceptance") or summary.get("acceptance") or {}
+    if not isinstance(acceptance, dict) or not isinstance(acceptance.get("checks"), dict):
+        return []
+    simulation = metrics.get("simulation") or summary.get("simulation") or {}
+    config = read_record("resolved_config.yaml", config=True).get("aimd", {})
+    if not isinstance(simulation, dict): simulation = {}
+    if not isinstance(config, dict): config = {}
+    labels = {
+        "trajectory_status_ok": ("轨迹完成状态", "轨迹状态为 ok"),
+        "frame_count_matches": ("轨迹帧数", "帧数等于模拟步数 + 1"),
+        "all_frames_finite": ("数值有效性", "所有轨迹帧数值有限"),
+        "all_frames_in_training_domain": ("训练域范围", "所有构型在训练域内"),
+        "ood_not_stopped": ("越域停止检查", "未因越出训练域而停止"),
+    }
+    limits = {
+        "total_energy_drift_within_limit": ("总能量漂移", "total_energy_drift_eV", "max_total_energy_drift_eV", "eV"),
+        "total_energy_range_within_limit": ("总能量变化范围", "total_energy_range_eV", "max_total_energy_range_eV", "eV"),
+        "linear_energy_drift_within_limit": ("线性能量漂移", "linear_total_energy_drift_eV_per_ps", "max_linear_energy_drift_eV_per_ps", "eV/ps"),
+        "center_of_mass_drift_within_limit": ("质心漂移", "center_of_mass_max_displacement_A", "max_center_of_mass_displacement_A", "Å"),
+        "max_force_component_within_limit": ("最大受力分量", "max_force_component_eV_per_A", "max_force_component_eV_per_A", "eV/Å"),
+        "adjacent_force_jump_within_limit": ("相邻步受力变化", "max_adjacent_force_jump_eV_per_A", "max_adjacent_force_jump_eV_per_A", "eV/Å"),
+        "total_force_within_limit": ("总合力残差", "max_total_force_norm_eV_per_A", None, "eV/Å"),
+        "total_torque_within_limit": ("总力矩残差", "max_total_torque_norm_eV", None, "eV"),
+    }
+    def finite(value: Any) -> bool:
+        return type(value) in (int, float) and math.isfinite(value)
+
+    result = []
+    applicability = acceptance.get("metric_applicability", {})
+    for name, passed in acceptance["checks"].items():
+        if type(passed) is not bool:
+            continue
+        label, criterion = labels.get(name, (name, "此历史检查未记录判定标准"))
+        observed = None
+        if name in limits:
+            label, field, limit_key, unit = limits[name]
+            observed = simulation.get(field)
+            # The two rigid-body residual gates are fixed at 1e-6 in run_aimd.py.
+            threshold = config.get(limit_key) if limit_key else 1e-6
+            criterion = f"绝对值 ≤ {threshold:g} {unit}" if finite(threshold) else "本次运行未保存阈值，请核对原始配置"
+            observed = f"{abs(observed):g} {unit}" if finite(observed) else None
+        if name == "linear_energy_drift_within_limit":
+            detail = applicability.get("linear_energy_drift", {}) if isinstance(applicability, dict) else {}
+            if isinstance(detail, dict) and detail.get("applicable_as_hard_gate") is False:
+                criterion = f"本次仅供参考；至少 {detail.get('hard_gate_minimum_steps', '未记录')} 步才作为通过条件"
+        if name == "finite_difference_step_refinement":
+            label = "差分步长细化一致性"
+            detail = metrics.get("force_consistency", {})
+            if isinstance(detail, dict):
+                threshold = detail.get("threshold_eV_per_A")
+                value = detail.get("max_abs_error_eV_per_A")
+                criterion = f"最大绝对误差 ≤ {threshold:g} eV/Å" if finite(threshold) else "本次运行未保存阈值"
+                observed = f"{value:g} eV/Å" if finite(value) else None
+        result.append({"id": name, "label": label, "passed": passed, "criterion": criterion, "observed": observed})
+    return result

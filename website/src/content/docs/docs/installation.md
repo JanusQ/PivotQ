@@ -16,7 +16,7 @@ description: 使用 Docker 镜像、源码或 wheel 安装 PivotQ，并运行 Py
 
 ## 使用 Docker 安装
 
-安装 Docker，并确保支持 Linux x86-64 容器。镜像地址为 `janusq/pivotq:latest`：
+在 Linux x86-64 环境安装 Docker，启动 PivotQ 的可视化操作服务。镜像地址为 `janusq/pivotq:latest`：
 
 ```bash
 docker pull janusq/pivotq:latest
@@ -29,7 +29,7 @@ docker run --rm --init \
   janusq/pivotq:latest
 ```
 
-启动后，在浏览器访问 `http://localhost:8787`。此终端显示工作台日志；运行记录与输出保存在 `pivotq-data` 数据卷中，容器退出后仍保留。
+启动后，在同一台机器的浏览器访问 `http://127.0.0.1:8787/`。这是运行服务的操作界面，当前门户网站只提供文档与演示。若使用远程 Linux 主机，先建立 SSH 端口转发；`127.0.0.1` 指浏览器所在的机器。此终端显示工作台日志；运行记录与输出保存在 `pivotq-data` 数据卷中，容器退出后仍保留。
 
 ### 在容器中执行 Python
 

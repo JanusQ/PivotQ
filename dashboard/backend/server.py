@@ -380,6 +380,7 @@ class Handler(BaseHTTPRequestHandler):
                 result = dict(run.result) if run.result is not None else None
                 if result is not None:
                     result['artifacts'] = results.list_artifacts(run, output_root(run))
+                    result['calculation_checks'] = results.read_calculation_checks(run, output_root(run))
                 return self._send(200, {"run_id": run.id, "status": run.status, "result": result, "events": run.events})
             if len(parts) == 5:
                 return self._send(200, run.as_dict())

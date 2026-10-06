@@ -132,14 +132,14 @@ test("submits current source, polls to completion and restores a run URL", async
   page,
 }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "计算工作台" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "编写与配置" })).toBeVisible();
   await expect(page.getByRole("button", { name: /预测：/ })).toBeDisabled();
   await expect(
     page.getByRole("img", { name: "编译后的量子电路" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "提交任务", exact: true }).click();
   await expect(
-    page.getByLabel("运行结果").getByText("已完成", { exact: true }),
+    page.getByLabel("所选运行的详情").getByText("已完成", { exact: true }),
   ).toBeVisible({
     timeout: 10000,
   });
@@ -147,7 +147,7 @@ test("submits current source, polls to completion and restores a run URL", async
   await expect(page).toHaveURL(/results\.html\?run=run-test/);
   await page.reload();
   await expect(
-    page.getByLabel("运行结果").getByText("已完成", { exact: true }),
+    page.getByLabel("所选运行的详情").getByText("已完成", { exact: true }),
   ).toBeVisible();
 });
 test("ignores a compile result after the source is edited", async ({
@@ -274,6 +274,13 @@ test("plays only recorded trajectory frames and retains coordinates without WebG
           artifacts: [],
           summary: { completed_steps: 11 },
           scientific_status: "not_available",
+          calculation_checks: [{
+            id: "total_energy_drift_within_limit",
+            label: "总能量漂移",
+            passed: true,
+            criterion: "绝对值 ≤ 0.03 eV",
+            observed: "0.02 eV",
+          }],
         },
       };
     else if (url.pathname.endsWith("/series"))
@@ -297,12 +304,14 @@ test("plays only recorded trajectory frames and retains coordinates without WebG
     await route.fulfill({ json: payload });
   });
   await page.goto("/results.html?run=run-trajectory");
+  await page.getByText("计算检查项目与判定标准", { exact: true }).click();
+  await expect(page.getByText("总能量漂移：通过", { exact: true })).toBeVisible();
+  await expect(page.getByText(/绝对值 ≤ 0.03 eV.*记录值：0.02 eV/)).toBeVisible();
   await expect(page.getByText("当前浏览器无法显示三维视图")).toBeVisible();
   await expect(page.getByText("不完整", { exact: true })).toBeVisible();
   await page.getByRole("slider", { name: "轨迹帧" }).focus();
   await page.keyboard.press("End");
-  await expect(page.getByText("步 11", { exact: true })).toBeVisible();
-  await expect(page.getByText("0.110 fs", { exact: true })).toBeVisible();
+  await expect(page.getByText("第 11 步 / 0.110 fs", { exact: true })).toBeVisible();
   await expect(
     page.getByRole("cell", { name: "0.7700", exact: true }),
   ).toBeVisible();

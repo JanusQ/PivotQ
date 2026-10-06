@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { readdir, readFile, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { posix } from "node:path";
+const { join } = posix;
 async function files(dir) {
   return (
     await Promise.all(

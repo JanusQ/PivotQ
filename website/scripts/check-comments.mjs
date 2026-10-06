@@ -17,7 +17,7 @@ const page = await context.newPage();
 const errors = [];
 const checks = [];
 page.on('pageerror', error => errors.push(error.message));
-const title = '任务编排和性能分析：PivotQ 可利用真机运行或性能仿真引擎生成详细的性能报告，发现瓶颈。';
+const title = '查看运行时间，定位耗时步骤';
 
 try {
   for (const width of [320, 390, 768, 1000, 1024, 1440, 1920]) {
@@ -33,7 +33,7 @@ try {
       const visibleCopy = await page.locator('body').innerText();
       assert.doesNotMatch(visibleCopy, /参考文档|水分子\s*AIMD/);
       const footer = page.getByRole('contentinfo');
-      for (const name of ['文档', '水分子动力学模拟', '量子随机存储器']) {
+      for (const name of ['文档', '水分子动力学模拟', '量子随机存取存储器']) {
         assert.ok(await footer.getByRole('link', { name, exact: true }).isVisible());
       }
       if (!route) {
@@ -44,7 +44,7 @@ try {
           return copy.textContent.trim();
         }), title);
         assert.deepEqual(await page.locator('.flow-section-heading h2 .flow-section-number').allTextContents(), ['01', '02', '03'], 'Homepage headings retain their ordered section numbers');
-        assert.deepEqual(await page.locator('.flow-section-heading h2 .flow-section-label').allTextContents(), ['编程模型：', '任务编排和性能分析：', '教程：']);
+        assert.deepEqual((await page.locator('.flow-section-heading h2').allTextContents()).map(text => text.replace(/^\s*0[123]\s*/, '').trim()), ['用 Python 组织混合计算', '查看运行时间，定位耗时步骤', '应用教程']);
         assert.equal(await page.locator('.flow-section-kicker').count(), 0, 'The number and category are part of the heading without a separate kicker');
         for (const sectionTitle of await page.locator('.flow-section-heading h2').all()) {
           assert.ok(await sectionTitle.evaluate(node => node.scrollWidth <= node.clientWidth + 1), `${width}px section title wraps within its available width`);
@@ -63,7 +63,7 @@ try {
         assert.equal(await workflow.locator('[data-flow-report]').count(), 1, 'Both branches share one report');
         assert.equal(await sharedReport.count(), 1);
         assert.equal((await sharedReport.locator('.flow-node-name').innerText()).replace(/\s/g, ''), '真机/仿真性能报告');
-        assert.deepEqual(await sharedReport.locator('.flow-report-fields li').allTextContents(), ['各任务运行时间', '运行节点', '运行指令顺序', '运行复杂度']);
+        assert.deepEqual(await sharedReport.locator('.flow-report-fields li').allTextContents(), ['各任务运行时间', '执行设备/计算节点', '指令执行顺序']);
         assert.equal(await workflow.locator('[data-flow-branch]').count(), 2);
         assert.equal(await workflow.locator('.flow-merge').count(), 1, 'The alternative paths have a merge connector');
         const sharedBounds = await sharedReport.boundingBox();
@@ -135,10 +135,10 @@ try {
     assert.equal(await sidebar.locator('.top-level a:visible').count(), sidebarLinkCount, 'Clicking a group title cannot hide its links');
   }
   const examples = sidebar.locator('.top-level > li > .docs-sidebar-group').filter({ has: page.locator('.docs-sidebar-group-label > .large').filter({ hasText: /^应用教程$/ }) });
-  assert.deepEqual((await examples.locator('a').allTextContents()).map(text => text.trim()), ['介绍', '水分子动力学模拟', '量子随机存储器']);
+  assert.deepEqual((await examples.locator('a').allTextContents()).map(text => text.trim()), ['介绍', '水分子动力学模拟', '量子随机存取存储器']);
   await examples.getByRole('link', { name: '水分子动力学模拟', exact: true }).click();
   await page.waitForURL(new URL('examples/aimd/', root).href);
-  await page.getByRole('link', { name: '水分子动力学模拟工作台教程', exact: true }).click();
+  await page.getByRole('link', { name: '水分子动力学模拟：Linux 可视化操作教程', exact: true }).click();
   await page.waitForURL(new URL('docs/aimd/', root).href);
   assert.equal(await page.locator('.flow-guide-content img').count(), 6);
   for (const screenshot of await page.locator('.flow-guide-content img').all()) {
