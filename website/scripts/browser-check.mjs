@@ -372,12 +372,34 @@ try {
   await page.getByRole('region', { name: /^模型门结构图/ }).waitFor();
   await page.getByRole('region', { name: /^基础门分解图/ }).waitFor();
   const circuitNavigation = notebook.locator('[data-circuit-card="physical"] [data-circuit-navigation]');
+  const circuitViewport = notebook.locator('[data-circuit-card="physical"] [data-circuit-viewport]');
+  const expectCircuitNavigationAt = async target => {
+    // Smooth scrolling and its scroll handler can update on different frames.
+    // Wait for the destination and all navigation controls before browsing back.
+    await expect.poll(() => circuitViewport.evaluate((viewport, target) => {
+      const navigation = viewport.closest('[data-circuit-card]').querySelector('[data-circuit-navigation]');
+      const maximum = viewport.scrollWidth - viewport.clientWidth;
+      const left = viewport.scrollLeft;
+      return {
+        atDestination: Math.abs(left - target) <= 1,
+        positionMatches: Number(navigation.querySelector('[data-circuit-position]').value)
+          === (maximum ? Math.round(left / maximum * 100) : 0),
+        previousMatches: navigation.querySelector('[data-circuit-previous]').disabled === (left <= 1),
+        nextMatches: navigation.querySelector('[data-circuit-next]').disabled === (left >= maximum - 1),
+      };
+    }, target), { message: `Circuit position and controls follow browsing to ${target}px` }).toEqual({
+      atDestination: true, positionMatches: true, previousMatches: true, nextMatches: true,
+    });
+  };
   assert.ok(await circuitNavigation.isVisible(), 'Long circuit has horizontal navigation');
+  await expectCircuitNavigationAt(0);
+  const circuitDestination = await circuitViewport.evaluate(viewport =>
+    Math.min(viewport.scrollWidth - viewport.clientWidth, viewport.scrollLeft + viewport.clientWidth * .75));
   await circuitNavigation.locator('[data-circuit-next]').click();
-  await page.waitForFunction(() => document.querySelector('[data-circuit-card="physical"] [data-circuit-viewport]')?.scrollLeft > 20);
+  await expectCircuitNavigationAt(circuitDestination);
   assert.ok(Number(await circuitNavigation.locator('[data-circuit-position]').inputValue()) > 0, 'Circuit position follows browsing');
   await circuitNavigation.locator('[data-circuit-previous]').click();
-  await page.waitForFunction(() => (document.querySelector('[data-circuit-card="physical"] [data-circuit-viewport]')?.scrollLeft ?? 1) < 20);
+  await expectCircuitNavigationAt(0);
   const results = page.locator('.analysis-results');
   assert.match(await results.locator('.aimd-notebook-prose').innerText(), /另一份归档的 CSV[\s\S]*并非代码 3 的运行结果/, 'Archived trajectory remains distinct from the displayed CPU calculation');
   const source = results.locator('.analysis-result-source');
